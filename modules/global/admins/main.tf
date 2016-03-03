@@ -21,10 +21,22 @@ resource "aws_iam_user" "admin" {
   name = "${element(split(",",var.admin_users), count.index)}"
 }
 
+resource "aws_iam_access_key" "admins" {
+  count = "${length(split(",",var.admin_users))}"
+  user = "${element(aws_iam_user.admin.*.name, count.index)}"
+}
+
+resource "aws_iam_group" "admins" {
+    name = "Administrators"
+    path = "/nubis/admin/"
+}
+
 resource "aws_iam_group_membership" "admins" {
     name = "admins-group-membership"
+
     users = [
         "${aws_iam_user.admin.*.name}"
     ]
-    group = "Administrators"
+
+    group = "${aws_iam_group.admins.name}"
 }

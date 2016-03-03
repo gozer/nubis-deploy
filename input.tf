@@ -5,13 +5,21 @@ variable aws_profile {
 }
 
 variable nubis_version {
-  default = "v1.0.2-dev"
+  default = "v1.0.1-sec1"
 }
 
 variable environments {
   default = "admin,stage,prod"
 }
 
-variable regions {
+variable environments_networks {
+
+}
+
+variable environments_ipsec_targets {
+  default = "0.0.0.0/0,0.0.0.0/0,0.0.0.0/0"
+}
+
+variable aws_regions {
   default = "us-east-1,us-west-2"
 }
