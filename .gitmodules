@@ -1,0 +1,6 @@
+[submodule "vpc"]
+	path = vpc
+	url = https://github.com/nubisproject/nubis-vpc.git
+[submodule "stacks"]
+	path = stacks
+	url = https://github.com/nubisproject/nubis-stacks.git
