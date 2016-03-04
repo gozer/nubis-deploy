@@ -1,2 +1,8 @@
 account_name = "some-account-name"
 aws_profile  = "some-account-name-profile"
+
+nubis_version = "v1.0.2"
+
+aws_regions           = "us-east-1,us-west-2"
+environments          = "admin,prod,stage"
+environments_networks = "10.x.y.0/24,10.x.y.0/24,10.x.y.0/24"
