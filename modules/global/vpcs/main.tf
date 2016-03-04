@@ -26,7 +26,6 @@ module "us-east-1" {
   # should convert over to just passing in environments_ipsec_targets
   prod_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 1)}"
   stage_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 2)}"
-  
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
