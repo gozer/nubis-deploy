@@ -13,11 +13,10 @@ variable environments {
 }
 
 variable environments_networks {
-
 }
 
 variable environments_ipsec_targets {
-  default = "0.0.0.0/0,0.0.0.0/0,0.0.0.0/0"
+  default = "0.0.0.0,0.0.0.0,0.0.0.0"
 }
 
 variable aws_regions {
