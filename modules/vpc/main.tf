@@ -146,8 +146,7 @@ resource "aws_lambda_function" "LookupNestedStackOutputs" {
 }
 
 resource "aws_cloudformation_stack" "vpc" {
-#    count = "${var.enabled}"
-    count = 0
+  count = "${var.enabled}"
 
   depends_on = [
     "aws_key_pair.nubis",
