@@ -3,6 +3,7 @@ module "us-east-1" {
 
   aws_region = "us-east-1"
   aws_profile = "${var.aws_profile}"
+  aws_account_id = "${var.aws_account_id}"
  
   # Okay, somewhat nasty
   #  - take the list of regions, look for the one we care about and make it XXX
@@ -26,6 +27,8 @@ module "us-east-1" {
   # should convert over to just passing in environments_ipsec_targets
   prod_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 1)}"
   stage_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 2)}"
+  
+  consul_secret = "${var.consul_secret}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -34,6 +37,7 @@ module "us-west-2" {
 
   aws_region = "us-west-2"
   aws_profile = "${var.aws_profile}"
+  aws_account_id = "${var.aws_account_id}"
  
   # Okay, somewhat nasty
   #  - take the list of regions, look for the one we care about and make it XXX
@@ -57,5 +61,7 @@ module "us-west-2" {
   # should convert over to just passing in environments_ipsec_targets
   prod_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 1)}"
   stage_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 2)}"
+
+  consul_secret = "${var.consul_secret}"
 }
 

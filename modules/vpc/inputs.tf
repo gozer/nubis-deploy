@@ -1,5 +1,6 @@
 variable aws_profile {}
 variable aws_region {}
+variable aws_account_id {}
 
 variable admin_network {}
 variable stage_network {}
@@ -30,3 +31,4 @@ variable enabled {
   default = 1
 }
 
+variable consul_secret {}

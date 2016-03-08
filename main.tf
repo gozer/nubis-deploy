@@ -13,6 +13,7 @@ module "vpcs" {
 
   aws_regions = "${var.aws_regions}"
   aws_profile = "${var.aws_profile}"
+  aws_account_id = "${module.global_admins.account_id}"
 
   # This exists to force a dependency on the global admins module
   account_name = "${module.global_admins.account_name}"
@@ -21,4 +22,6 @@ module "vpcs" {
   environments = "${var.environments}"
   environments_networks = "${var.environments_networks}"
   environments_ipsec_targets = "${var.environments_ipsec_targets}"
+
+  consul_secret = "${var.consul_secret}"
 }
