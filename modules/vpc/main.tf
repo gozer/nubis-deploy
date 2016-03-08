@@ -214,6 +214,21 @@ module "jumphost" {
   technical_owner = "${var.technical_owner}"
 }
 
+module "fluent-collector" {
+  source = "../fluent-collector"
+
+  enabled = "${var.enabled}"
+
+  environments = "${var.environments}"
+  aws_profile = "${var.aws_profile}"
+  aws_region = "${var.aws_region}"
+
+  key_name = "${var.ssh_key_name}"
+  nubis_version = "${var.nubis_version}"
+  service_name = "${var.account_name}"
+  technical_owner = "${var.technical_owner}"
+}
+
 #module "consul" {
 #  source = "../consul"
 #
