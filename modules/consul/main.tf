@@ -8,6 +8,8 @@ module "consul-admin" {
   #source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=${var.nubis_version}"
   source = "/home/gozer/opt/src/mozilla.org/gozer/nubis/consul/nubis/terraform"
 
+  enabled = "${var.enabled}"
+
   environment = "admin"
 
   aws_profile = "${var.aws_profile}"
