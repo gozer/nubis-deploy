@@ -86,6 +86,11 @@ EOF
 resource "aws_iam_role" "lambda" {
     count = "${var.enabled}"
     name = "lambda-${var.aws_region}"
+
+  provisioner "local-exec" {
+   command = "sleep 30"
+  }
+
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -210,8 +215,10 @@ module "jumphost" {
 
   key_name = "${var.ssh_key_name}"
   nubis_version = "${var.nubis_version}"
-  service_name = "${var.account_name}"
   technical_owner = "${var.technical_owner}"
+
+  # Force a dependency on the VPC stack
+  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
 }
 
 module "fluent-collector" {
@@ -225,22 +232,28 @@ module "fluent-collector" {
 
   key_name = "${var.ssh_key_name}"
   nubis_version = "${var.nubis_version}"
-  service_name = "${var.account_name}"
   technical_owner = "${var.technical_owner}"
+
+  # Force a dependency on the VPC stack
+  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
 }
 
-#module "consul" {
-#  source = "../consul"
-#
-#  environments = "${var.environments}"
-#
-#  aws_profile = "${var.aws_profile}"
-#  aws_account_id = "${var.aws_account_id}"
-#
-#  key_name = "${var.ssh_key_name}"
-#  nubis_version = "${var.nubis_version}"
-#  service_name = "${var.account_name}"
-#
-#  consul_secret = "${var.consul_secret}"
-#  credstash_key = "${aws_cloudformation_stack.vpc.outputs.CredstashKeyId}"
-#}
+module "consul" {
+  source = "../consul"
+
+  enabled = "${var.enabled}"
+
+  environments = "${var.environments}"
+
+  aws_profile = "${var.aws_profile}"
+  aws_region = "${var.aws_region}"
+  aws_account_id = "${var.aws_account_id}"
+
+  key_name = "${var.ssh_key_name}"
+  nubis_version = "${var.nubis_version}"
+
+  consul_secret = "${var.consul_secret}"
+
+  # Force a dependency on the VPC stack
+  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
+}
