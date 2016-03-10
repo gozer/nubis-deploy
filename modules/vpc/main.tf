@@ -5,7 +5,7 @@ provider "aws" {
 
 resource "aws_key_pair" "nubis" {
   count = "${var.enabled}"
-  key_name = "nubis"
+  key_name = "${var.ssh_key_name}"
   public_key = "${var.nubis_ssh_key}"
 
   provisioner "local-exec" {
@@ -154,7 +154,6 @@ resource "aws_cloudformation_stack" "vpc" {
   count = "${var.enabled}"
 
   depends_on = [
-    "aws_key_pair.nubis",
     "aws_lambda_function.LookupNestedStackOutputs",
     "aws_lambda_function.LookupStackOutputs",
     "aws_lambda_function.UUID",
@@ -168,7 +167,7 @@ resource "aws_cloudformation_stack" "vpc" {
     ServiceName = "${var.account_name}"
     TechnicalOwner = "${var.technical_owner}"
     StacksVersion = "${var.nubis_version}"
-    SSHKeyName = "${var.ssh_key_name}"
+    SSHKeyName = "${aws_key_pair.nubis.key_name}"
     
     AdminVpcCidr = "${var.admin_network}"
     StageVpcCidr = "${var.stage_network}"
