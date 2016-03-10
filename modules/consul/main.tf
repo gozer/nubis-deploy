@@ -28,7 +28,7 @@ module "consul-admin" {
 
   private_subnets = "${aws_cloudformation_stack.consul.0.outputs.PrivateSubnets}"
   public_subnets  = "${aws_cloudformation_stack.consul.0.outputs.PublicSubnets}"
-  zone_id = "${aws_route53_zone.consul.0.zone_id}"
+  zone_id = "${aws_route53_zone.consul-admin.zone_id}"
   vpc_id = "${aws_cloudformation_stack.consul.0.outputs.VpcId}"
 
  master_acl_token = "00000000-0000-0000-0000-000000000000"
@@ -61,7 +61,7 @@ module "consul-prod" {
 
   private_subnets = "${aws_cloudformation_stack.consul.1.outputs.PrivateSubnets}"
   public_subnets  = "${aws_cloudformation_stack.consul.1.outputs.PublicSubnets}"
-  zone_id = "${aws_route53_zone.consul.1.zone_id}"
+  zone_id = "${aws_route53_zone.consul-prod.zone_id}"
   vpc_id = "${aws_cloudformation_stack.consul.1.outputs.VpcId}"
 
   master_acl_token = "00000000-0000-0000-0000-000000000000"
@@ -94,7 +94,7 @@ module "consul-stage" {
 
   private_subnets = "${aws_cloudformation_stack.consul.2.outputs.PrivateSubnets}"
   public_subnets  = "${aws_cloudformation_stack.consul.2.outputs.PublicSubnets}"
-  zone_id = "${aws_route53_zone.consul.2.zone_id}"
+  zone_id = "${aws_route53_zone.consul-stage.zone_id}"
   vpc_id = "${aws_cloudformation_stack.consul.2.outputs.VpcId}"
 
   master_acl_token = "00000000-0000-0000-0000-000000000000"
@@ -103,10 +103,22 @@ module "consul-stage" {
   ssl_key = "/tmp/consul.key"
 }
 
-resource "aws_route53_zone" "consul" {
-  count = "${var.enabled * 3}"
-  name = "consul.${element(split(",",var.environments), count.index)}.${var.aws_region}.${var.service_name}.nubis.allizom.org"
-  vpc_id = "${element(aws_cloudformation_stack.consul.*.outputs.VpcId, count.index)}"
+resource "aws_route53_zone" "consul-admin" {
+  name = "consul.admin.${var.aws_region}.${var.service_name}.nubis.allizom.org"
+  #vpc_id = "${element(aws_cloudformation_stack.consul.*.outputs.VpcId, count.index)}"
+  vpc_id = "${aws_cloudformation_stack.consul.0.outputs.VpcId}"
+}
+
+resource "aws_route53_zone" "consul-prod" {
+  name = "consul.prod.${var.aws_region}.${var.service_name}.nubis.allizom.org"
+  #vpc_id = "${element(aws_cloudformation_stack.consul.*.outputs.VpcId, count.index)}"
+  vpc_id = "${aws_cloudformation_stack.consul.1.outputs.VpcId}"
+}
+
+resource "aws_route53_zone" "consul-stage" {
+  name = "consul.stage.${var.aws_region}.${var.service_name}.nubis.allizom.org"
+  #vpc_id = "${(aws_cloudformation_stack.consul.1.outputs.VpcId, count.index)}"
+  vpc_id = "${aws_cloudformation_stack.consul.2.outputs.VpcId}"
 }
 
 resource "aws_cloudformation_stack" "consul" {
