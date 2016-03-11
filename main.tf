@@ -4,6 +4,8 @@ module "global_admins" {
   aws_profile = "${var.aws_profile}"
   aws_region = "us-east-1"
 
+  admin_users = "${var.admin_users}"
+
   account_name = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
 }

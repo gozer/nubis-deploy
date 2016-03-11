@@ -15,6 +15,10 @@ variable environments {
 variable environments_networks {
 }
 
+variable admin_users {
+  default = "gozer,limed,rweiss,jcrowe"
+}
+
 variable environments_ipsec_targets {
   default = "0.0.0.0,0.0.0.0,0.0.0.0"
 }

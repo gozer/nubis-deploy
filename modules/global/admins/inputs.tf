@@ -2,7 +2,6 @@ variable aws_profile {}
 variable account_name {}
 
 variable admin_users {
-  default = "gozer,limed,rweiss,jcrowe"
 }
 
 variable aws_region {

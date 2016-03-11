@@ -24,7 +24,7 @@ resource "aws_cloudformation_stack" "vpc" {
   template_body = "${file("${path.module}/../../fluent-collector/nubis/cloudformation/main.json")}"
 
   parameters = {
-    ServiceName = "${var.service_name}"
+    ServiceName = "fluentd-collector"
     TechnicalOwner = "${var.technical_owner}"
     SSHKeyName    = "${var.key_name}"
     StacksVersion = "${var.nubis_version}"
