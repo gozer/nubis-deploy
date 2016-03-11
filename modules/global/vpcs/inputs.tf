@@ -8,3 +8,13 @@ variable environments_networks {}
 variable environments_ipsec_targets {}
 
 variable consul_secret {}
+
+variable enable_jumphost {
+}
+
+variable enable_fluent {
+}
+
+variable enable_consul {
+}
+

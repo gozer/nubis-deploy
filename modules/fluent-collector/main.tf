@@ -4,6 +4,7 @@ provider "aws" {
 }
 
 resource "atlas_artifact" "nubis-fluent-collector" {
+  count = "${var.enabled}"
   name = "nubisproject/nubis-fluentd-collector"
   type = "amazon.image"
 

@@ -30,3 +30,15 @@ variable consul_master_acl_token {
 variable consul_secret {
   default = "sGPeZ2clbA+PTi1naruZiw=="
 }
+
+variable enable_jumphost {
+  default = 0
+}
+
+variable enable_fluent {
+  default = 0
+}
+
+variable enable_consul {
+  default = 0
+}

@@ -11,6 +11,10 @@ module "global_admins" {
 module "vpcs" {
   source = "modules/global/vpcs"
 
+  enable_consul = "${var.enable_consul}"
+  enable_jumphost = "${var.enable_jumphost}"
+  enable_fluent = "${var.enable_fluent}"
+
   aws_regions = "${var.aws_regions}"
   aws_profile = "${var.aws_profile}"
   aws_account_id = "${module.global_admins.account_id}"
@@ -24,4 +28,5 @@ module "vpcs" {
   environments_ipsec_targets = "${var.environments_ipsec_targets}"
 
   consul_secret = "${var.consul_secret}"
+
 }

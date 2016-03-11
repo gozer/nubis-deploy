@@ -4,6 +4,7 @@ provider "aws" {
 }
 
 resource "atlas_artifact" "nubis-jumphost" {
+  count = "${var.enabled}"
   name = "nubisproject/nubis-jumphost"
   type = "amazon.image"
 

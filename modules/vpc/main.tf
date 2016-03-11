@@ -203,44 +203,44 @@ resource "aws_cloudformation_stack" "vpc" {
   }
 }
 
-#module "jumphost" {
-#  source = "../jumphost"
-#
-#  enabled = "${var.enabled}"
-#
-#  environments = "${var.environments}"
-#  aws_profile = "${var.aws_profile}"
-#  aws_region = "${var.aws_region}"
-#
-#  key_name = "${var.ssh_key_name}"
-#  nubis_version = "${var.nubis_version}"
-#  technical_owner = "${var.technical_owner}"
-#
-#  # Force a dependency on the VPC stack
-#  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
-#}
+module "jumphost" {
+  source = "../jumphost"
 
-#module "fluent-collector" {
-#  source = "../fluent-collector"
-#
-#  enabled = "${var.enabled}"
-#
-#  environments = "${var.environments}"
-#  aws_profile = "${var.aws_profile}"
-#  aws_region = "${var.aws_region}"
-#
-#  key_name = "${var.ssh_key_name}"
-#  nubis_version = "${var.nubis_version}"
-#  technical_owner = "${var.technical_owner}"
-#
-#  # Force a dependency on the VPC stack
-#  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
-#}
+  enabled = "${var.enabled * var.enable_jumphost}"
+
+  environments = "${var.environments}"
+  aws_profile = "${var.aws_profile}"
+  aws_region = "${var.aws_region}"
+
+  key_name = "${var.ssh_key_name}"
+  nubis_version = "${var.nubis_version}"
+  technical_owner = "${var.technical_owner}"
+
+  # Force a dependency on the VPC stack
+  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
+}
+
+module "fluent-collector" {
+  source = "../fluent-collector"
+
+  enabled = "${var.enabled * var.enable_fluent}"
+
+  environments = "${var.environments}"
+  aws_profile = "${var.aws_profile}"
+  aws_region = "${var.aws_region}"
+
+  key_name = "${var.ssh_key_name}"
+  nubis_version = "${var.nubis_version}"
+  technical_owner = "${var.technical_owner}"
+
+  # Force a dependency on the VPC stack
+  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
+}
 
 module "consul" {
   source = "../consul"
 
-  enabled = "${var.enabled}"
+  enabled = "${var.enabled * var.enable_consul}"
 
   environments = "${var.environments}"
 

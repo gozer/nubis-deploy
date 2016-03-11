@@ -32,3 +32,10 @@ variable enabled {
 }
 
 variable consul_secret {}
+
+variable enable_jumphost {}
+
+variable enable_fluent {}
+
+variable enable_consul {}
+

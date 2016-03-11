@@ -14,6 +14,10 @@ module "us-east-1" {
   #  Result, 1 if the region is found, 0 otherwise
   enabled = "${replace(replace(replace(replace(var.aws_regions, "/.*,?us-east-1,?.*/", "XXX"), "/[^X]+/", "Y" ), "XXX", "1"),"/Y+/","0")}"
 
+  enable_consul = "${var.enable_consul}"
+  enable_jumphost = "${var.enable_jumphost}"
+  enable_fluent = "${var.enable_fluent}"
+
   # This exists to force a dependency on the global module
   account_name = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
@@ -47,6 +51,10 @@ module "us-west-2" {
   #  - change YYY... if found into 0
   #  Result, 1 if the region is found, 0 otherwise
   enabled = "${replace(replace(replace(replace(var.aws_regions, "/.*,?us-west-2,?.*/", "XXX"), "/[^X]+/", "Y" ), "XXX", "1"),"/Y+/","0")}"
+
+  enable_consul = "${var.enable_consul}"
+  enable_jumphost = "${var.enable_jumphost}"
+  enable_fluent = "${var.enable_fluent}"
 
   # This exists to force a dependency on the global module
   account_name = "${var.account_name}"
