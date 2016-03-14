@@ -18,6 +18,8 @@ module "us-east-1" {
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
 
+  my_ip = "${var.my_ip}"
+
   # This exists to force a dependency on the global module
   account_name = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
@@ -55,6 +57,8 @@ module "us-west-2" {
   enable_consul = "${var.enable_consul}"
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
+
+  my_ip = "${var.my_ip}"
 
   # This exists to force a dependency on the global module
   account_name = "${var.account_name}"

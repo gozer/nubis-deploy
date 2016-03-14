@@ -46,3 +46,7 @@ variable enable_fluent {
 variable enable_consul {
   default = 0
 }
+
+variable my_ip {
+  default = "127.0.0.1/32"
+}

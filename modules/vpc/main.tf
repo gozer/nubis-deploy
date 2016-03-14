@@ -221,7 +221,7 @@ module "jumphost" {
 }
 
 module "fluent-collector" {
-  source = "../fluent-collector"
+  source = "../fluent-collector/multi"
 
   enabled = "${var.enabled * var.enable_fluent}"
 
@@ -235,6 +235,8 @@ module "fluent-collector" {
 
   # Force a dependency on the VPC stack
   service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
+
+  consul_endpoints = "${module.consul.consul_endpoints}"
 }
 
 module "consul" {
@@ -247,6 +249,8 @@ module "consul" {
   aws_profile = "${var.aws_profile}"
   aws_region = "${var.aws_region}"
   aws_account_id = "${var.aws_account_id}"
+
+  my_ip = "${var.my_ip}"
 
   key_name = "${var.ssh_key_name}"
   nubis_version = "${var.nubis_version}"

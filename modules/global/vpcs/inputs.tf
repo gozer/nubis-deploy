@@ -18,3 +18,4 @@ variable enable_fluent {
 variable enable_consul {
 }
 
+variable my_ip {}

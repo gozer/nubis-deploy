@@ -20,6 +20,8 @@ module "consul-admin" {
   nubis_version = "${var.nubis_version}"
   service_name = "${var.service_name}"
 
+  allowed_public_cidrs = "${var.my_ip}"
+
   consul_secret = "${var.consul_secret}"
   credstash_key = "${aws_cloudformation_stack.consul.0.outputs.CredstashKeyId}"
 
@@ -53,6 +55,8 @@ module "consul-prod" {
   nubis_version = "${var.nubis_version}"
   service_name = "${var.service_name}"
 
+  allowed_public_cidrs = "${var.my_ip}"
+
   consul_secret = "${var.consul_secret}"
   credstash_key = "${aws_cloudformation_stack.consul.1.outputs.CredstashKeyId}"
 
@@ -85,6 +89,8 @@ module "consul-stage" {
   key_name = "${var.key_name}"
   nubis_version = "${var.nubis_version}"
   service_name = "${var.service_name}"
+
+  allowed_public_cidrs = "${var.my_ip}"
 
   consul_secret = "${var.consul_secret}"
   credstash_key = "${aws_cloudformation_stack.consul.2.outputs.CredstashKeyId}"

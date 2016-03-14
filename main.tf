@@ -17,6 +17,8 @@ module "vpcs" {
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
 
+  my_ip = "${var.my_ip}"
+
   aws_regions = "${var.aws_regions}"
   aws_profile = "${var.aws_profile}"
   aws_account_id = "${module.global_admins.account_id}"

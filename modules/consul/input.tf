@@ -8,3 +8,4 @@ variable consul_secret {}
 
 variable environments {}
 variable enabled {}
+variable my_ip {}
