@@ -138,10 +138,10 @@ resource "aws_vpc" "nubis" {
     }
 }
 
-resource "aws_main_route_table_association" "nubis" {
+resource "aws_main_route_table_association" "public" {
     count = "${var.enabled * length(split(",", var.environments))}"
     vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
-    route_table_id = "${element(aws_route_table.nubis.*.id, count.index)}"
+    route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
 }
 
 resource "aws_security_group" "monitoring" {
@@ -241,6 +241,56 @@ resource "aws_security_group" "internet_access" {
   } 
 }
 
+resource "aws_security_group" "nat" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+
+  name = "NATSecurityGroup-${element(split(",",var.environments), count.index)}"
+  description = "NAT security group"
+
+  ingress {
+      from_port = 0
+      to_port = 0
+      protocol = "tcp"
+      security_groups = [
+        "${element(aws_security_group.internet_access.*.id, count.index)}",
+      ]
+  }
+
+  ingress {
+      from_port = 0
+      to_port = 0
+      protocol = "udp"
+      security_groups = [
+        "${element(aws_security_group.internet_access.*.id, count.index)}",
+      ]
+  }
+
+ingress {
+      from_port = 8
+      to_port = -1
+      protocol = "icmp"
+      security_groups = [
+        "${element(aws_security_group.internet_access.*.id, count.index)}",
+      ]
+  }
+
+  egress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "NATSecurityGroup-${element(split(",",var.environments), count.index)}"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
 resource "aws_security_group" "shared_services" {
   count = "${var.enabled * length(split(",", var.environments))}"
   
@@ -322,11 +372,29 @@ resource "aws_subnet" "public" {
   }
 }
 
-resource "aws_route_table_association" "nubis" {
+# ATM, we just create private subnets for each environment in the first 3 AZs
+resource "aws_subnet" "private" {
+  count = "${3 * var.enabled * length(split(",", var.environments))}"
+
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
+
+  availability_zone = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), count.index % 3 )}"
+
+  cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, (count.index % 3) + 3 )}"
+
+  tags {
+    Name = "PrivateSubnet-${element(split(",",var.environments), count.index / 3)}-AZ${(count.index % 3 ) + 1}"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index / 3)}"
+  }
+}
+
+resource "aws_route_table_association" "public" {
     count = "${3 * var.enabled * length(split(",", var.environments))}"
     
     subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
-    route_table_id = "${element(aws_route_table.nubis.*.id, count.index / 3)}"
+    route_table_id = "${element(aws_route_table.public.*.id, count.index / 3)}"
 }
 
 resource "aws_internet_gateway" "nubis" {
@@ -342,7 +410,7 @@ resource "aws_internet_gateway" "nubis" {
   }
 }
 
-resource "aws_route_table" "nubis" {
+resource "aws_route_table" "public" {
     count = "${var.enabled * length(split(",", var.environments))}"
   
     vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
@@ -358,6 +426,51 @@ resource "aws_route_table" "nubis" {
     TechnicalOwner = "${var.technical_owner}"
     Environment = "${element(split(",",var.environments), count.index)}"
   }
+}
+
+resource "aws_route_table" "private" {
+  count = "${3 * var.enabled * length(split(",", var.environments))}"
+
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    network_interface_id = "${element(aws_network_interface.private-nat.*.id, count.index)}"
+  }
+
+  tags {
+    Name = "PrivateRoute-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1}"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
+resource "aws_route_table_association" "private" {
+    count = "${3 * var.enabled * length(split(",", var.environments))}"
+
+    subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
+    route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+}
+
+resource "aws_network_interface" "private-nat" {
+  count = "${3 * var.enabled * length(split(",", var.environments))}"
+
+  subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
+
+  source_dest_check = false
+
+  tags {
+    Name = "NatENI-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1}"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+
+  security_groups = [
+    "${element(aws_security_group.shared_services.*.id, count.index / 3 )}",
+    "${element(aws_security_group.nat.*.id, count.index / 3 )}",
+  ]
 }
 
 resource "aws_cloudformation_stack" "vpc" {
