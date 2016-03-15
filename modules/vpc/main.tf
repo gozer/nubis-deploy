@@ -13,48 +13,6 @@ resource "aws_key_pair" "nubis" {
   }
 }
 
-resource "tls_private_key" "default" {
-  count = "${var.enabled}"
-  
-  algorithm = "RSA"
-}
-
-resource "tls_self_signed_cert" "default" {
-    count = "${var.enabled}"
-    key_algorithm = "${tls_private_key.default.algorithm}"
-    private_key_pem = "${tls_private_key.default.private_key_pem}"
-
-    # Certificate expires after 10 years
-    validity_period_hours = 43800
-
-    # Generate a new certificate if Terraform is run within 2 weeks
-	# of the certificate's expiration time.
-    early_renewal_hours = 168
-
-    # Reasonable set of uses for a server SSL certificate.
-    allowed_uses = [
-        "key_encipherment",
-        "digital_signature",
-        "server_auth",
-    ]
-
-    subject {
-        common_name = "*.${var.aws_region}.${var.account_name}.nubis.allizom.org"
-        organization = "Mozilla Nubis"
-    }
-}
-
-resource "aws_iam_server_certificate" "default" {
-    count = "${var.enabled}"
-    name = "${var.aws_region}.${var.account_name}.nubis.allizom.org"
-    certificate_body = "${tls_self_signed_cert.default.cert_pem}"
-    private_key = "${tls_private_key.default.private_key_pem}"
-
-    provisioner "local-exec" {
-      command = "sleep 30"
-    }
-}
-
 resource "aws_iam_role_policy" "lambda" {
     count = "${var.enabled}"
     name = "lambda_policy-${var.aws_region}"
@@ -150,8 +108,260 @@ resource "aws_lambda_function" "LookupNestedStackOutputs" {
         role = "${aws_iam_role.lambda.arn}"
 }
 
-resource "aws_cloudformation_stack" "vpc" {
+module "meta" {
+  source = "../meta"
+
+  enabled = "${var.enabled}"
+
+  aws_profile = "${var.aws_profile}"
+  aws_region = "${var.aws_region}"
+
+  nubis_version = "${var.nubis_version}"
+  nubis_domain = "${var.nubis_domain}"
+  technical_owner = "${var.technical_owner}"
+
+  service_name = "${var.account_name}"
+}
+
+resource "aws_vpc" "nubis" {
+    count = "${var.enabled * length(split(",", var.environments))}"
+    cidr_block = "${element(split(",",var.environments_networks), count.index)}"
+    
+    enable_dns_support = true
+    enable_dns_hostnames = true
+    
+    tags {
+      Name = "${var.aws_region}-${element(split(",",var.environments), count.index)}-vpc"
+      ServiceName = "${var.account_name}"
+      TechnicalOwner = "${var.technical_owner}"
+      Environment = "${element(split(",",var.environments), count.index)}"
+    }
+}
+
+resource "aws_main_route_table_association" "nubis" {
+    count = "${var.enabled * length(split(",", var.environments))}"
+    vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+    route_table_id = "${element(aws_route_table.nubis.*.id, count.index)}"
+}
+
+resource "aws_security_group" "monitoring" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+  
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+    
+  name = "MonitoringSecurityGroup-${element(split(",",var.environments), count.index)}"
+  description = "Securiry group for monitoring hosts"
+  
+  egress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  } 
+  
+  ingress {
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  ingress {
+      from_port = 80
+      to_port = 80
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+  }    
+
+  tags {
+    Name = "MonitoringSecurityGroup"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  } 
+}
+
+resource "aws_security_group" "ssh" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+  
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+    
+  name = "SshSecurityGroup-${element(split(",",var.environments), count.index)}"
+  description = "SSH Security Group"
+  
+  egress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  } 
+  
+  ingress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "SshSecurityGroup"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  } 
+}
+
+resource "aws_security_group" "internet_access" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+  
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+    
+  name = "InternetAccessSecurityGroup-${element(split(",",var.environments), count.index)}"
+  description = "Internet Access security group"
+  
+  egress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  } 
+  
+  ingress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  }  
+
+  tags {
+    Name = "InternetAccessSecurityGroup"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  } 
+}
+
+resource "aws_security_group" "shared_services" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+  
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+    
+  name = "SharedServicesSecurityGroup-${element(split(",",var.environments), count.index)}"
+  description = "The security group for all instances."
+
+  ingress {
+      from_port = 8
+      to_port = -1
+      protocol = "icmp"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  # Consul TCP
+  ingress {
+    self = true
+    from_port = 8300
+    to_port = 8302
+    protocol = "tcp"
+  }
+  
+  # Consul UDP
+  ingress {
+    self = true
+    from_port = 8300
+    to_port = 8302
+    protocol = "udp"
+  }
+  
+  # Poll Monitoring
+  ingress {
+    security_groups = [
+      "${element(aws_security_group.monitoring.*.id, count.index)}"
+    ]
+    from_port = 9100
+    to_port = 9110
+    protocol = "tcp"
+  }
+
+  egress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+    
+  tags {
+    Name = "SharedServicesSecurityGroup"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
+resource "aws_cloudformation_stack" "availability_zones" {
   count = "${var.enabled}"
+  name = "availability-zones"
+  
+  template_body = "${file("${path.module}/availability-zones.json")}"
+}
+
+# ATM, we just create public subnets for each environment in the first 3 AZs
+resource "aws_subnet" "public" {
+  count = "${3 * var.enabled * length(split(",", var.environments))}"
+  
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
+    
+  availability_zone = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), count.index % 3 )}"
+    
+  cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, count.index % 3 )}"
+
+  tags {
+    Name = "PublicSubnet-${element(split(",",var.environments), count.index / 3)}-AZ${(count.index % 3 ) + 1}"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index / 3)}"
+  }
+}
+
+resource "aws_route_table_association" "nubis" {
+    count = "${3 * var.enabled * length(split(",", var.environments))}"
+    
+    subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
+    route_table_id = "${element(aws_route_table.nubis.*.id, count.index / 3)}"
+}
+
+resource "aws_internet_gateway" "nubis" {
+    count = "${var.enabled * length(split(",", var.environments))}"
+  
+    vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+
+  tags {
+    Name = "InternetGateway-${element(split(",",var.environments), count.index)}"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
+resource "aws_route_table" "nubis" {
+    count = "${var.enabled * length(split(",", var.environments))}"
+  
+    vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+    
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = "${element(aws_internet_gateway.nubis.*.id, count.index)}"
+    }
+
+  tags {
+    Name = "PublicRoute-${element(split(",",var.environments), count.index)}"
+    ServiceName = "${var.account_name}"
+    TechnicalOwner = "${var.technical_owner}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
+resource "aws_cloudformation_stack" "vpc" {
+  count = "${var.enabled * var.enable_vpc_stack }"
 
   depends_on = [
     "aws_lambda_function.LookupNestedStackOutputs",
@@ -203,10 +413,12 @@ resource "aws_cloudformation_stack" "vpc" {
   }
 }
 
+
+
 module "jumphost" {
   source = "../jumphost"
 
-  enabled = "${var.enabled * var.enable_jumphost}"
+  enabled = "${var.enabled * var.enable_jumphost * var.enable_vpc_stack}"
 
   environments = "${var.environments}"
   aws_profile = "${var.aws_profile}"
@@ -217,13 +429,14 @@ module "jumphost" {
   technical_owner = "${var.technical_owner}"
 
   # Force a dependency on the VPC stack
-  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
+  service_name = "${var.account_name}"
+  #service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
 }
 
 module "fluent-collector" {
   source = "../fluent-collector/multi"
 
-  enabled = "${var.enabled * var.enable_fluent}"
+  enabled = "${var.enabled * var.enable_fluent * var.enable_vpc_stack}"
 
   environments = "${var.environments}"
   aws_profile = "${var.aws_profile}"
@@ -234,7 +447,8 @@ module "fluent-collector" {
   technical_owner = "${var.technical_owner}"
 
   # Force a dependency on the VPC stack
-  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
+  service_name = "${var.account_name}"
+  #service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
 
   consul_endpoints = "${module.consul.consul_endpoints}"
 }
@@ -242,7 +456,7 @@ module "fluent-collector" {
 module "consul" {
   source = "../consul"
 
-  enabled = "${var.enabled * var.enable_consul}"
+  enabled = "${var.enabled * var.enable_consul * var.enable_vpc_stack}"
 
   environments = "${var.environments}"
 
@@ -258,5 +472,6 @@ module "consul" {
   consul_secret = "${var.consul_secret}"
 
   # Force a dependency on the VPC stack
-  service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
+  service_name = "${var.account_name}"
+  #service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
 }

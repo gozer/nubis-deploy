@@ -17,13 +17,16 @@ module "us-east-1" {
   enable_consul = "${var.enable_consul}"
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
+  enable_vpc_stack = "${var.enable_vpc_stack}"
 
   my_ip = "${var.my_ip}"
 
   # This exists to force a dependency on the global module
   account_name = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
+  nubis_domain = "${var.nubis_domain}"
   environments = "${var.environments}"
+  environments_networks = "${var.environments_networks}"
   
   # should convert over to just passing in environments_networks
   admin_network = "${element(split(",",var.environments_networks), 0)}"
@@ -57,13 +60,16 @@ module "us-west-2" {
   enable_consul = "${var.enable_consul}"
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
+  enable_vpc_stack = "${var.enable_vpc_stack}"
 
   my_ip = "${var.my_ip}"
 
   # This exists to force a dependency on the global module
   account_name = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
+  nubis_domain = "${var.nubis_domain}"
   environments = "${var.environments}"
+  environments_networks = "${var.environments_networks}"
   
   # should convert over to just passing in environments_networks
   admin_network = "${element(split(",",var.environments_networks), 0)}"

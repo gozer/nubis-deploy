@@ -35,6 +35,10 @@ variable consul_secret {
   default = "sGPeZ2clbA+PTi1naruZiw=="
 }
 
+variable nubis_domain {
+  default = "nubis.allizom.org"
+}
+
 variable enable_jumphost {
   default = 0
 }
@@ -44,6 +48,10 @@ variable enable_fluent {
 }
 
 variable enable_consul {
+  default = 0
+}
+
+variable enable_vpc_stack {
   default = 0
 }
 

@@ -4,6 +4,7 @@ variable aws_regions {}
 variable environments {}
 variable account_name {}
 variable nubis_version {}
+variable nubis_domain {}
 variable environments_networks {}
 variable environments_ipsec_targets {}
 
@@ -17,5 +18,7 @@ variable enable_fluent {
 
 variable enable_consul {
 }
+
+variable enable_vpc_stack {}
 
 variable my_ip {}
