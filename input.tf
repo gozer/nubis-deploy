@@ -51,10 +51,6 @@ variable enable_consul {
   default = 0
 }
 
-variable enable_vpc_stack {
-  default = 0
-}
-
 variable my_ip {
   default = "127.0.0.1/32"
 }

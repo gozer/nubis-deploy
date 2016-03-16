@@ -43,6 +43,4 @@ variable enable_fluent {}
 
 variable enable_consul {}
 
-variable enable_vpc_stack {}
-
 variable my_ip {}

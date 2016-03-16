@@ -5,6 +5,7 @@ provider "aws" {
 
 resource "aws_key_pair" "nubis" {
   count = "${var.enabled}"
+  lifecycle { create_before_destroy = true }
   key_name = "${var.ssh_key_name}"
   public_key = "${var.nubis_ssh_key}"
 
@@ -125,9 +126,7 @@ module "meta" {
 
 resource "aws_vpc" "nubis" {
     count = "${var.enabled * length(split(",", var.environments))}"
-
-    # need to shift by the region count region1:0,1,2 region2:3,4,5
-    
+lifecycle { create_before_destroy = true }
     
     # index(split(",",var.aws_regions), var.aws_region)
     # is the index of the current region, starting at 0
@@ -147,6 +146,7 @@ resource "aws_vpc" "nubis" {
 
 resource "aws_main_route_table_association" "public" {
     count = "${var.enabled * length(split(",", var.environments))}"
+    lifecycle { create_before_destroy = true }
     vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
     route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
 }
@@ -154,9 +154,11 @@ resource "aws_main_route_table_association" "public" {
 resource "aws_security_group" "monitoring" {
   count = "${var.enabled * length(split(",", var.environments))}"
   
+  lifecycle { create_before_destroy = true }
+  
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
     
-  name = "MonitoringSecurityGroup-${element(split(",",var.environments), count.index)}"
+  name_prefix = "MonitoringSecurityGroup-${element(split(",",var.environments), count.index)}-"
   description = "Securiry group for monitoring hosts"
   
   egress {
@@ -191,9 +193,11 @@ resource "aws_security_group" "monitoring" {
 resource "aws_security_group" "ssh" {
   count = "${var.enabled * length(split(",", var.environments))}"
   
+  lifecycle { create_before_destroy = true }
+  
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
     
-  name = "SshSecurityGroup-${element(split(",",var.environments), count.index)}"
+  name_prefix = "SshSecurityGroup-${element(split(",",var.environments), count.index)}-"
   description = "SSH Security Group"
   
   egress {
@@ -214,9 +218,11 @@ resource "aws_security_group" "ssh" {
 resource "aws_security_group" "internet_access" {
   count = "${var.enabled * length(split(",", var.environments))}"
   
+  lifecycle { create_before_destroy = true }
+  
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
     
-  name = "InternetAccessSecurityGroup-${element(split(",",var.environments), count.index)}"
+  name_prefix = "InternetAccessSecurityGroup-${element(split(",",var.environments), count.index)}-"
   description = "Internet Access security group"
 
   egress {
@@ -237,10 +243,12 @@ resource "aws_security_group" "internet_access" {
 
 resource "aws_security_group" "nat" {
   count = "${var.enabled * length(split(",", var.environments))}"
+  
+  lifecycle { create_before_destroy = true }
 
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
 
-  name = "NATSecurityGroup-${element(split(",",var.environments), count.index)}"
+  name_prefix = "NATSecurityGroup-${element(split(",",var.environments), count.index)}"
   description = "NAT security group"
 
   ingress {
@@ -297,7 +305,7 @@ resource "aws_security_group" "nat" {
 
 resource "aws_security_group" "shared_services" {
   count = "${var.enabled * length(split(",", var.environments))}"
-  
+  lifecycle { create_before_destroy = true }
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
     
   name = "SharedServicesSecurityGroup-${element(split(",",var.environments), count.index)}"
@@ -354,14 +362,14 @@ resource "aws_security_group" "shared_services" {
 resource "aws_cloudformation_stack" "availability_zones" {
   count = "${var.enabled}"
   name = "availability-zones"
-  
+  lifecycle { create_before_destroy = true }
   template_body = "${file("${path.module}/availability-zones.json")}"
 }
 
 # ATM, we just create public subnets for each environment in the first 3 AZs
 resource "aws_subnet" "public" {
   count = "${3 * var.enabled * length(split(",", var.environments))}"
-  
+  lifecycle { create_before_destroy = true } 
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
     
   availability_zone = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), count.index % 3 )}"
@@ -379,6 +387,8 @@ resource "aws_subnet" "public" {
 # ATM, we just create private subnets for each environment in the first 3 AZs
 resource "aws_subnet" "private" {
   count = "${3 * var.enabled * length(split(",", var.environments))}"
+  
+  lifecycle { create_before_destroy = true }
 
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
 
@@ -396,14 +406,16 @@ resource "aws_subnet" "private" {
 
 resource "aws_route_table_association" "public" {
     count = "${3 * var.enabled * length(split(",", var.environments))}"
-    
+    lifecycle { create_before_destroy = true }   
     subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
     route_table_id = "${element(aws_route_table.public.*.id, count.index / 3)}"
 }
 
 resource "aws_internet_gateway" "nubis" {
     count = "${var.enabled * length(split(",", var.environments))}"
-  
+
+  lifecycle { create_before_destroy = true }
+
     vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
 
   tags {
@@ -416,7 +428,9 @@ resource "aws_internet_gateway" "nubis" {
 
 resource "aws_route_table" "public" {
     count = "${var.enabled * length(split(",", var.environments))}"
-  
+
+    lifecycle { create_before_destroy = true }
+
     vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
     
     route {
@@ -435,6 +449,17 @@ resource "aws_route_table" "public" {
 resource "aws_route_table" "private" {
   count = "${3 * var.enabled * length(split(",", var.environments))}"
 
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [
+      # One of these should work, but they don't, so be careful if we ever need to change the routes below
+      #"route.*.instance_id",
+      #"route.instance_id",
+      #"instance_id",
+      "route",
+    ]
+  }
+  
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
 
   route {
@@ -451,14 +476,18 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private" {
-    count = "${3 * var.enabled * length(split(",", var.environments))}"
+  count = "${3 * var.enabled * length(split(",", var.environments))}"
 
-    subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
-    route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+  lifecycle { create_before_destroy = true }
+
+  subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }
 
 resource "aws_network_interface" "private-nat" {
   count = "${3 * var.enabled * length(split(",", var.environments))}"
+
+  lifecycle { create_before_destroy = true }
 
   subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
 
@@ -466,6 +495,8 @@ resource "aws_network_interface" "private-nat" {
 
   tags {
     Name = "NatENI-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1}"
+    # Found by the nat instance doing --filter Name=tag-value,Values=nubis-nat-eni-stage Name=availability-zone,Values=$MY_AZ
+    Autodiscover = "nubis-nat-eni-${element(split(",",var.environments), count.index/3)}"
     ServiceName = "${var.account_name}"
     TechnicalOwner = "${var.technical_owner}"
     Environment = "${element(split(",",var.environments), count.index)}"
@@ -479,7 +510,7 @@ resource "aws_network_interface" "private-nat" {
 
 resource "atlas_artifact" "nubis-nat" {
   count = "${var.enabled}"
-
+  lifecycle { create_before_destroy = true }
   name = "nubisproject/nubis-nat"
   type = "amazon.image"
 
@@ -490,8 +521,10 @@ resource "atlas_artifact" "nubis-nat" {
 
 resource "aws_autoscaling_group" "nat" {
   count = "${3 * var.enabled * length(split(",", var.environments))}"
-   
-  name = "nubis-nat-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1}"
+
+  lifecycle { create_before_destroy = true }
+  
+  name = "nubis-nat-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1} (${element(aws_launch_configuration.nat.*.name, count.index/3 )})"
 
   availability_zones = [
     "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), count.index % 3 )}"
@@ -531,6 +564,8 @@ resource "aws_autoscaling_group" "nat" {
 
 resource "aws_launch_configuration" "nat" {
   count = "${var.enabled * length(split(",", var.environments))}"
+  
+  lifecycle { create_before_destroy = true }
     
   name_prefix = "nubis-nat-${element(split(",",var.environments), count.index)}-"
     
@@ -597,66 +632,10 @@ resource "aws_iam_instance_profile" "nat" {
     roles = ["${aws_iam_role.nat.name}"]
 }
 
-#XXX
-resource "aws_cloudformation_stack" "vpc" {
-  count = "${var.enabled * var.enable_vpc_stack }"
-
-  depends_on = [
-    "aws_lambda_function.LookupNestedStackOutputs",
-    "aws_lambda_function.LookupStackOutputs",
-    "aws_lambda_function.UUID",
-  ]
-
-  name = "${var.aws_region}-vpc"
-  capabilities = [ "CAPABILITY_IAM" ]
-  template_body = "${file("${path.module}/../../vpc/vpc-account.template")}"
-  
-  parameters = {
-    ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
-    StacksVersion = "${var.nubis_version}"
-    SSHKeyName = "${aws_key_pair.nubis.key_name}"
-    
-    AdminVpcCidr = "${var.admin_network}"
-    StageVpcCidr = "${var.stage_network}"
-    ProdVpcCidr = "${var.prod_network}"
-  
-    ProdIPSecTunnelTarget = "${var.prod_ipsec_target}"
-    StageIPSecTunnelTarget = "${var.stage_ipsec_target}"
-  
-    AdminPublicSubnetAZ1Cidr = "${cidrsubnet(var.admin_network, 3, 0)}"
-    AdminPublicSubnetAZ2Cidr = "${cidrsubnet(var.admin_network, 3, 1)}"
-    AdminPublicSubnetAZ3Cidr = "${cidrsubnet(var.admin_network, 3, 2)}"
-  
-    AdminPrivateSubnetAZ1Cidr = "${cidrsubnet(var.admin_network, 3, 3)}"
-    AdminPrivateSubnetAZ2Cidr = "${cidrsubnet(var.admin_network, 3, 4)}"
-    AdminPrivateSubnetAZ3Cidr = "${cidrsubnet(var.admin_network, 3, 5)}"
-  
-    ProdPublicSubnetAZ1Cidr = "${cidrsubnet(var.prod_network, 3, 0)}"
-    ProdPublicSubnetAZ2Cidr = "${cidrsubnet(var.prod_network, 3, 1)}"
-    ProdPublicSubnetAZ3Cidr = "${cidrsubnet(var.prod_network, 3, 2)}"
-  
-    ProdPrivateSubnetAZ1Cidr = "${cidrsubnet(var.prod_network, 3, 3)}"
-    ProdPrivateSubnetAZ2Cidr = "${cidrsubnet(var.prod_network, 3, 4)}"
-    ProdPrivateSubnetAZ3Cidr = "${cidrsubnet(var.prod_network, 3, 5)}"
-  
-    StagePublicSubnetAZ1Cidr = "${cidrsubnet(var.stage_network, 3, 0)}"
-    StagePublicSubnetAZ2Cidr = "${cidrsubnet(var.stage_network, 3, 1)}"
-    StagePublicSubnetAZ3Cidr = "${cidrsubnet(var.stage_network, 3, 2)}"
-  
-    StagePrivateSubnetAZ1Cidr = "${cidrsubnet(var.stage_network, 3, 3)}"
-    StagePrivateSubnetAZ2Cidr = "${cidrsubnet(var.stage_network, 3, 4)}"
-    StagePrivateSubnetAZ3Cidr = "${cidrsubnet(var.stage_network, 3, 5)}"
-  
-  }
-}
-
-
-
 module "jumphost" {
   source = "../jumphost"
 
-  enabled = "${var.enabled * var.enable_jumphost * var.enable_vpc_stack}"
+  enabled = "${var.enabled * var.enable_jumphost}"
 
   environments = "${var.environments}"
   aws_profile = "${var.aws_profile}"
@@ -674,7 +653,7 @@ module "jumphost" {
 module "fluent-collector" {
   source = "../fluent-collector/multi"
 
-  enabled = "${var.enabled * var.enable_fluent * var.enable_vpc_stack}"
+  enabled = "${var.enabled * var.enable_fluent}"
 
   environments = "${var.environments}"
   aws_profile = "${var.aws_profile}"
@@ -694,7 +673,7 @@ module "fluent-collector" {
 module "consul" {
   source = "../consul"
 
-  enabled = "${var.enabled * var.enable_consul * var.enable_vpc_stack}"
+  enabled = "${var.enabled * var.enable_consul}"
 
   environments = "${var.environments}"
 
