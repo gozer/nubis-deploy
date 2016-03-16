@@ -2,6 +2,7 @@ module "us-east-1" {
   source  = "../../vpc"
 
   aws_region = "us-east-1"
+  aws_regions = "${var.aws_regions}"
   aws_profile = "${var.aws_profile}"
   aws_account_id = "${var.aws_account_id}"
  
@@ -45,6 +46,7 @@ module "us-west-2" {
   source  = "../../vpc"
 
   aws_region = "us-west-2"
+  aws_regions = "${var.aws_regions}"
   aws_profile = "${var.aws_profile}"
   aws_account_id = "${var.aws_account_id}"
  

@@ -42,14 +42,14 @@ EOF
 }
 
 resource "aws_iam_role" "lambda" {
-    count = "${var.enabled}"
-    name = "lambda-${var.aws_region}"
+  count = "${var.enabled}"
+  name = "lambda-${var.aws_region}"
 
   provisioner "local-exec" {
    command = "sleep 30"
   }
 
-    assume_role_policy = <<EOF
+  assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
           "Statement": [
@@ -125,7 +125,14 @@ module "meta" {
 
 resource "aws_vpc" "nubis" {
     count = "${var.enabled * length(split(",", var.environments))}"
-    cidr_block = "${element(split(",",var.environments_networks), count.index)}"
+
+    # need to shift by the region count region1:0,1,2 region2:3,4,5
+    
+    
+    # index(split(",",var.aws_regions), var.aws_region)
+    # is the index of the current region, starting at 0
+    # So the correct grouping of subnets is count.index + ( 3 * region-index )
+    cidr_block = "${element(split(",",var.environments_networks), count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) )}"
     
     enable_dns_support = true
     enable_dns_hostnames = true
@@ -195,13 +202,6 @@ resource "aws_security_group" "ssh" {
       protocol = "-1"
       cidr_blocks = ["0.0.0.0/0"]
   } 
-  
-  ingress {
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-  }
 
   tags {
     Name = "SshSecurityGroup"
@@ -218,20 +218,13 @@ resource "aws_security_group" "internet_access" {
     
   name = "InternetAccessSecurityGroup-${element(split(",",var.environments), count.index)}"
   description = "Internet Access security group"
-  
+
   egress {
       from_port = 0
       to_port = 0
       protocol = "-1"
       cidr_blocks = ["0.0.0.0/0"]
-  } 
-  
-  ingress {
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-  }  
+  }
 
   tags {
     Name = "InternetAccessSecurityGroup"
@@ -239,6 +232,7 @@ resource "aws_security_group" "internet_access" {
     TechnicalOwner = "${var.technical_owner}"
     Environment = "${element(split(",",var.environments), count.index)}"
   } 
+
 }
 
 resource "aws_security_group" "nat" {
@@ -267,12 +261,22 @@ resource "aws_security_group" "nat" {
       ]
   }
 
-ingress {
+  ingress {
       from_port = 8
       to_port = -1
       protocol = "icmp"
       security_groups = [
         "${element(aws_security_group.internet_access.*.id, count.index)}",
+      ]
+  }
+  
+  #XXX
+  ingress {
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = [
+        "${var.my_ip}"
       ]
   }
 
@@ -473,6 +477,127 @@ resource "aws_network_interface" "private-nat" {
   ]
 }
 
+resource "atlas_artifact" "nubis-nat" {
+  count = "${var.enabled}"
+
+  name = "nubisproject/nubis-nat"
+  type = "amazon.image"
+
+  metadata {
+    project_version = "${var.nubis_version}"
+  }
+}
+
+resource "aws_autoscaling_group" "nat" {
+  count = "${3 * var.enabled * length(split(",", var.environments))}"
+   
+  name = "nubis-nat-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1}"
+
+  availability_zones = [
+    "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), count.index % 3 )}"
+  ]
+
+  # Subnets
+  vpc_zone_identifier = [
+    "${element(aws_subnet.public.*.id, count.index)}"
+  ]
+
+  max_size = 2
+  min_size = 1
+  desired_capacity = 1
+  launch_configuration = "${element(aws_launch_configuration.nat.*.name, count.index/3 )}"
+  
+  tag {
+    key = "Name"
+    value = "nubis-nat-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1}"
+    propagate_at_launch = true
+  }
+  tag {
+    key = "ServiceName"
+    value = "${var.account_name}"
+    propagate_at_launch = true
+  }
+  tag {
+    key = "TechnicalOwner"
+    value = "${var.technical_owner}"
+    propagate_at_launch = true
+  }
+  tag {
+    key = "Environment"
+    value = "${element(split(",",var.environments), count.index)}"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_launch_configuration" "nat" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+    
+  name_prefix = "nubis-nat-${element(split(",",var.environments), count.index)}-"
+    
+  # Somewhat nasty, since Atlas doesn't have an elegant way to access the id for a region
+  # the id is "region:ami,region:ami,region:ami"
+  # so we split it all and find the index of the region
+  # add on, and pick that element
+  image_id = "${ element(split(",",replace(atlas_artifact.nubis-nat.id,":",",")) ,1 + index(split(",",replace(atlas_artifact.nubis-nat.id,":",",")), var.aws_region)) }"
+  
+  instance_type = "t2.nano"
+  associate_public_ip_address  = true
+  key_name = "${var.ssh_key_name}"
+  
+  iam_instance_profile = "${aws_iam_instance_profile.nat.id}"
+ 
+  security_groups = [
+    "${element(aws_security_group.internet_access.*.id, count.index)}",
+    "${element(aws_security_group.nat.*.id, count.index)}",
+    "${element(aws_security_group.ssh.*.id, count.index)}",
+    "${element(aws_security_group.shared_services.*.id, count.index)}",
+  ]
+  
+  user_data = <<USER_DATA
+NUBIS_PROJECT='nubis-nat-${element(split(",",var.environments), count.index)}'
+NUBIS_ENVIRONMENT='${element(split(",",var.environments), count.index)}'
+NUBIS_DOMAIN='${var.nubis_domain}'
+NUBIS_MIGRATE='1'
+CONSUL_ACL_TOKEN='anonymous'
+NUBIS_ACCOUNT='${var.account_name}'
+NUBIS_PURPOSE='Nat Instance'
+USER_DATA
+}
+
+# XXX: This could be a global
+resource "aws_iam_role" "nat" {
+    count = "${var.enabled}"
+    path = "/nubis/"
+    name = "nubis-nat-role-${var.aws_region}"
+    assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy" "nat" {
+    name = "nubis-nat-policy-${var.aws_region}"
+    role = "${aws_iam_role.nat.id}"
+    policy = "${file("${path.module}/nat-policy.json")}"
+}
+
+resource "aws_iam_instance_profile" "nat" {
+    name = "nubis-nat-profile-${var.aws_region}"
+    roles = ["${aws_iam_role.nat.name}"]
+}
+
+#XXX
 resource "aws_cloudformation_stack" "vpc" {
   count = "${var.enabled * var.enable_vpc_stack }"
 

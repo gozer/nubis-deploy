@@ -1,5 +1,6 @@
 variable aws_profile {}
 variable aws_region {}
+variable aws_regions {}
 variable aws_account_id {}
 
 variable admin_network {}
