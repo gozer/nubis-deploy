@@ -23,9 +23,9 @@ module "global_meta" {
 module "vpcs" {
   source = "modules/global/vpcs"
 
-  enable_consul = "${var.enable_consul}"
-  enable_jumphost = "${var.enable_jumphost}"
-  enable_fluent = "${var.enable_fluent}"
+  enable_consul = "${lookup(var.features,"consul")}"
+  enable_jumphost = "${lookup(var.features,"jumphost")}"
+  enable_fluent = "${lookup(var.features,"fluent")}"
 
   my_ip = "${var.my_ip}"
 

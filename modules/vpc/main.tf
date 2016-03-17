@@ -253,7 +253,7 @@ resource "aws_security_group" "nat" {
 
   ingress {
       from_port = 0
-      to_port = 0
+      to_port = 65535
       protocol = "tcp"
       security_groups = [
         "${element(aws_security_group.internet_access.*.id, count.index)}",
@@ -262,7 +262,7 @@ resource "aws_security_group" "nat" {
 
   ingress {
       from_port = 0
-      to_port = 0
+      to_port = 65535
       protocol = "udp"
       security_groups = [
         "${element(aws_security_group.internet_access.*.id, count.index)}",
@@ -456,7 +456,7 @@ resource "aws_route_table" "private" {
       #"route.*.instance_id",
       #"route.instance_id",
       #"instance_id",
-      "route",
+      #"route",
     ]
   }
   
@@ -602,6 +602,8 @@ USER_DATA
 # XXX: This could be a global
 resource "aws_iam_role" "nat" {
     count = "${var.enabled}"
+    lifecycle { create_before_destroy = true }
+
     path = "/nubis/"
     name = "nubis-nat-role-${var.aws_region}"
     assume_role_policy = <<POLICY
@@ -622,12 +624,18 @@ POLICY
 }
 
 resource "aws_iam_role_policy" "nat" {
+    count = "${var.enabled}"
+    lifecycle { create_before_destroy = true }
+
     name = "nubis-nat-policy-${var.aws_region}"
     role = "${aws_iam_role.nat.id}"
     policy = "${file("${path.module}/nat-policy.json")}"
 }
 
 resource "aws_iam_instance_profile" "nat" {
+    count = "${var.enabled}"
+    lifecycle { create_before_destroy = true }
+
     name = "nubis-nat-profile-${var.aws_region}"
     roles = ["${aws_iam_role.nat.name}"]
 }
@@ -645,9 +653,18 @@ module "jumphost" {
   nubis_version = "${var.nubis_version}"
   technical_owner = "${var.technical_owner}"
 
-  # Force a dependency on the VPC stack
+  zone_id = "${module.meta.HostedZoneId}"
+
+  vpc_ids = "${join(",", aws_vpc.nubis.*.id)}"
+  public_subnet_ids = "${join(",", aws_subnet.public.*.id)}"
+
+  internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
+  shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
+  ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
+
+  nubis_domain = "${var.nubis_domain}"
+
   service_name = "${var.account_name}"
-  #service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
 }
 
 module "fluent-collector" {
@@ -667,7 +684,8 @@ module "fluent-collector" {
   service_name = "${var.account_name}"
   #service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
 
-  consul_endpoints = "${module.consul.consul_endpoints}"
+#  consul_endpoints = "${module.consul.consul_endpoints}"
+   consul_endpoints = "bla"
 }
 
 module "consul" {
@@ -685,10 +703,17 @@ module "consul" {
 
   key_name = "${var.ssh_key_name}"
   nubis_version = "${var.nubis_version}"
+  vpc_ids = "${join(",", aws_vpc.nubis.*.id)}"
+  public_subnet_ids = "${join(",", aws_subnet.public.*.id)}"
+  private_subnet_ids = "${join(",", aws_subnet.private.*.id)}"
+
+  internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
+  shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
+  ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
 
   consul_secret = "${var.consul_secret}"
+  credstash_key = "${module.meta.CredstashKeyID}"
+  zone_id = "${module.meta.HostedZoneId}"
 
-  # Force a dependency on the VPC stack
   service_name = "${var.account_name}"
-  #service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
 }

@@ -39,16 +39,12 @@ variable nubis_domain {
   default = "nubis.allizom.org"
 }
 
-variable enable_jumphost {
-  default = 0
-}
-
-variable enable_fluent {
-  default = 0
-}
-
-variable enable_consul {
-  default = 0
+variable features {
+  default = {
+    consul = 0
+    jumphost = 0
+    fluent = 0
+  }
 }
 
 variable my_ip {

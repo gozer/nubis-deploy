@@ -9,7 +9,9 @@ environments_networks = "10.x.y.0/24,10.x.y.0/24,10.x.y.0/24"
 
 admin_users = "alice,bob,chris"
 
-#enable_consul = 0
-#enable_jumphost = 0
-#enable_fluent = 0
+features.consul = 0
+features.jumphost = 0
+features.fluent = 0
+
+my_ip = "a.b.c.d/32"
 

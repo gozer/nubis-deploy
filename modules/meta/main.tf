@@ -9,6 +9,7 @@ resource "aws_route53_zone" "hosted_zone" {
     tags {
       ServiceName = "${var.service_name}"
       TechnicalOwner = "${var.technical_owner}"
+      Test = "foo"
     }
 }
 
@@ -184,4 +185,8 @@ output "HostedZoneName" {
 
 output "CredstashPolicy" {
   value = "{$aws_iam_policy.credstash.arn}"
+}
+
+output "HostedZoneNS" {
+  value = "${aws_route53_zone.hosted_zone.name_servers.0},${aws_route53_zone.hosted_zone.name_servers.1},${aws_route53_zone.hosted_zone.name_servers.2},${aws_route53_zone.hosted_zone.name_servers.3}"
 }
