@@ -446,26 +446,22 @@ resource "aws_route_table" "public" {
   }
 }
 
+resource "aws_route" "private" {
+    count = "${3 * var.enabled * length(split(",", var.environments))}"
+    lifecycle { create_before_destroy = true }
+
+    route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+
+    destination_cidr_block = "0.0.0.0/0"
+    network_interface_id = "${element(aws_network_interface.private-nat.*.id, count.index)}"
+}
+
 resource "aws_route_table" "private" {
   count = "${3 * var.enabled * length(split(",", var.environments))}"
 
-  lifecycle {
-    create_before_destroy = true
-    ignore_changes = [
-      # One of these should work, but they don't, so be careful if we ever need to change the routes below
-      #"route.*.instance_id",
-      #"route.instance_id",
-      #"instance_id",
-      #"route",
-    ]
-  }
+  lifecycle { create_before_destroy = true }
   
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    network_interface_id = "${element(aws_network_interface.private-nat.*.id, count.index)}"
-  }
 
   tags {
     Name = "PrivateRoute-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1}"
