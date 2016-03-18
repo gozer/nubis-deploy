@@ -3,13 +3,13 @@ provider "aws" {
     region = "${var.aws_region}"
 }
 
+#XXX: We create this on purpose for all the regions we support
 resource "aws_route53_zone" "hosted_zone" {
    name = "${var.aws_region}.${var.service_name}.${var.nubis_domain}"
 
     tags {
       ServiceName = "${var.service_name}"
       TechnicalOwner = "${var.technical_owner}"
-      Test = "foo"
     }
 }
 
@@ -184,7 +184,7 @@ output "HostedZoneName" {
 }
 
 output "CredstashPolicy" {
-  value = "{$aws_iam_policy.credstash.arn}"
+  value = "${aws_iam_policy.credstash.arn}"
 }
 
 output "HostedZoneNS" {

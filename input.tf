@@ -27,12 +27,11 @@ variable aws_regions {
   default = "us-east-1,us-west-2"
 }
 
-variable consul_master_acl_token {
-  default = "00000000-0000-0000-0000-000000000000"
-}
-
-variable consul_secret {
-  default = "sGPeZ2clbA+PTi1naruZiw=="
+variable consul {
+  default = {
+    master_acl_token = "00000000-0000-0000-0000-000000000000"
+    secret           = "AAAAAAAAAAAAAAAAAAAAAA=="
+  }
 }
 
 variable nubis_domain {

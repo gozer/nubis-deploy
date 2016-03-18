@@ -9,6 +9,7 @@ variable environments_networks {}
 variable environments_ipsec_targets {}
 
 variable consul_secret {}
+variable consul_master_acl_token {}
 
 variable enable_jumphost {
 }

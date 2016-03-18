@@ -23,6 +23,8 @@ module "consul" {
   allowed_public_cidrs = "${var.my_ip}"
 
   consul_secret = "${var.consul_secret}"
+  master_acl_token = "${var.consul_master_acl_token}"
+
   credstash_key = "${var.credstash_key}"
 
   shared_services_security_groups = "${var.shared_services_security_groups}"
@@ -32,9 +34,4 @@ module "consul" {
   public_subnets  = "${var.public_subnet_ids}"
   zone_id = "${var.zone_id}"
   vpc_ids = "${var.vpc_ids}"
-
-  master_acl_token = "00000000-0000-0000-0000-000000000000"
-
-  ssl_cert = "/tmp/consul.pem"
-  ssl_key = "/tmp/consul.key"
 }

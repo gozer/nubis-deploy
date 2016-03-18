@@ -38,6 +38,7 @@ module "us-east-1" {
   stage_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 2)}"
   
   consul_secret = "${var.consul_secret}"
+  consul_master_acl_token = "${var.consul_master_acl_token}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -81,5 +82,6 @@ module "us-west-2" {
   stage_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 2)}"
 
   consul_secret = "${var.consul_secret}"
+  consul_master_acl_token = "${var.consul_master_acl_token}"
 }
 

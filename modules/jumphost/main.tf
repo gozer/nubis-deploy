@@ -72,8 +72,23 @@ resource "aws_iam_instance_profile" "jumphost" {
     count = "${var.enabled * length(split(",", var.environments))}"
     lifecycle { create_before_destroy = true }
     name = "${var.project}-${element(split(",",var.environments), count.index)}-${var.aws_region}"
-    roles = ["${element(aws_iam_role.jumphost.*.name, count.index)}"]
+    roles = [
+      "${element(aws_iam_role.jumphost.*.name, count.index)}",
+    ]
 }
+
+# Right now, it's one policy per region
+resource "aws_iam_policy_attachment" "jumphost-credstash" {
+    count = "${var.enabled}"
+
+    name = "jumphost-credstash--${var.aws_region}"
+
+    roles = [
+      "${aws_iam_role.jumphost.*.name}",
+    ]
+    policy_arn = "${var.credstash_policy}"
+}
+
 
 resource "aws_iam_role" "jumphost" {
   count = "${var.enabled * length(split(",", var.environments))}"

@@ -5,6 +5,7 @@ variable key_name {}
 variable nubis_version {}
 variable service_name {}
 variable consul_secret {}
+variable consul_master_acl_token {}
 variable credstash_key {}
 variable vpc_ids {}
 variable public_subnet_ids {}
@@ -18,3 +19,5 @@ variable shared_services_security_groups {}
 variable environments {}
 variable enabled {}
 variable my_ip {}
+
+variable lambda_uuid_arn {}

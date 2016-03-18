@@ -657,6 +657,7 @@ module "jumphost" {
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
+  credstash_policy                = "${module.meta.CredstashPolicy}"
 
   nubis_domain = "${var.nubis_domain}"
 
@@ -696,6 +697,7 @@ module "consul" {
   aws_account_id = "${var.aws_account_id}"
 
   my_ip = "${var.my_ip}"
+  lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
 
   key_name = "${var.ssh_key_name}"
   nubis_version = "${var.nubis_version}"
@@ -708,6 +710,7 @@ module "consul" {
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
 
   consul_secret = "${var.consul_secret}"
+  consul_master_acl_token = "${var.consul_master_acl_token}"
   credstash_key = "${module.meta.CredstashKeyID}"
   zone_id = "${module.meta.HostedZoneId}"
 
