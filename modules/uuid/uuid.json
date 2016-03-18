@@ -1,0 +1,27 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "LambdaUUIDArn": {
+      "Description": "ARN of a UUID generating function",
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "UUID": {
+      "Type": "Custom::UUID",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "LambdaUUIDArn"
+        }
+      }
+    },
+    "Outputs": {
+      "UUID": {
+        "Fn::GetAtt": [
+          "UUID",
+          "uuid"
+        ]
+      }
+    }
+  }
+}
