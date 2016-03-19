@@ -33,52 +33,6 @@ resource "aws_kms_key" "credstash" {
 POLICY
 }
 
-resource "aws_iam_policy" "credstash" {
-  count = "${var.enabled}"
-  name = "credstash-${var.aws_region}"
-  description = "Policy for reading the Credstash DynamoDB"
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "kms:Decrypt"
-      ],
-      "Effect": "Allow",
-      "Resource": "${aws_kms_key.credstash.arn}",
-      "Condition": {
-                "StringEquals": {
-                  "kms:EncryptionContext:environment": [
-                    "admin",
-                    "stage",
-                    "prod"
-                  ],
-                  "kms:EncryptionContext:region": "${var.aws_region}",
-                  "kms:EncryptionContext:service": "nubis"
-                }
-            }
-    },
-                {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
-                "dynamodb:ListTables",
-                "dynamodb:Query",
-                "dynamodb:Scan",
-                "dynamodb:DescribeReservedCapacity",
-                "dynamodb:DescribeReservedCapacityOfferings"
-              ],
-              "Resource": "${aws_dynamodb_table.credstash.arn}"
-            }
-  ]
-}
-POLICY
-
-}
-
 resource "aws_dynamodb_table" "credstash" {
     count = "${var.enabled}"
     name = "credential-store"
@@ -183,8 +137,8 @@ output "HostedZoneName" {
   value = "${aws_route53_zone.hosted_zone.name}"
 }
 
-output "CredstashPolicy" {
-  value = "${aws_iam_policy.credstash.arn}"
+output "CredstashDynamoDB" {
+  value = "${aws_dynamodb_table.credstash.arn}"
 }
 
 output "HostedZoneNS" {

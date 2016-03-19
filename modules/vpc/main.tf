@@ -14,6 +14,49 @@ resource "aws_key_pair" "nubis" {
   }
 }
 
+resource "aws_iam_policy" "credstash" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  name = "credstash-${element(split(",",var.environments), count.index)}-${var.aws_region}"
+  description = "Policy for reading the Credstash DynamoDB"
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Effect": "Allow",
+      "Resource": "${module.meta.CredstashKeyID}",
+      "Condition": {
+                "StringEquals": {
+                  "kms:EncryptionContext:environment": "${element(split(",",var.environments), count.index)}",
+                  "kms:EncryptionContext:region": "${var.aws_region}",
+                  "kms:EncryptionContext:service": "nubis"
+                }
+            }
+    },
+                {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:DescribeTable",
+                "dynamodb:GetItem",
+                "dynamodb:ListTables",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:DescribeReservedCapacity",
+                "dynamodb:DescribeReservedCapacityOfferings"
+              ],
+              "Resource": "${module.meta.CredstashDynamoDB}"
+            }
+  ]
+}
+POLICY
+
+}
+
 resource "aws_iam_role_policy" "lambda" {
     count = "${var.enabled}"
     name = "lambda_policy-${var.aws_region}"
@@ -657,7 +700,7 @@ module "jumphost" {
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
-  credstash_policy                = "${module.meta.CredstashPolicy}"
+  credstash_policies              = "${join(",",aws_iam_policy.credstash.*.arn)}"
 
   nubis_domain = "${var.nubis_domain}"
 

@@ -77,18 +77,17 @@ resource "aws_iam_instance_profile" "jumphost" {
     ]
 }
 
-# Right now, it's one policy per region
+#XXX: This needs rolling up so nat/fluent can be in here as well
 resource "aws_iam_policy_attachment" "jumphost-credstash" {
-    count = "${var.enabled}"
+    count = "${var.enabled * length(split(",", var.environments))}"
 
     name = "jumphost-credstash--${var.aws_region}"
 
     roles = [
-      "${aws_iam_role.jumphost.*.name}",
+      "${element(aws_iam_role.jumphost.*.name, count.index)}",
     ]
-    policy_arn = "${var.credstash_policy}"
+    policy_arn = "${element(split(",",var.credstash_policies), count.index)}"
 }
-
 
 resource "aws_iam_role" "jumphost" {
   count = "${var.enabled * length(split(",", var.environments))}"
