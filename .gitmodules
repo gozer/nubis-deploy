@@ -1,9 +1,0 @@
-[submodule "vpc"]
-	path = vpc
-	url = https://github.com/nubisproject/nubis-vpc.git
-[submodule "jumphost"]
-	path = jumphost
-	url = https://github.com/nubisproject/nubis-jumphost.git
-[submodule "fluent-collector"]
-	path = fluent-collector
-	url = https://github.com/nubisproject/nubis-fluent-collector.git
