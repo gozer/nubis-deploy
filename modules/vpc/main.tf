@@ -637,7 +637,6 @@ NUBIS_PROJECT='nubis-nat-${element(split(",",var.environments), count.index)}'
 NUBIS_ENVIRONMENT='${element(split(",",var.environments), count.index)}'
 NUBIS_DOMAIN='${var.nubis_domain}'
 NUBIS_MIGRATE='1'
-CONSUL_ACL_TOKEN='anonymous'
 NUBIS_ACCOUNT='${var.account_name}'
 NUBIS_PURPOSE='Nat Instance'
 USER_DATA
