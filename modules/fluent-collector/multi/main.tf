@@ -49,6 +49,52 @@ resource "aws_s3_bucket" "fluent" {
   }
 }
 
+
+variable "elb_account_ids" {
+  default = {
+    us-east-1 = "127311923021"
+    us-west-1 = "027434742980"
+    us-west-2 = "797873946194"
+  }
+}
+
+resource "aws_s3_bucket" "elb" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+  lifecycle { create_before_destroy = true }
+
+  bucket = "fluent-elb-${element(split(",",var.environments), count.index)}-${element(split(",",module.uuid.uuids), count.index)}"
+
+  acl = "private"
+  force_destroy = true
+  versioning {
+    enabled = true
+  }
+  
+  # Careful, resource must match the name of the bucket
+  policy = <<POLICY
+{
+          "Version": "2008-10-17",
+          "Statement": [
+            {
+              "Sid": "Allow ELBs to publish logs here",
+              "Action": "s3:PutObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::fluent-elb-${element(split(",",var.environments), count.index)}-${element(split(",",module.uuid.uuids), count.index)}/*",
+              "Principal": {
+                "AWS": "arn:aws:iam::${lookup(var.elb_account_ids, var.aws_region)}:root"
+              }
+            }
+          ]
+        }  
+POLICY
+
+  tags = {
+    Name = "${var.project}-${element(split(",",var.environments), count.index)}"
+    Region = "${var.aws_region}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
 resource "aws_security_group" "fluent-collector" {
   count = "${var.enabled * length(split(",", var.environments))}"
   lifecycle { create_before_destroy = true }
@@ -213,6 +259,7 @@ NUBIS_ENVIRONMENT=${element(split(",",var.environments), count.index)}
 NUBIS_ACCOUNT=${var.service_name}
 NUBIS_DOMAIN=${var.nubis_domain}
 NUBIS_FLUENT_BUCKET=${element(aws_s3_bucket.fluent.*.id, count.index)}
+NUBIS_ELB_BUCKET=${element(aws_s3_bucket.elb.*.id, count.index)}
 EOF
 }
 
