@@ -78,6 +78,11 @@ resource "aws_security_group" "jumphost" {
 resource "aws_iam_instance_profile" "jumphost" {
     count = "${var.enabled * length(split(",", var.environments))}"
     lifecycle { create_before_destroy = true }
+
+    provisioner "local-exec" {
+      command = "sleep 10"
+    }
+
     name = "${var.project}-${element(split(",",var.environments), count.index)}-${var.aws_region}"
     roles = [
       "${element(aws_iam_role.jumphost.*.name, count.index)}",
