@@ -9,9 +9,18 @@ environments_networks = "10.x.y.0/24,10.x.y.0/24,10.x.y.0/24"
 
 admin_users = "alice,bob,chris"
 
-features.consul = 0
+features.consul = 1
 features.jumphost = 0
 features.fluent = 0
+features.opsec = 0
+
+# SECURITY
+
+# generate a UUID with "uuidgen"
+consul.master_acl_token = "00000000-0000-0000-0000-000000000000"
+# generate a secret with "openssl rand 16 | base64"
+consul.secret = "AAAAAAAAAAAAAAAAAAAAAA=="
+
 
 my_ip = "a.b.c.d/32"
 
