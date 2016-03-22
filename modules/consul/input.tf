@@ -7,6 +7,7 @@ variable service_name {}
 variable consul_secret {}
 variable consul_master_acl_token {}
 variable credstash_key {}
+variable credstash_dynamodb_table {}
 variable vpc_ids {}
 variable public_subnet_ids {}
 variable private_subnet_ids {}

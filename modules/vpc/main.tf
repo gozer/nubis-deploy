@@ -688,12 +688,10 @@ resource "aws_iam_policy_attachment" "credstash" {
     count = "${var.enabled * length(split(",", var.environments))}"
 
     name = "credstash-${var.aws_region}"
-
+    
     roles = [
-       "${element(split(",",module.jumphost.iam_roles), count.index)}",
-       "${element(split(",",module.consul.iam_roles), count.index)}",
-       "${element(split(",",module.fluent-collector.iam_roles), count.index)}",
-       "${element(aws_iam_role.nat.*.id, count.index)}",
+      #XXX: concat and compact should work here, but element() isn't a list, so BUG
+      "${split(",",replace(replace(concat(element(split(",",module.jumphost.iam_roles), count.index), ",", element(split(",",module.consul.iam_roles), count.index), ",", element(split(",",module.fluent-collector.iam_roles), count.index), ",", element(aws_iam_role.nat.*.id, count.index) ), "/(,+)/",","),"/(^,+|,+$)/", ""))}",
     ]
 
     policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
@@ -750,11 +748,11 @@ module "fluent-collector" {
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
-  credstash_policies              = "${join(",",aws_iam_policy.credstash.*.arn)}"
+#  credstash_policies              = "${join(",",aws_iam_policy.credstash.*.arn)}"
 
   nubis_domain = "${var.nubis_domain}"
-  credstash_key = "${module.meta.CredstashKeyID}"
-  credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
+#  credstash_key = "${module.meta.CredstashKeyID}"
+#  credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
 
   service_name = "${var.account_name}"
 }
@@ -786,7 +784,21 @@ module "consul" {
   consul_secret = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
   credstash_key = "${module.meta.CredstashKeyID}"
+  credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
   zone_id = "${module.meta.HostedZoneId}"
 
   service_name = "${var.account_name}"
+}
+
+module "opsec" {
+  source = "../opsec"
+
+  enabled = "${var.enabled * var.enable_opsec}"
+
+  environments = "${var.environments}"
+  nubis_version = "${var.nubis_version}"
+
+  aws_profile = "${var.aws_profile}"
+  aws_region = "${var.aws_region}"
+
 }

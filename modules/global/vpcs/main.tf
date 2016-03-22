@@ -18,6 +18,7 @@ module "us-east-1" {
   enable_consul = "${var.enable_consul}"
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
+  enable_opsec = "${var.enable_opsec}"
 
   my_ip = "${var.my_ip}"
 
@@ -62,6 +63,7 @@ module "us-west-2" {
   enable_consul = "${var.enable_consul}"
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
+  enable_opsec = "${var.enable_opsec}"
 
   my_ip = "${var.my_ip}"
 

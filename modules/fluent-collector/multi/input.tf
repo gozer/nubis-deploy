@@ -19,9 +19,6 @@ variable subnet_ids {}
 variable ssh_security_groups {}
 variable internet_access_security_groups {}
 variable shared_services_security_groups {}
-variable credstash_policies {}
-variable credstash_key {}
-variable credstash_dynamodb_table {}
 
 variable lambda_uuid_arn {}
 

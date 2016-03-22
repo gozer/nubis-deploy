@@ -3,6 +3,13 @@ provider "aws" {
     region = "${var.aws_region}"
 }
 
+resource "null_resource" "intermediates" {
+  triggers = {
+    # Number of environments to create
+    environments = "${var.enabled * length(split(",", var.environments))}"
+  }
+}
+
 resource "atlas_artifact" "nubis-jumphost" {
   count = "${var.enabled}"
   name = "nubisproject/nubis-jumphost"

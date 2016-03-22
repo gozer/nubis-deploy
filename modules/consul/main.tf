@@ -24,8 +24,8 @@ module "consul" {
 
   consul_secret = "${var.consul_secret}"
   master_acl_token = "${var.consul_master_acl_token}"
-
   credstash_key = "${var.credstash_key}"
+  credstash_dynamodb_table = "${var.credstash_dynamodb_table}"
 
   shared_services_security_groups = "${var.shared_services_security_groups}"
   internet_access_security_groups = "${var.internet_access_security_groups}"
