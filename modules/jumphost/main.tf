@@ -77,18 +77,6 @@ resource "aws_iam_instance_profile" "jumphost" {
     ]
 }
 
-#XXX: This needs rolling up so nat/fluent can be in here as well
-resource "aws_iam_policy_attachment" "jumphost-credstash" {
-    count = "${var.enabled * length(split(",", var.environments))}"
-
-    name = "jumphost-credstash--${var.aws_region}"
-
-    roles = [
-      "${element(aws_iam_role.jumphost.*.name, count.index)}",
-    ]
-    policy_arn = "${element(split(",",var.credstash_policies), count.index)}"
-}
-
 resource "aws_iam_role" "jumphost" {
   count = "${var.enabled * length(split(",", var.environments))}"
   lifecycle { create_before_destroy = true }

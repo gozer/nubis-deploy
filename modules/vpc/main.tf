@@ -59,6 +59,7 @@ POLICY
 
 resource "aws_iam_role_policy" "lambda" {
     count = "${var.enabled}"
+    lifecycle { create_before_destroy = true }
     name = "lambda_policy-${var.aws_region}"
     role = "${aws_iam_role.lambda.id}"
     policy = <<EOF
@@ -87,6 +88,8 @@ EOF
 
 resource "aws_iam_role" "lambda" {
   count = "${var.enabled}"
+lifecycle { create_before_destroy = true }
+
   name = "lambda-${var.aws_region}"
 
   provisioner "local-exec" {
@@ -115,6 +118,8 @@ EOF
 
 resource "aws_lambda_function" "UUID" {
     count = "${var.enabled}"
+    lifecycle { create_before_destroy = true }
+
 	function_name = "UUID"
 	s3_bucket = "nubis-stacks"
 	s3_key    = "${var.nubis_version}/lambda/UUID.zip"
@@ -618,7 +623,7 @@ resource "aws_launch_configuration" "nat" {
   associate_public_ip_address  = true
   key_name = "${var.ssh_key_name}"
   
-  iam_instance_profile = "${aws_iam_instance_profile.nat.id}"
+  iam_instance_profile = "${element(aws_iam_instance_profile.nat.*.id, count.index)}"
  
   security_groups = [
     "${element(aws_security_group.internet_access.*.id, count.index)}",
@@ -640,11 +645,11 @@ USER_DATA
 
 # XXX: This could be a global
 resource "aws_iam_role" "nat" {
-    count = "${var.enabled}"
+    count = "${var.enabled * length(split(",", var.environments))}"
     lifecycle { create_before_destroy = true }
 
     path = "/nubis/"
-    name = "nubis-nat-role-${var.aws_region}"
+    name = "nubis-nat-role-${element(split(",",var.environments), count.index)}-${var.aws_region}"
     assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -663,21 +668,37 @@ POLICY
 }
 
 resource "aws_iam_role_policy" "nat" {
-    count = "${var.enabled}"
+    count = "${var.enabled * length(split(",", var.environments))}"
     lifecycle { create_before_destroy = true }
 
-    name = "nubis-nat-policy-${var.aws_region}"
-    role = "${aws_iam_role.nat.id}"
+    name = "nubis-nat-policy-${element(split(",",var.environments), count.index)}-${var.aws_region}"
+    role = "${element(aws_iam_role.nat.*.id, count.index)}"
     policy = "${file("${path.module}/nat-policy.json")}"
 }
 
 resource "aws_iam_instance_profile" "nat" {
-    count = "${var.enabled}"
+    count = "${var.enabled * length(split(",", var.environments))}"
     lifecycle { create_before_destroy = true }
 
-    name = "nubis-nat-profile-${var.aws_region}"
-    roles = ["${aws_iam_role.nat.name}"]
+    name = "nubis-nat-profile-${element(split(",",var.environments), count.index)}-${var.aws_region}"
+    roles = ["${element(aws_iam_role.nat.*.name, count.index)}"]
 }
+
+resource "aws_iam_policy_attachment" "credstash" {
+    count = "${var.enabled * length(split(",", var.environments))}"
+
+    name = "credstash-${var.aws_region}"
+
+    roles = [
+       "${element(split(",",module.jumphost.iam_roles), count.index)}",
+       "${element(split(",",module.consul.iam_roles), count.index)}",
+       "${element(split(",",module.fluent-collector.iam_roles), count.index)}",
+       "${element(aws_iam_role.nat.*.id, count.index)}",
+    ]
+
+    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+}
+
 
 module "jumphost" {
   source = "../jumphost"
@@ -700,7 +721,6 @@ module "jumphost" {
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
-  credstash_policies              = "${join(",",aws_iam_policy.credstash.*.arn)}"
 
   nubis_domain = "${var.nubis_domain}"
 
@@ -716,16 +736,27 @@ module "fluent-collector" {
   aws_profile = "${var.aws_profile}"
   aws_region = "${var.aws_region}"
 
+  lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
+
   key_name = "${var.ssh_key_name}"
   nubis_version = "${var.nubis_version}"
   technical_owner = "${var.technical_owner}"
 
-  # Force a dependency on the VPC stack
-  service_name = "${var.account_name}"
-  #service_name = "${aws_cloudformation_stack.vpc.outputs.ServiceName}"
+  zone_id = "${module.meta.HostedZoneId}"
 
-#  consul_endpoints = "${module.consul.consul_endpoints}"
-   consul_endpoints = "bla"
+  vpc_ids = "${join(",", aws_vpc.nubis.*.id)}"
+  subnet_ids = "${join(",", aws_subnet.private.*.id)}"
+
+  internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
+  shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
+  ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
+  credstash_policies              = "${join(",",aws_iam_policy.credstash.*.arn)}"
+
+  nubis_domain = "${var.nubis_domain}"
+  credstash_key = "${module.meta.CredstashKeyID}"
+  credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
+
+  service_name = "${var.account_name}"
 }
 
 module "consul" {

@@ -14,9 +14,11 @@
           "Ref": "LambdaUUIDArn"
         }
       }
-    },
-    "Outputs": {
-      "UUID": {
+    }
+  },
+  "Outputs": {
+    "UUID": {
+      "Value": {
         "Fn::GetAtt": [
           "UUID",
           "uuid"

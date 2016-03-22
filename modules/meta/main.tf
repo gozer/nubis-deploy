@@ -15,6 +15,7 @@ resource "aws_route53_zone" "hosted_zone" {
 
 resource "aws_kms_key" "credstash" {
     count = "${var.enabled}"
+    lifecycle { create_before_destroy = true }
     description = "Key for Credstash in ${var.aws_region}"
     policy = <<POLICY
 {
@@ -35,6 +36,7 @@ POLICY
 
 resource "aws_dynamodb_table" "credstash" {
     count = "${var.enabled}"
+    lifecycle { create_before_destroy = true }
     name = "credential-store"
     read_capacity = 1
     write_capacity = 1
