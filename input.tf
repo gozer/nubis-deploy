@@ -46,6 +46,10 @@ variable features {
   }
 }
 
+variable state_uuid {
+  default = ""
+}
+
 variable my_ip {
   default = "127.0.0.1/32"
 }

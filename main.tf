@@ -18,6 +18,8 @@ module "global_meta" {
 
   account_name = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
+  
+  state_uuid = "${var.state_uuid}"
 }
 
 module "vpcs" {
