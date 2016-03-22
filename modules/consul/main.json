@@ -133,43 +133,57 @@
     "PrivateSubnets": {
       "Description": "Private Subnets",
       "Value": {
-        "Fn::Join" : [ ",",
-       [
-        { "Fn::GetAtt": [
-          "VpcInfo",
-          "PrivateSubnetAZ1"
-        ]},
-        { "Fn::GetAtt": [
-          "VpcInfo",
-          "PrivateSubnetAZ2"
-        ]},
-        { "Fn::GetAtt": [
-          "VpcInfo",
-          "PrivateSubnetAZ3"
-        ]}
-] ]
-
+        "Fn::Join": [
+          ",",
+          [
+            {
+              "Fn::GetAtt": [
+                "VpcInfo",
+                "PrivateSubnetAZ1"
+              ]
+            },
+            {
+              "Fn::GetAtt": [
+                "VpcInfo",
+                "PrivateSubnetAZ2"
+              ]
+            },
+            {
+              "Fn::GetAtt": [
+                "VpcInfo",
+                "PrivateSubnetAZ3"
+              ]
+            }
+          ]
+        ]
       }
     },
     "PublicSubnets": {
       "Description": "Public Subnets",
       "Value": {
-        "Fn::Join" : [ ",", 
-       [
-        { "Fn::GetAtt": [
-          "VpcInfo",
-          "PublicSubnetAZ1"
-        ]},
-        { "Fn::GetAtt": [
-          "VpcInfo",
-          "PublicSubnetAZ2"
-        ]},
-        { "Fn::GetAtt": [
-          "VpcInfo",
-          "PublicSubnetAZ3"
-        ]}
-] ]
-
+        "Fn::Join": [
+          ",",
+          [
+            {
+              "Fn::GetAtt": [
+                "VpcInfo",
+                "PublicSubnetAZ1"
+              ]
+            },
+            {
+              "Fn::GetAtt": [
+                "VpcInfo",
+                "PublicSubnetAZ2"
+              ]
+            },
+            {
+              "Fn::GetAtt": [
+                "VpcInfo",
+                "PublicSubnetAZ3"
+              ]
+            }
+          ]
+        ]
       }
     },
     "CredstashKeyId": {

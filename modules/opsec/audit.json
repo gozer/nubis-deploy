@@ -304,8 +304,7 @@
       }
     }
   },
-  "Parameters": {
-  },
+  "Parameters": {},
   "Outputs": {
     "InfosecSecurityAuditRoleARN": {
       "Value": {
