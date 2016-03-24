@@ -531,7 +531,10 @@ resource "aws_route_table_association" "private" {
 resource "aws_network_interface" "private-nat" {
   count = "${3 * var.enabled * length(split(",", var.environments))}"
 
-  lifecycle { create_before_destroy = true }
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [ "attachment" ]
+  }
 
   subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
 
@@ -787,6 +790,8 @@ module "consul" {
   zone_id = "${module.meta.HostedZoneId}"
 
   service_name = "${var.account_name}"
+
+  datadog_api_key = "${var.datadog_api_key}"
 }
 
 module "opsec" {

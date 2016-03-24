@@ -34,4 +34,6 @@ module "consul" {
   public_subnets  = "${var.public_subnet_ids}"
   zone_id = "${var.zone_id}"
   vpc_ids = "${var.vpc_ids}"
+
+  datadog_api_key = "${var.datadog_api_key}"
 }

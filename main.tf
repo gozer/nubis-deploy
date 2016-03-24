@@ -48,4 +48,5 @@ module "vpcs" {
   consul_secret = "${lookup(var.consul, "secret")}"
   consul_master_acl_token = "${lookup(var.consul, "master_acl_token")}"
 
+  datadog_api_key = "${lookup(var.datadog, "api_key")}"
 }

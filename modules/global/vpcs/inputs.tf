@@ -23,3 +23,5 @@ variable enable_consul {
 variable enable_opsec {}
 
 variable my_ip {}
+
+variable datadog_api_key {}

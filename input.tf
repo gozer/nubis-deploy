@@ -50,6 +50,23 @@ variable state_uuid {
   default = ""
 }
 
+# Turn into features ?
+variable datadog {
+  default = {
+    api_key = "unset"
+  }
+}
+
+variable mig {
+  default = {
+    agent_crt = ""
+    agent_key = ""
+    ca_crt = ""
+    relay_password = ""
+    relay_user = ""
+  }
+}
+
 variable my_ip {
   default = "127.0.0.1/32"
 }

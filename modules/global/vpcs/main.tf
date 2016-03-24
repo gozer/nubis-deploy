@@ -40,6 +40,7 @@ module "us-east-1" {
   
   consul_secret = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
+  datadog_api_key = "${var.datadog_api_key}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -85,5 +86,6 @@ module "us-west-2" {
 
   consul_secret = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
+  datadog_api_key = "${var.datadog_api_key}"
 }
 

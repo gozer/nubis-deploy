@@ -13,3 +13,10 @@ output "admins_secret_keys" {
 output "account_id" {
   value = "${module.global_admins.account_id}"
 }
+
+output "datadog_access_key" {
+  value = "${module.global_meta.datadog_access_key}"
+}
+output "datadog_secret_key" {
+  value = "${module.global_meta.datadog_secret_key}"
+}
