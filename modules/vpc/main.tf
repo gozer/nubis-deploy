@@ -87,8 +87,8 @@ EOF
 }
 
 resource "aws_iam_role" "lambda" {
-  count = "${var.enabled}"
-lifecycle { create_before_destroy = true }
+#  count = "${var.enabled}"
+  lifecycle { create_before_destroy = true }
 
   name = "lambda-${var.aws_region}"
 
@@ -116,8 +116,11 @@ lifecycle { create_before_destroy = true }
 EOF
 }
 
+#XXX: This is because it's fed to a module input, so it can't be undefined
+#XXX: even in regions where enabled=0, unfortunately
+
 resource "aws_lambda_function" "UUID" {
-    count = "${var.enabled}"
+#    count = "${var.enabled}"
     lifecycle { create_before_destroy = true }
 
 	function_name = "UUID"
