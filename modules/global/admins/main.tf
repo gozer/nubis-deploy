@@ -7,8 +7,8 @@ output "account_name" {
     value = "${var.account_name}"
 }
 
-output "technical_owner" {
-    value = "${var.technical_owner}"
+output "technical_contact" {
+    value = "${var.technical_contact}"
 }
 
 output "ssh_key_name" {

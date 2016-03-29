@@ -43,6 +43,7 @@ variable features {
     consul = 0
     jumphost = 0
     fluent = 0
+    mig = 0
   }
 }
 
@@ -59,11 +60,11 @@ variable datadog {
 
 variable mig {
   default = {
-    agent_crt = ""
-    agent_key = ""
-    ca_crt = ""
-    relay_password = ""
-    relay_user = ""
+    agent_cert = "mig/agent.crt"
+    agent_key = "mig/agent.key"
+    ca = "mig/ca.crt"
+    relay_password = "<unset>"
+    relay_user = "agent-it-nubis"
   }
 }
 

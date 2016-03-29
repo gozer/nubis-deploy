@@ -170,7 +170,7 @@ module "meta" {
 
   nubis_version = "${var.nubis_version}"
   nubis_domain = "${var.nubis_domain}"
-  technical_owner = "${var.technical_owner}"
+  technical_contact = "${var.technical_contact}"
 
   service_name = "${var.account_name}"
 }
@@ -190,7 +190,7 @@ lifecycle { create_before_destroy = true }
     tags {
       Name = "${var.aws_region}-${element(split(",",var.environments), count.index)}-vpc"
       ServiceName = "${var.account_name}"
-      TechnicalOwner = "${var.technical_owner}"
+      TechnicalContact = "${var.technical_contact}"
       Environment = "${element(split(",",var.environments), count.index)}"
     }
 }
@@ -236,7 +236,7 @@ resource "aws_security_group" "monitoring" {
   tags {
     Name = "MonitoringSecurityGroup"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index)}"
   } 
 }
@@ -261,7 +261,7 @@ resource "aws_security_group" "ssh" {
   tags {
     Name = "SshSecurityGroup"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index)}"
   } 
 }
@@ -286,7 +286,7 @@ resource "aws_security_group" "internet_access" {
   tags {
     Name = "InternetAccessSecurityGroup"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index)}"
   } 
 
@@ -349,7 +349,7 @@ resource "aws_security_group" "nat" {
   tags {
     Name = "NATSecurityGroup-${element(split(",",var.environments), count.index)}"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index)}"
   }
 }
@@ -405,7 +405,7 @@ resource "aws_security_group" "shared_services" {
   tags {
     Name = "SharedServicesSecurityGroup"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index)}"
   }
 }
@@ -430,7 +430,7 @@ resource "aws_subnet" "public" {
   tags {
     Name = "PublicSubnet-${element(split(",",var.environments), count.index / 3)}-AZ${(count.index % 3 ) + 1}"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index / 3)}"
   }
 }
@@ -450,7 +450,7 @@ resource "aws_subnet" "private" {
   tags {
     Name = "PrivateSubnet-${element(split(",",var.environments), count.index / 3)}-AZ${(count.index % 3 ) + 1}"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index / 3)}"
   }
 }
@@ -472,7 +472,7 @@ resource "aws_internet_gateway" "nubis" {
   tags {
     Name = "InternetGateway-${element(split(",",var.environments), count.index)}"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index)}"
   }
 }
@@ -492,7 +492,7 @@ resource "aws_route_table" "public" {
   tags {
     Name = "PublicRoute-${element(split(",",var.environments), count.index)}"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index)}"
   }
 }
@@ -517,7 +517,7 @@ resource "aws_route_table" "private" {
   tags {
     Name = "PrivateRoute-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1}"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index)}"
   }
 }
@@ -548,7 +548,7 @@ resource "aws_network_interface" "private-nat" {
     # Found by the nat instance doing --filter Name=tag-value,Values=nubis-nat-eni-stage Name=availability-zone,Values=$MY_AZ
     Autodiscover = "nubis-nat-eni-${element(split(",",var.environments), count.index/3)}"
     ServiceName = "${var.account_name}"
-    TechnicalOwner = "${var.technical_owner}"
+    TechnicalContact = "${var.technical_contact}"
     Environment = "${element(split(",",var.environments), count.index)}"
   }
 
@@ -601,8 +601,8 @@ resource "aws_autoscaling_group" "nat" {
     propagate_at_launch = true
   }
   tag {
-    key = "TechnicalOwner"
-    value = "${var.technical_owner}"
+    key = "TechnicalContact"
+    value = "${var.technical_contact}"
     propagate_at_launch = true
   }
   tag {
@@ -714,7 +714,7 @@ module "jumphost" {
 
   key_name = "${var.ssh_key_name}"
   nubis_version = "${var.nubis_version}"
-  technical_owner = "${var.technical_owner}"
+  technical_contact = "${var.technical_contact}"
 
   zone_id = "${module.meta.HostedZoneId}"
 
@@ -743,7 +743,7 @@ module "fluent-collector" {
 
   key_name = "${var.ssh_key_name}"
   nubis_version = "${var.nubis_version}"
-  technical_owner = "${var.technical_owner}"
+  technical_contact = "${var.technical_contact}"
 
   zone_id = "${module.meta.HostedZoneId}"
 

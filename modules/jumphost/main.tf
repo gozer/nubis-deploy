@@ -72,6 +72,7 @@ resource "aws_security_group" "jumphost" {
     Name = "${var.project}-${element(split(",",var.environments), count.index)}"
     Region = "${var.aws_region}"
     Environment = "${element(split(",",var.environments), count.index)}"
+    TecnnicalContact = "${var.technical_contact}"
   }
 }
 
@@ -202,4 +203,10 @@ resource "aws_autoscaling_group" "jumphost" {
     value = "${var.project}"
     propagate_at_launch = true
   }
+  tag {
+    key = "TechnicalContact"
+    value = "${var.technical_contact}"
+    propagate_at_launch = true
+  }
+ 
 }

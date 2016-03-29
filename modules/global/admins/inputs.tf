@@ -8,7 +8,7 @@ variable aws_region {
   default = "us-east-1"
 }
 
-variable technical_owner {
+variable technical_contact {
   default = "infra-aws@mozilla.com"
 }
 

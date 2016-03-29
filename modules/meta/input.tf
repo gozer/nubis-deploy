@@ -7,4 +7,4 @@ variable service_name {}
 
 variable enabled {}
 
-variable technical_owner {}
+variable technical_contact {}

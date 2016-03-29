@@ -10,7 +10,7 @@ variable environments {}
 
 variable enabled {}
 
-variable technical_owner {}
+variable technical_contact {}
 
 variable zone_id {}
 variable vpc_ids {}

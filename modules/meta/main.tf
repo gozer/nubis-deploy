@@ -9,7 +9,7 @@ resource "aws_route53_zone" "hosted_zone" {
 
     tags {
       ServiceName = "${var.service_name}"
-      TechnicalOwner = "${var.technical_owner}"
+      TechnicalContact = "${var.technical_contact}"
     }
 }
 
@@ -115,7 +115,7 @@ resource "aws_db_parameter_group" "mysql56" {
     
     tags {
       ServiceName = "${var.service_name}"
-      TechnicalOwner = "${var.technical_owner}"
+      TechnicalContact = "${var.technical_contact}"
     }
 }
 
