@@ -128,13 +128,6 @@ resource "aws_iam_role_policy" "jumphost" {
                 "ec2:DisassociateAddress"
               ],
               "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "cloudformation:DescribeStacks"
-              ],
-              "Resource": "*"
             }
           ]
         }
