@@ -641,7 +641,7 @@ resource "aws_autoscaling_group" "nat" {
 
   lifecycle { create_before_destroy = true }
   
-  name = "nubis-nat-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1} (${element(aws_launch_configuration.nat.*.name, count.index/3 )})"
+  name = "nubis-nat-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1} (${element(aws_launch_configuration.nat.*.name, count.index)})"
 
   availability_zones = [
     "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), count.index % 3 )}"
@@ -655,7 +655,7 @@ resource "aws_autoscaling_group" "nat" {
   max_size = 2
   min_size = 1
   desired_capacity = 1
-  launch_configuration = "${element(aws_launch_configuration.nat.*.name, count.index/3 )}"
+  launch_configuration = "${element(aws_launch_configuration.nat.*.name, count.index )}"
   
   tag {
     key = "Name"
@@ -680,11 +680,11 @@ resource "aws_autoscaling_group" "nat" {
 }
 
 resource "aws_launch_configuration" "nat" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${3 * var.enabled * length(split(",", var.environments))}"
   
   lifecycle { create_before_destroy = true }
     
-  name_prefix = "nubis-nat-${element(split(",",var.environments), count.index)}-"
+  name_prefix = "nubis-nat-${element(split(",",var.environments), count.index / 3 )}-AZ${(count.index % 3 ) + 1}-"
     
   # Somewhat nasty, since Atlas doesn't have an elegant way to access the id for a region
   # the id is "region:ami,region:ami,region:ami"
@@ -696,22 +696,23 @@ resource "aws_launch_configuration" "nat" {
   associate_public_ip_address  = true
   key_name = "${var.ssh_key_name}"
   
-  iam_instance_profile = "${element(aws_iam_instance_profile.nat.*.id, count.index)}"
+  iam_instance_profile = "${element(aws_iam_instance_profile.nat.*.id, count.index / 3)}"
  
   security_groups = [
-    "${element(aws_security_group.internet_access.*.id, count.index)}",
-    "${element(aws_security_group.nat.*.id, count.index)}",
-    "${element(aws_security_group.ssh.*.id, count.index)}",
-    "${element(aws_security_group.shared_services.*.id, count.index)}",
+    "${element(aws_security_group.internet_access.*.id, count.index/3)}",
+    "${element(aws_security_group.nat.*.id, count.index/3)}",
+    "${element(aws_security_group.ssh.*.id, count.index/3)}",
+    "${element(aws_security_group.shared_services.*.id, count.index/3)}",
   ]
   
   user_data = <<USER_DATA
-NUBIS_PROJECT='nubis-nat-${element(split(",",var.environments), count.index)}'
-NUBIS_ENVIRONMENT='${element(split(",",var.environments), count.index)}'
+NUBIS_PROJECT='nubis-nat-${element(split(",",var.environments), count.index/3)}'
+NUBIS_ENVIRONMENT='${element(split(",",var.environments), count.index/3)}'
 NUBIS_DOMAIN='${var.nubis_domain}'
 NUBIS_MIGRATE='1'
 NUBIS_ACCOUNT='${var.account_name}'
 NUBIS_PURPOSE='Nat Instance'
+NUBIS_NAT_EIP='${element(aws_eip.nat.*.id,count.index)}'
 USER_DATA
 }
 
