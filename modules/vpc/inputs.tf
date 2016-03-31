@@ -44,6 +44,7 @@ variable enable_fluent {}
 
 variable enable_consul {}
 variable enable_opsec {}
+variable enable_stack_compat {}
 
 variable my_ip {}
 

@@ -29,6 +29,7 @@ module "vpcs" {
   enable_jumphost = "${lookup(var.features,"jumphost")}"
   enable_fluent = "${lookup(var.features,"fluent")}"
   enable_opsec = "${lookup(var.features,"opsec")}"
+  enable_stack_compat = "${lookup(var.features,"stack_compat")}"
 
   my_ip = "${var.my_ip}"
 

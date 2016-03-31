@@ -19,6 +19,7 @@ module "us-east-1" {
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
   enable_opsec = "${var.enable_opsec}"
+  enable_stack_compat = "${var.enable_stack_compat}"
 
   my_ip = "${var.my_ip}"
 
@@ -65,6 +66,7 @@ module "us-west-2" {
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
   enable_opsec = "${var.enable_opsec}"
+  enable_stack_compat = "${var.enable_stack_compat}"
 
   my_ip = "${var.my_ip}"
 

@@ -61,12 +61,14 @@ resource "aws_kms_alias" "credstash" {
 
 resource "tls_private_key" "default" {
   count = "${var.enabled}"
+  lifecycle { create_before_destroy = true }
 
   algorithm = "RSA"
 }
 
 resource "tls_self_signed_cert" "default" {
     count = "${var.enabled}"
+    lifecycle { create_before_destroy = true }
     key_algorithm = "${tls_private_key.default.algorithm}"
     private_key_pem = "${tls_private_key.default.private_key_pem}"
 
@@ -92,6 +94,8 @@ resource "tls_self_signed_cert" "default" {
 
 resource "aws_iam_server_certificate" "default" {
     count = "${var.enabled}"
+    lifecycle { create_before_destroy = true }
+
     name = "${var.aws_region}.${var.service_name}.${var.nubis_domain}"
     certificate_body = "${tls_self_signed_cert.default.cert_pem}"
     private_key = "${tls_private_key.default.private_key_pem}"
@@ -104,7 +108,8 @@ resource "aws_iam_server_certificate" "default" {
 
 resource "aws_db_parameter_group" "mysql56" {
     count = "${var.enabled}"
-    name = "mysql56"
+    lifecycle { create_before_destroy = true }
+    name = "nubis-mysql56"
     family = "mysql5.6"
     description = "Nubis DB Parameter group for MySql 5.6"
 
@@ -120,7 +125,7 @@ resource "aws_db_parameter_group" "mysql56" {
 }
 
 output "NubisMySQL56ParameterGroup" {
-  value = "${aws_db_parameter_group.mysql56.arn}"
+  value = "${aws_db_parameter_group.mysql56.id}"
 }
 
 output "DefaultServerCertificate" {
@@ -145,4 +150,8 @@ output "CredstashDynamoDB" {
 
 output "HostedZoneNS" {
   value = "${aws_route53_zone.hosted_zone.name_servers.0},${aws_route53_zone.hosted_zone.name_servers.1},${aws_route53_zone.hosted_zone.name_servers.2},${aws_route53_zone.hosted_zone.name_servers.3}"
+}
+
+output "DefaultServerCertificate" {
+  value = "${aws_iam_server_certificate.default.arn}"
 }
