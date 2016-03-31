@@ -772,7 +772,7 @@ resource "aws_iam_policy_attachment" "credstash" {
 
 
 module "jumphost" {
-  source = "../jumphost"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=master"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
