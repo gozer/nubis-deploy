@@ -19,10 +19,6 @@ variable admin_users {
   default = "gozer,limed,riweiss,jcrowe"
 }
 
-variable environments_ipsec_targets {
-  default = "0.0.0.0,0.0.0.0,0.0.0.0"
-}
-
 variable aws_regions {
   default = "us-east-1,us-west-2"
 }
@@ -46,6 +42,7 @@ variable features {
     stack_compat = 0
     mig = 0
     ci = 0
+    vpn = 0
   }
 }
 
@@ -80,5 +77,11 @@ variable ci {
     git_repo = "https://github.com/nubisproject/nubis-skel.git"
     github_oauth_client_secret = "AAA"
     github_oauth_client_id = "BBB"
+  }
+}
+
+variable vpn {
+  default = {
+    ipsec_targets = "" 
   }
 }

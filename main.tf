@@ -45,7 +45,7 @@ module "vpcs" {
   nubis_domain = "${var.nubis_domain}"
   environments = "${var.environments}"
   environments_networks = "${var.environments_networks}"
-  environments_ipsec_targets = "${var.environments_ipsec_targets}"
+  environments_ipsec_targets = "${lookup(var.vpn, "ipsec_targets")}"
 
   consul_secret = "${lookup(var.consul, "secret")}"
   consul_master_acl_token = "${lookup(var.consul, "master_acl_token")}"

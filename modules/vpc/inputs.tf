@@ -7,8 +7,7 @@ variable admin_network {}
 variable stage_network {}
 variable prod_network {}
 
-variable prod_ipsec_target {}
-variable stage_ipsec_target {}
+variable ipsec_targets {}
 
 variable account_name {}
 variable environments {}

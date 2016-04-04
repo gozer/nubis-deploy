@@ -36,9 +36,7 @@ module "us-east-1" {
   prod_network = "${element(split(",",var.environments_networks), 1)}"
   stage_network = "${element(split(",",var.environments_networks), 2)}"
 
-  # should convert over to just passing in environments_ipsec_targets
-  prod_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 1)}"
-  stage_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 2)}"
+  ipsec_targets = "${var.environments_ipsec_targets}"
   
   consul_secret = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
@@ -91,9 +89,7 @@ module "us-west-2" {
   prod_network = "${element(split(",",var.environments_networks), 1)}"
   stage_network = "${element(split(",",var.environments_networks), 2)}"
 
-  # should convert over to just passing in environments_ipsec_targets
-  prod_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 1)}"
-  stage_ipsec_target = "${element(split(",",var.environments_ipsec_targets), 2)}"
+  ipsec_targets = "${var.environments_ipsec_targets}"
 
   consul_secret = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
