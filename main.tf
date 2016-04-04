@@ -28,6 +28,7 @@ module "vpcs" {
   enable_consul = "${lookup(var.features,"consul")}"
   enable_jumphost = "${lookup(var.features,"jumphost")}"
   enable_fluent = "${lookup(var.features,"fluent")}"
+  enable_ci = "${lookup(var.features,"ci")}"
   enable_opsec = "${lookup(var.features,"opsec")}"
   enable_stack_compat = "${lookup(var.features,"stack_compat")}"
 
@@ -50,4 +51,10 @@ module "vpcs" {
   consul_master_acl_token = "${lookup(var.consul, "master_acl_token")}"
 
   datadog_api_key = "${lookup(var.datadog, "api_key")}"
+
+  ci_project = "${lookup(var.ci, "project")}"
+  ci_git_repo = "${lookup(var.ci, "git_repo")}"
+  ci_github_oauth_client_secret = "${lookup(var.ci, "github_oauth_client_secret")}"
+  ci_github_oauth_client_id = "${lookup(var.ci, "github_oauth_client_id")}"
+
 }

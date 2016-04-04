@@ -18,6 +18,7 @@ module "us-east-1" {
   enable_consul = "${var.enable_consul}"
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
+  enable_ci = "${var.enable_ci}"
   enable_opsec = "${var.enable_opsec}"
   enable_stack_compat = "${var.enable_stack_compat}"
 
@@ -41,7 +42,14 @@ module "us-east-1" {
   
   consul_secret = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
+
   datadog_api_key = "${var.datadog_api_key}"
+
+  ci_project = "${var.ci_project}"
+  ci_git_repo = "${var.ci_git_repo}"
+  ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
+  ci_github_oauth_client_id = "${var.ci_github_oauth_client_secret}"
+
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -65,6 +73,7 @@ module "us-west-2" {
   enable_consul = "${var.enable_consul}"
   enable_jumphost = "${var.enable_jumphost}"
   enable_fluent = "${var.enable_fluent}"
+  enable_ci = "${var.enable_ci}"
   enable_opsec = "${var.enable_opsec}"
   enable_stack_compat = "${var.enable_stack_compat}"
 
@@ -88,6 +97,12 @@ module "us-west-2" {
 
   consul_secret = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
+
   datadog_api_key = "${var.datadog_api_key}"
+
+  ci_project = "${var.ci_project}"
+  ci_git_repo = "${var.ci_git_repo}"
+  ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
+  ci_github_oauth_client_id = "${var.ci_github_oauth_client_secret}"
 }
 

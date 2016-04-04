@@ -13,14 +13,35 @@ features.consul = 1
 features.jumphost = 0
 features.fluent = 0
 features.opsec = 0
+features.ci = 0
+features.stack_compat = 0
 
-# SECURITY
+# Your own IP for bootstrap
+# (curl ifconfig.me)
+
+my_ip = "a.b.c.d/32"
+
+# Consul
 
 # generate a UUID with "uuidgen"
 consul.master_acl_token = "00000000-0000-0000-0000-000000000000"
 # generate a secret with "openssl rand 16 | base64"
 consul.secret = "AAAAAAAAAAAAAAAAAAAAAA=="
 
+# CI
 
-my_ip = "a.b.c.d/32"
+#ci.project = "skel"
+#ci.git_repo = "https://github.com/nubisproject/nubis-skel.git"
+#ci.github_oauth_client_secret = "AAA"
+#ci.github_oauth_client_id = "BBB"
+
+# Datadog
+datadog.api_key = "00000000000000000000000000000000"
+
+# MiG
+#mig.relay_password = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+#mig.relay_user = ""
+#mig.ca = ""
+#mig.client_key = ""
+#mig.client_cert = ""
 

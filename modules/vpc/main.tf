@@ -821,11 +821,8 @@ module "fluent-collector" {
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
-#  credstash_policies              = "${join(",",aws_iam_policy.credstash.*.arn)}"
 
   nubis_domain = "${var.nubis_domain}"
-#  credstash_key = "${module.meta.CredstashKeyID}"
-#  credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
 
   service_name = "${var.account_name}"
 }
@@ -863,6 +860,62 @@ module "consul" {
   service_name = "${var.account_name}"
 
   datadog_api_key = "${var.datadog_api_key}"
+}
+
+module "ci-uuid" {
+  source = "../uuid"
+  enabled = "${var.enabled}"
+
+  aws_profile = "${var.aws_profile}"
+  aws_region  = "${var.aws_region}"
+
+  name = "ci"
+
+  environments = "${element(split(",",var.environments), 0)}"
+
+  lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
+}
+
+
+# XXX: This assumes it's going in the first environment, i.e. admin
+module "ci" {
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=master"
+
+  enabled = "${var.enabled * var.enable_ci}"
+
+  environment = "${element(split(",",var.environments), 0)}"
+  aws_profile = "${var.aws_profile}"
+  region = "${var.aws_region}"
+
+  key_name = "${var.ssh_key_name}"
+  version = "${var.nubis_version}"
+  technical_contact = "${var.technical_contact}"
+
+  nubis_domain = "${var.nubis_domain}"
+  zone_id = "${module.meta.HostedZoneId}"
+
+  vpc_id = "${element(aws_vpc.nubis.*.id, 0)}"
+  
+  # XXX: Only first 3
+  private_subnets = "${element(aws_subnet.private.*.id, 0)},${element(aws_subnet.private.*.id, 1)},${element(aws_subnet.private.*.id, 2)}"
+  public_subnets = "${element(aws_subnet.public.*.id, 0)},${element(aws_subnet.public.*.id, 1)},${element(aws_subnet.public.*.id, 2)}"
+
+  internet_security_group_id        = "${element(aws_security_group.internet_access.*.id, 0)}"
+  shared_services_security_group_id = "${element(aws_security_group.shared_services.*.id, 0)}"
+  ssh_security_group_id             = "${element(aws_security_group.ssh.*.id, 0)}"
+
+  domain = "${var.nubis_domain}"
+
+  account_name = "${var.account_name}"
+  
+  project = "${var.ci_project}"
+  git_repo = "${var.ci_git_repo}"
+  github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
+  github_oauth_client_id = "${var.ci_github_oauth_client_secret}"
+  
+  s3_bucket_name = "ci-skel-${module.ci-uuid.uuids}"
+  
+  email = "${var.technical_contact}"
 }
 
 module "opsec" {

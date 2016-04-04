@@ -45,6 +45,7 @@ variable features {
     fluent = 0
     stack_compat = 0
     mig = 0
+    ci = 0
   }
 }
 
@@ -71,4 +72,13 @@ variable mig {
 
 variable my_ip {
   default = "127.0.0.1/32"
+}
+
+variable ci {
+  default = {
+    project = "skel"
+    git_repo = "https://github.com/nubisproject/nubis-skel.git"
+    github_oauth_client_secret = "AAA"
+    github_oauth_client_id = "BBB"
+  }
 }

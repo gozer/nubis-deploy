@@ -45,7 +45,14 @@ variable enable_fluent {}
 variable enable_consul {}
 variable enable_opsec {}
 variable enable_stack_compat {}
+variable enable_ci {}
 
 variable my_ip {}
 
 variable datadog_api_key {}
+
+
+variable ci_project {}
+variable ci_git_repo {}
+variable ci_github_oauth_client_secret {}
+variable ci_github_oauth_client_id {}
