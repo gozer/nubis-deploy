@@ -31,6 +31,7 @@ module "vpcs" {
   enable_ci = "${lookup(var.features,"ci")}"
   enable_opsec = "${lookup(var.features,"opsec")}"
   enable_stack_compat = "${lookup(var.features,"stack_compat")}"
+  enable_vpn = "${lookup(var.features,"vpn")}"
 
   my_ip = "${var.my_ip}"
 
@@ -46,6 +47,7 @@ module "vpcs" {
   environments = "${var.environments}"
   environments_networks = "${var.environments_networks}"
   environments_ipsec_targets = "${lookup(var.vpn, "ipsec_targets")}"
+  vpn_bgp_asn = "${lookup(var.vpn, "bgp_asn")}"
 
   consul_secret = "${lookup(var.consul, "secret")}"
   consul_master_acl_token = "${lookup(var.consul, "master_acl_token")}"

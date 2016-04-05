@@ -21,6 +21,7 @@ module "us-east-1" {
   enable_ci = "${var.enable_ci}"
   enable_opsec = "${var.enable_opsec}"
   enable_stack_compat = "${var.enable_stack_compat}"
+  enable_vpn = "${var.enable_vpn}"
 
   my_ip = "${var.my_ip}"
 
@@ -37,6 +38,7 @@ module "us-east-1" {
   stage_network = "${element(split(",",var.environments_networks), 2)}"
 
   ipsec_targets = "${var.environments_ipsec_targets}"
+  vpn_bgp_asn = "${var.vpn_bgp_asn}"
   
   consul_secret = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
@@ -74,6 +76,7 @@ module "us-west-2" {
   enable_ci = "${var.enable_ci}"
   enable_opsec = "${var.enable_opsec}"
   enable_stack_compat = "${var.enable_stack_compat}"
+  enable_vpn = "${var.enable_vpn}"
 
   my_ip = "${var.my_ip}"
 
@@ -90,6 +93,7 @@ module "us-west-2" {
   stage_network = "${element(split(",",var.environments_networks), 2)}"
 
   ipsec_targets = "${var.environments_ipsec_targets}"
+  vpn_bgp_asn = "${var.vpn_bgp_asn}"
 
   consul_secret = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"

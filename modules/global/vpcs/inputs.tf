@@ -24,10 +24,13 @@ variable enable_consul {
 
 variable enable_opsec {}
 variable enable_stack_compat {}
+variable enable_vpn {}
 
 variable my_ip {}
 
 variable datadog_api_key {}
+
+variable vpn_bgp_asn {}
 
 variable ci_project {}
 variable ci_git_repo {}

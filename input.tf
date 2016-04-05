@@ -83,5 +83,7 @@ variable ci {
 variable vpn {
   default = {
     ipsec_targets = "" 
+    ipsec_network = "10.0.0.0/8"
+    bgp_asn = "65022"
   }
 }

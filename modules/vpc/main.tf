@@ -545,17 +545,12 @@ resource "aws_internet_gateway" "nubis" {
 }
 
 resource "aws_route_table" "public" {
-    count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * length(split(",", var.environments))}"
 
-    lifecycle { create_before_destroy = true }
+  lifecycle { create_before_destroy = true }
 
-    vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
     
-    route {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = "${element(aws_internet_gateway.nubis.*.id, count.index)}"
-    }
-
   tags {
     Name = "PublicRoute-${element(split(",",var.environments), count.index)}"
     ServiceName = "${var.account_name}"
@@ -564,14 +559,26 @@ resource "aws_route_table" "public" {
   }
 }
 
+resource "aws_route" "public" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+  lifecycle { create_before_destroy = true }
+
+  route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
+
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = "${element(aws_internet_gateway.nubis.*.id, count.index)}"
+
+  depends_on = ["aws_route_table.public"]
+}
+
 resource "aws_route" "private" {
-    count = "${3 * var.enabled * length(split(",", var.environments))}"
-    lifecycle { create_before_destroy = true }
+  count = "${3 * var.enabled * length(split(",", var.environments))}"
+  lifecycle { create_before_destroy = true }
 
-    route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 
-    destination_cidr_block = "0.0.0.0/0"
-    network_interface_id = "${element(aws_network_interface.private-nat.*.id, count.index)}"
+  destination_cidr_block = "0.0.0.0/0"
+  network_interface_id = "${element(aws_network_interface.private-nat.*.id, count.index)}"
 }
 
 resource "aws_route_table" "private" {
@@ -930,3 +937,82 @@ module "opsec" {
   aws_region = "${var.aws_region}"
 
 }
+
+#XXX: Move to a module
+#XXX: outputs:
+#tunnel1_address
+#tunnel1_preshared_key
+#tunnel2_address
+#tunnel2_preshared_key
+
+resource "aws_vpn_gateway" "vpn_gateway" {
+  count = "${var.enabled * var.enable_vpn * length(split(",", var.environments))}"
+  lifecycle { create_before_destroy = true }
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+
+  tags {
+    Name = "${var.aws_region}-${element(split(",",var.environments), count.index)}-vpn-gateway"
+    ServiceName = "${var.account_name}"
+    TechnicalContact = "${var.technical_contact}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
+resource "aws_customer_gateway" "customer_gateway" {
+  count = "${var.enabled * var.enable_vpn * length(split(",", var.environments))}"
+  lifecycle { create_before_destroy = true }
+  bgp_asn = "${var.vpn_bgp_asn}"
+
+  ip_address = "${element(split(",", var.ipsec_targets), count.index)}"
+  type = "ipsec.1"
+
+  tags { 
+    Name = "${var.aws_region}-${element(split(",",var.environments), count.index)}-customer-gateway"
+    ServiceName = "${var.account_name}"
+    TechnicalContact = "${var.technical_contact}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
+resource "aws_vpn_connection" "main" {
+  count = "${var.enabled * var.enable_vpn * length(split(",", var.environments))}"
+  lifecycle { create_before_destroy = true }
+
+  vpn_gateway_id = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index)}"
+  customer_gateway_id = "${element(aws_customer_gateway.customer_gateway.*.id, count.index)}"
+  type = "${element(aws_customer_gateway.customer_gateway.*.type, count.index)}"
+  static_routes_only = false
+
+  tags { 
+    Name = "${var.aws_region}-${element(split(",",var.environments), count.index)}-vpn"
+    ServiceName = "${var.account_name}"
+    TechnicalContact = "${var.technical_contact}"
+    Environment = "${element(split(",",var.environments), count.index)}"
+  }
+
+}
+
+resource "aws_route" "vpn-public" {
+    count = "${var.enabled * var.enable_vpn * length(split(",", var.environments))}"
+    lifecycle { create_before_destroy = true }
+
+    route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
+
+    destination_cidr_block = "10.0.0.0/8"
+    gateway_id = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index)}"
+
+#    depends_on = ["aws_route_table.public"]
+}
+
+resource "aws_route" "vpn-private" {
+    count = "${3 * var.enabled * var.enable_vpn * length(split(",", var.environments))}"
+    lifecycle { create_before_destroy = true }
+
+    route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+
+    destination_cidr_block = "10.0.0.0/8"
+    gateway_id = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index/3)}"
+
+#    depends_on = ["aws_route_table.private"]
+}
+
