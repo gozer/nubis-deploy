@@ -61,17 +61,8 @@ resource "aws_iam_user_policy" "datadog" {
 POLICY
 }
 
-# Chicken and egg problem for the destroy operations here
-resource "aws_s3_bucket" "state" {
-    count = 0
-    provider = "aws.state"
-    
-    lifecycle {
-      prevent_destroy = true
-    }
-    
-    force_destroy = true
-
-    bucket = "nubis-deploy-${var.state_uuid}"
-    acl = "private"
+resource "aws_route53_delegation_set" "meta" {
+  lifecycle { create_before_destroy = true }
+  reference_name = "Meta"
 }
+

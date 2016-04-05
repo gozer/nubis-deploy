@@ -20,3 +20,6 @@ output "datadog_access_key" {
 output "datadog_secret_key" {
   value = "${module.global_meta.datadog_secret_key}"
 }
+output "nameservers" {
+  value = "${module.global_meta.nameservers}"
+}

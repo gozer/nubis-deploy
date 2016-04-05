@@ -33,6 +33,8 @@ module "vpcs" {
   enable_stack_compat = "${lookup(var.features,"stack_compat")}"
   enable_vpn = "${lookup(var.features,"vpn")}"
 
+  route53_delegation_set = "${module.global_meta.route53_delegation_set}"
+
   my_ip = "${var.my_ip}"
 
   aws_regions = "${var.aws_regions}"

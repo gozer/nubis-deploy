@@ -58,3 +58,5 @@ variable ci_github_oauth_client_secret {}
 variable ci_github_oauth_client_id {}
 
 variable vpn_bgp_asn {}
+
+variable route53_delegation_set {}

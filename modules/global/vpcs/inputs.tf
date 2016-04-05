@@ -37,3 +37,4 @@ variable ci_git_repo {}
 variable ci_github_oauth_client_secret {}
 variable ci_github_oauth_client_id {}
 
+variable route53_delegation_set {}

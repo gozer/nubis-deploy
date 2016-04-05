@@ -234,6 +234,8 @@ module "meta" {
   technical_contact = "${var.technical_contact}"
 
   service_name = "${var.account_name}"
+
+  route53_delegation_set = "${var.route53_delegation_set}"
 }
 
 resource "aws_vpc" "nubis" {

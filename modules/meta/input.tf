@@ -8,3 +8,5 @@ variable service_name {}
 variable enabled {}
 
 variable technical_contact {}
+
+variable route53_delegation_set {}

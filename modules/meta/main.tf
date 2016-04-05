@@ -5,16 +5,11 @@ provider "aws" {
 
 
 #XXX: We create this on purpose for all the regions we support
-resource "aws_route53_delegation_set" "meta" {
-  lifecycle { create_before_destroy = true }
-  reference_name = "Meta"
-}
-
 resource "aws_route53_zone" "hosted_zone" {
    name = "${var.aws_region}.${var.service_name}.${var.nubis_domain}"
    lifecycle { create_before_destroy = true }
 
-   delegation_set_id = "${aws_route53_delegation_set.meta.id}"
+   delegation_set_id = "${var.route53_delegation_set}"
 
     tags {
       ServiceName = "${var.service_name}"
