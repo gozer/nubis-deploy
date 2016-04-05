@@ -1016,3 +1016,32 @@ resource "aws_route" "vpn-private" {
 #    depends_on = ["aws_route_table.private"]
 }
 
+
+# Create a proxy discovery VPC DNS zone
+resource "aws_route53_zone" "proxy" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+  name = "proxy.${element(split(",",var.environments), count.index)}.${var.aws_region}.${var.account_name}.${var.nubis_domain}"
+
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+
+  tags {
+    Environment = "${element(split(",",var.environments), count.index)}"
+    ServiceName = "${var.account_name}"
+    TechnicalContact = "${var.technical_contact}"
+  }
+}
+
+# Create a proxy discovery VPC DNS record for bootstrap proxy access
+resource "aws_route53_record" "proxy" {
+   count = "${var.enabled * length(split(",", var.environments))}"
+   zone_id = "${element(aws_route53_zone.proxy.*.zone_id, count.index)}"
+   name = "proxy.${element(split(",",var.environments), count.index)}.${var.aws_region}.${var.account_name}.${var.nubis_domain}"
+
+   type = "A"
+   ttl = "60"
+   records = [
+     "${element(aws_network_interface.private-nat.*.private_ips, 0 + ( count.index * 3 ))}",
+     "${element(aws_network_interface.private-nat.*.private_ips, 1 + ( count.index * 3 ))}",
+     "${element(aws_network_interface.private-nat.*.private_ips, 2 + ( count.index * 3 ))}",
+   ]
+}
