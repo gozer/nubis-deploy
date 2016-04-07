@@ -5,8 +5,8 @@ provider "aws" {
 }
 
 module "consul" {
-  #source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=${var.nubis_version}"
-  source = "/home/gozer/opt/src/mozilla.org/gozer/nubis/consul/nubis/terraform"
+  #source = "/home/gozer/opt/src/mozilla.org/gozer/nubis/consul/nubis/terraform"
+  source = "github.com/gozer/nubis-consul//nubis/terraform/multi?ref=master"
 
   enabled = "${var.enabled}"
 
