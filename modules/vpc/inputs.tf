@@ -36,7 +36,6 @@ variable nubis_ssh_key {
 }
 
 variable technical_contact {
-  default = "infra-aws@mozilla.com"
 }
 
 variable nubis_version {

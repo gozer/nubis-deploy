@@ -8,6 +8,8 @@ module "global_admins" {
 
   account_name  = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
+
+  technical_contact = "${var.technical_contact}"
 }
 
 module "global_meta" {
@@ -20,6 +22,8 @@ module "global_meta" {
   nubis_version = "${var.nubis_version}"
 
   state_uuid = "${var.state_uuid}"
+
+  technical_contact = "${var.technical_contact}"
 }
 
 module "vpcs" {
@@ -32,6 +36,8 @@ module "vpcs" {
   enable_opsec        = "${lookup(var.features,"opsec")}"
   enable_stack_compat = "${lookup(var.features,"stack_compat")}"
   enable_vpn          = "${lookup(var.features,"vpn")}"
+
+  technical_contact = "${var.technical_contact}"
 
   route53_delegation_set = "${module.global_meta.route53_delegation_set}"
 

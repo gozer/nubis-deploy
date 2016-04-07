@@ -906,7 +906,7 @@ module "jumphost" {
 }
 
 module "fluent-collector" {
-  source = "../fluent-collector/multi"
+  source = "github.com/gozer/nubis-fluent-collector.git//nubis/terraform/multi?ref=master"
 
   enabled = "${var.enabled * var.enable_fluent}"
 

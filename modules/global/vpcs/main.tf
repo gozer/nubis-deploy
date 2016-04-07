@@ -23,6 +23,8 @@ module "us-east-1" {
   enable_stack_compat = "${var.enable_stack_compat}"
   enable_vpn          = "${var.enable_vpn}"
 
+  technical_contact = "${var.technical_contact}"
+
   route53_delegation_set = "${var.route53_delegation_set}"
 
   my_ip = "${var.my_ip}"
@@ -78,6 +80,8 @@ module "us-west-2" {
   enable_opsec        = "${var.enable_opsec}"
   enable_stack_compat = "${var.enable_stack_compat}"
   enable_vpn          = "${var.enable_vpn}"
+
+  technical_contact = "${var.technical_contact}"
 
   route53_delegation_set = "${var.route53_delegation_set}"
 

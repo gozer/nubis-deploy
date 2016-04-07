@@ -35,6 +35,10 @@ variable nubis_domain {
   default = "nubis.allizom.org"
 }
 
+variable technical_contact {
+  default = "infra-aws@mozilla.com"
+}
+
 variable features {
   default = {
     consul       = 0

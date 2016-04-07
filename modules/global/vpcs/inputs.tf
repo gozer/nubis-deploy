@@ -4,6 +4,9 @@ variable aws_profile {
 variable aws_account_id {
 }
 
+variable technical_contact {
+}
+
 variable aws_regions {
 }
 
