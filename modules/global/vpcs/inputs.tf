@@ -1,15 +1,35 @@
-variable aws_profile {}
-variable aws_account_id {}
-variable aws_regions {}
-variable environments {}
-variable account_name {}
-variable nubis_version {}
-variable nubis_domain {}
-variable environments_networks {}
-variable environments_ipsec_targets {}
+variable aws_profile {
+}
 
-variable consul_secret {}
-variable consul_master_acl_token {}
+variable aws_account_id {
+}
+
+variable aws_regions {
+}
+
+variable environments {
+}
+
+variable account_name {
+}
+
+variable nubis_version {
+}
+
+variable nubis_domain {
+}
+
+variable environments_networks {
+}
+
+variable environments_ipsec_targets {
+}
+
+variable consul_secret {
+}
+
+variable consul_master_acl_token {
+}
 
 variable enable_jumphost {
 }
@@ -17,24 +37,41 @@ variable enable_jumphost {
 variable enable_fluent {
 }
 
-variable enable_ci {}
+variable enable_ci {
+}
 
 variable enable_consul {
 }
 
-variable enable_opsec {}
-variable enable_stack_compat {}
-variable enable_vpn {}
+variable enable_opsec {
+}
 
-variable my_ip {}
+variable enable_stack_compat {
+}
 
-variable datadog_api_key {}
+variable enable_vpn {
+}
 
-variable vpn_bgp_asn {}
+variable my_ip {
+}
 
-variable ci_project {}
-variable ci_git_repo {}
-variable ci_github_oauth_client_secret {}
-variable ci_github_oauth_client_id {}
+variable datadog_api_key {
+}
 
-variable route53_delegation_set {}
+variable vpn_bgp_asn {
+}
+
+variable ci_project {
+}
+
+variable ci_git_repo {
+}
+
+variable ci_github_oauth_client_secret {
+}
+
+variable ci_github_oauth_client_id {
+}
+
+variable route53_delegation_set {
+}

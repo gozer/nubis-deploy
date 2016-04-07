@@ -1,5 +1,8 @@
-variable aws_profile {}
-variable account_name {}
+variable aws_profile {
+}
+
+variable account_name {
+}
 
 variable admin_users {
 }
@@ -19,4 +22,3 @@ variable nubis_version {
 variable ssh_key_name {
   default = "nubis"
 }
-

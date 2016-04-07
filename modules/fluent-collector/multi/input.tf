@@ -1,26 +1,50 @@
-variable aws_profile {}
-variable aws_region {}
+variable aws_profile {
+}
 
-variable key_name {}
-variable nubis_version {}
-variable nubis_domain {}
-variable service_name {}
+variable aws_region {
+}
 
-variable environments {}
+variable key_name {
+}
 
-variable enabled {}
+variable nubis_version {
+}
 
-variable technical_contact {}
+variable nubis_domain {
+}
 
-variable zone_id {}
-variable vpc_ids {}
-variable subnet_ids {}
+variable service_name {
+}
 
-variable ssh_security_groups {}
-variable internet_access_security_groups {}
-variable shared_services_security_groups {}
+variable environments {
+}
 
-variable lambda_uuid_arn {}
+variable enabled {
+}
+
+variable technical_contact {
+}
+
+variable zone_id {
+}
+
+variable vpc_ids {
+}
+
+variable subnet_ids {
+}
+
+variable ssh_security_groups {
+}
+
+variable internet_access_security_groups {
+}
+
+variable shared_services_security_groups {
+}
+
+variable lambda_uuid_arn {
+}
 
 variable project {
   default = "fluent-collector"

@@ -1,8 +1,14 @@
-variable enabled {}
+variable enabled {
+}
 
-variable aws_profile {}
-variable aws_region {}
+variable aws_profile {
+}
 
-variable nubis_version {}
-variable environments {}
+variable aws_region {
+}
 
+variable nubis_version {
+}
+
+variable environments {
+}

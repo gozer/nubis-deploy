@@ -4,7 +4,7 @@ resource "aws_cloudformation_stack" "opsec" {
   name = "opsec"
 
   capabilities = [
-    "CAPABILITY_IAM"
+    "CAPABILITY_IAM",
   ]
 
   template_body = "${file("${path.module}/audit.json")}"
@@ -12,4 +12,3 @@ resource "aws_cloudformation_stack" "opsec" {
   parameters = {
   }
 }
-

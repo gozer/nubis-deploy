@@ -1,10 +1,10 @@
 provider "aws" {
-    profile = "${var.aws_profile}"
-    region = "${var.aws_region}"
+  profile = "${var.aws_profile}"
+  region  = "${var.aws_region}"
 }
 
 provider "aws" {
-  alias = "state"
+  alias   = "state"
   profile = "${var.aws_profile}"
   region  = "${var.aws_region_state}"
 }
@@ -19,9 +19,10 @@ resource "aws_iam_access_key" "datadog" {
 }
 
 resource "aws_iam_user_policy" "datadog" {
-    name = "datadog-readonly"
-    user = "${aws_iam_user.datadog.name}"
-    policy = <<POLICY
+  name = "datadog-readonly"
+  user = "${aws_iam_user.datadog.name}"
+
+  policy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -62,7 +63,9 @@ POLICY
 }
 
 resource "aws_route53_delegation_set" "meta" {
-  lifecycle { create_before_destroy = true }
+  lifecycle {
+    create_before_destroy = true
+  }
+
   reference_name = "Meta"
 }
-

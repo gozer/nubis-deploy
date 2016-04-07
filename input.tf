@@ -1,4 +1,5 @@
-variable account_name {}
+variable account_name {
+}
 
 variable aws_profile {
   default = "default"
@@ -36,13 +37,13 @@ variable nubis_domain {
 
 variable features {
   default = {
-    consul = 0
-    jumphost = 0
-    fluent = 0
+    consul       = 0
+    jumphost     = 0
+    fluent       = 0
     stack_compat = 0
-    mig = 0
-    ci = 0
-    vpn = 0
+    mig          = 0
+    ci           = 0
+    vpn          = 0
   }
 }
 
@@ -59,11 +60,11 @@ variable datadog {
 
 variable mig {
   default = {
-    agent_cert = "mig/agent.crt"
-    agent_key = "mig/agent.key"
-    ca = "mig/ca.crt"
+    agent_cert     = "mig/agent.crt"
+    agent_key      = "mig/agent.key"
+    ca             = "mig/ca.crt"
     relay_password = "<unset>"
-    relay_user = "agent-it-nubis"
+    relay_user     = "agent-it-nubis"
   }
 }
 
@@ -73,17 +74,17 @@ variable my_ip {
 
 variable ci {
   default = {
-    project = "skel"
-    git_repo = "https://github.com/nubisproject/nubis-skel.git"
+    project                    = "skel"
+    git_repo                   = "https://github.com/nubisproject/nubis-skel.git"
     github_oauth_client_secret = "AAA"
-    github_oauth_client_id = "BBB"
+    github_oauth_client_id     = "BBB"
   }
 }
 
 variable vpn {
   default = {
-    ipsec_targets = "" 
+    ipsec_targets = ""
     ipsec_network = "10.0.0.0/8"
-    bgp_asn = "65022"
+    bgp_asn       = "65022"
   }
 }
