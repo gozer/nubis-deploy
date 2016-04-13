@@ -387,7 +387,7 @@ resource "aws_eip" "nat" {
     create_before_destroy = true
   }
 
-  count = "${var.enabled * 3 * length(split(",", var.environments))}"
+  count = "${var.enabled  * length(split(",", var.environments))}"
   vpc   = true
 }
 
@@ -639,18 +639,18 @@ resource "aws_route" "public" {
   depends_on = ["aws_route_table.public"]
 }
 
-resource "aws_route" "private" {
-  count = "${3 * var.enabled * length(split(",", var.environments))}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
-
-  destination_cidr_block = "0.0.0.0/0"
-  network_interface_id   = "${element(aws_network_interface.private-nat.*.id, count.index)}"
-}
+#resource "aws_route" "private" {
+#  count = "${3 * var.enabled * length(split(",", var.environments))}"
+#
+#  lifecycle {
+#    create_before_destroy = true
+#  }
+#
+#  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+#
+#  destination_cidr_block = "0.0.0.0/0"
+##  network_interface_id   = "${element(aws_network_interface.private-nat.*.id, count.index)}"
+#}
 
 resource "aws_route_table" "private" {
   count = "${3 * var.enabled * length(split(",", var.environments))}"
@@ -670,6 +670,7 @@ resource "aws_route_table" "private" {
     ServiceName      = "${var.account_name}"
     TechnicalContact = "${var.technical_contact}"
     Environment      = "${element(split(",",var.environments), count.index)}"
+    RouteType        = "private"
   }
 }
 
@@ -728,21 +729,19 @@ resource "atlas_artifact" "nubis-nat" {
 }
 
 resource "aws_autoscaling_group" "nat" {
-  count = "${3 * var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
   }
 
-  name = "nubis-nat-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1} (${element(aws_launch_configuration.nat.*.name, count.index)})"
-
-  availability_zones = [
-    "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), count.index % 3 )}",
-  ]
+  name = "nubis-nat-${element(split(",",var.environments), count.index)}- (${element(aws_launch_configuration.nat.*.name, count.index)})"
 
   # Subnets
   vpc_zone_identifier = [
-    "${element(aws_subnet.public.*.id, count.index)}",
+    "${element(aws_subnet.public.*.id, 3*count.index)}",
+    "${element(aws_subnet.public.*.id, 3*count.index+1)}",
+    "${element(aws_subnet.public.*.id, 3*count.index+2)}",
   ]
 
   max_size             = 2
@@ -752,7 +751,7 @@ resource "aws_autoscaling_group" "nat" {
 
   tag {
     key                 = "Name"
-    value               = "nubis-nat-${element(split(",",var.environments), count.index/3)}-AZ${(count.index % 3 ) + 1}"
+    value               = "nubis-nat-${element(split(",",var.environments), count.index)}"
     propagate_at_launch = true
   }
 
@@ -776,13 +775,13 @@ resource "aws_autoscaling_group" "nat" {
 }
 
 resource "aws_launch_configuration" "nat" {
-  count = "${3 * var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
   }
 
-  name_prefix = "nubis-nat-${element(split(",",var.environments), count.index / 3 )}-AZ${(count.index % 3 ) + 1}-"
+  name_prefix = "nubis-nat-${element(split(",",var.environments), count.index )}-"
 
   # Somewhat nasty, since Atlas doesn't have an elegant way to access the id for a region
   # the id is "region:ami,region:ami,region:ami"
@@ -794,18 +793,18 @@ resource "aws_launch_configuration" "nat" {
   associate_public_ip_address = true
   key_name                    = "${var.ssh_key_name}"
 
-  iam_instance_profile = "${element(aws_iam_instance_profile.nat.*.id, count.index / 3)}"
+  iam_instance_profile = "${element(aws_iam_instance_profile.nat.*.id, count.index)}"
 
   security_groups = [
-    "${element(aws_security_group.internet_access.*.id, count.index/3)}",
-    "${element(aws_security_group.nat.*.id, count.index/3)}",
-    "${element(aws_security_group.ssh.*.id, count.index/3)}",
-    "${element(aws_security_group.shared_services.*.id, count.index/3)}",
+    "${element(aws_security_group.internet_access.*.id, count.index)}",
+    "${element(aws_security_group.nat.*.id, count.index)}",
+    "${element(aws_security_group.ssh.*.id, count.index)}",
+    "${element(aws_security_group.shared_services.*.id, count.index)}",
   ]
 
   user_data = <<USER_DATA
-NUBIS_PROJECT='nubis-nat-${element(split(",",var.environments), count.index/3)}'
-NUBIS_ENVIRONMENT='${element(split(",",var.environments), count.index/3)}'
+NUBIS_PROJECT='nubis-nat-${element(split(",",var.environments), count.index)}'
+NUBIS_ENVIRONMENT='${element(split(",",var.environments), count.index)}'
 NUBIS_DOMAIN='${var.nubis_domain}'
 NUBIS_MIGRATE='1'
 NUBIS_ACCOUNT='${var.account_name}'
@@ -870,11 +869,11 @@ resource "aws_iam_policy_attachment" "credstash" {
 
   name = "credstash-${var.aws_region}"
 
+  #XXX: concat and compact should work here, but element() isn't a list, so BUG
   roles = [
     "${split(",",replace(replace(concat(element(split(",",module.jumphost.iam_roles), count.index), ",", element(split(",",module.consul.iam_roles), count.index), ",", element(split(",",module.fluent-collector.iam_roles), count.index), ",", element(aws_iam_role.nat.*.id, count.index) ), "/(,+)/",","),"/(^,+|,+$)/", ""))}",
   ]
 
-  #XXX: concat and compact should work here, but element() isn't a list, so BUG
   policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
