@@ -51,14 +51,14 @@ pip install "credstash>=1.11.0"
 
 ### Version to install
 
-Determine which version you wish to install, for this tutorial, we'll assume v1.0.2
+Determine which version you wish to install, for this tutorial, we'll assume v1.1.0
 
 ### clone the deployment repo
 
 ```
 git clone https://github.com/nubisproject/nubis-deploy
 cd nubis-deploy
-git checkout v1.0.2
+git checkout v1.1.0
 ```
 
 ### Create the state bucket
@@ -92,12 +92,12 @@ account_name = "some-account-name"
 aws_profile  = "project-foo"
 
 # The version of the platform you want
-nubis_version = "v1.0.2"
+nubis_version = "v1.1.0"
 
 # UUID used for the state bucket
 state_uuid = "479220c3efeaa0dfcba3e0078886c68a"
 
-# AWS regions to deploy to (us-east-1 & us-west-2 only in v1.0.2)
+# AWS regions to deploy to (us-east-1 & us-west-2 only in v1.1.0)
 aws_regions           = "us-east-1,us-west-2"
 
 # Name of the different environments you want
