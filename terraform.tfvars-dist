@@ -5,7 +5,7 @@ account_name = "some-account-name"
 aws_profile  = "some-account-name-profile"
 
 # The version of the platform you want
-nubis_version = "v1.0.2"
+nubis_version = "v1.1.0"
 
 # UUID used for the state bucket
 state_uuid = "00000000000000000000000000000000"
