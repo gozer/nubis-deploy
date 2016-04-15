@@ -1,6 +1,5 @@
 module "consul" {
-  #source = "/home/gozer/opt/src/mozilla.org/gozer/nubis/consul/nubis/terraform"
-  source = "github.com/gozer/nubis-consul//nubis/terraform/multi?ref=master"
+  source = "github.com/gozer/nubis-consul//nubis/terraform/multi?ref=v1.1.0"
 
   enabled = "${var.enabled}"
 
