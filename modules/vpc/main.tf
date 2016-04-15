@@ -382,15 +382,6 @@ resource "aws_security_group" "internet_access" {
   }
 }
 
-resource "aws_eip" "nat" {
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  count = "${var.enabled  * length(split(",", var.environments))}"
-  vpc   = true
-}
-
 resource "aws_security_group" "nat" {
   count = "${var.enabled * length(split(",", var.environments))}"
 
@@ -809,7 +800,6 @@ NUBIS_DOMAIN='${var.nubis_domain}'
 NUBIS_MIGRATE='1'
 NUBIS_ACCOUNT='${var.account_name}'
 NUBIS_PURPOSE='Nat Instance'
-NUBIS_NAT_EIP='${element(aws_eip.nat.*.id,count.index)}'
 USER_DATA
 }
 
