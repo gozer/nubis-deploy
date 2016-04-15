@@ -39,7 +39,7 @@ Get it from your favorite package manager.
 
 ### credstash (1.11.0+)
 
-[Credstash](https://github.com/fugue/credstash) is a tool for managing our secrets into DynamoDB and KMS. It's a dependency we are hoping to get rid fo, but for now, you'll need in your $PATH as well.
+[Credstash](https://github.com/fugue/credstash) is a tool for managing our secrets into DynamoDB and KMS. It's a dependency we are hoping to get rid of, but for now, you'll need in your $PATH as well.
 
 It's a Python PIP package, so assuming you have a working Python, just do
 
