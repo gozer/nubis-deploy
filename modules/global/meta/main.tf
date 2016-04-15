@@ -9,6 +9,13 @@ provider "aws" {
   region  = "${var.aws_region_state}"
 }
 
+module "cloudhealth" {
+  source = "github.com/nubisproject/nubis-terraform-cloudhealth"
+
+  aws_profile = "${var.aws_profile}"
+  aws_region  = "${var.aws_region_state}"
+}
+
 resource "aws_iam_user" "datadog" {
   path = "/nubis/datadog/"
   name = "datadog"

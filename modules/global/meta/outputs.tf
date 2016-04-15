@@ -13,3 +13,11 @@ output "route53_delegation_set" {
 output "nameservers" {
   value = "${join(",",aws_route53_delegation_set.meta.name_servers)}"
 }
+
+output "cloudhealth_assume_role_arn" {
+  value = "${module.cloudhealth.assume_role_arn}"
+}
+
+output "cloudhealth_assume_role_external_id" {
+  value = "${module.cloudhealth.assume_role_external_id}"
+}
