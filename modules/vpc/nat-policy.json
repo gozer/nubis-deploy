@@ -45,6 +45,7 @@
       "Action": [
         "ec2:DescribeRouteTables",
         "ec2:ReplaceRoute",
+        "ec2:CreateRoute",
         "ec2:DescribeSubnets",
         "ec2:DescribeNetworkAcls",
         "ec2:CreateNetworkAclEntry",
