@@ -1006,7 +1006,7 @@ module "ci" {
   project                    = "${var.ci_project}"
   git_repo                   = "${var.ci_git_repo}"
   github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
-  github_oauth_client_id     = "${var.ci_github_oauth_client_secret}"
+  github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
 
   s3_bucket_name = "ci-skel-${module.ci-uuid.uuids}"
 
