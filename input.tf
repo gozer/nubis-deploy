@@ -72,6 +72,13 @@ variable mig {
   }
 }
 
+variable cloudtrail {
+  default = {
+    bucket = "mozilla-cloudtrail-logs"
+    sns_topic = "arn:aws:sns:us-west-2:088944123687:MozillaCloudTrailLogs"
+  }
+}
+
 variable my_ip {
   default = "127.0.0.1/32"
 }
