@@ -26,6 +26,18 @@ module "global_meta" {
   technical_contact = "${var.technical_contact}"
 }
 
+module "global_opsec" {
+  source = "modules/global/opsec"
+
+  enabled = "${lookup(var.features,"opsec")}"
+
+  aws_profile = "${var.aws_profile}"
+  aws_region  = "us-east-1"
+
+  cloudtrail_bucket = "${lookup(var.cloudtrail, "bucket")}"
+  cloudtrail_sns_topic = "${lookup(var.cloudtrail, "sns_topic")}"
+}
+
 module "vpcs" {
   source = "modules/global/vpcs"
 
