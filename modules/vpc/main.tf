@@ -1018,9 +1018,6 @@ module "opsec" {
 
   enabled = "${var.enabled * var.enable_opsec}"
 
-  environments  = "${var.environments}"
-  nubis_version = "${var.nubis_version}"
-
   aws_profile = "${var.aws_profile}"
   aws_region  = "${var.aws_region}"
 }
