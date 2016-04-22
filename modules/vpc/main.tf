@@ -404,6 +404,17 @@ resource "aws_security_group" "nat" {
     ]
   }
 
+  # Allow the internal proxy ELB to reach us
+  ingress {
+    from_port = 3128
+    to_port   = 3128
+    protocol  = "tcp"
+
+    security_groups = [
+      "${element(aws_security_group.proxy.*.id, count.index)}",
+    ]
+  }
+
   ingress {
     from_port = 0
     to_port   = 65535
@@ -726,13 +737,17 @@ resource "aws_autoscaling_group" "nat" {
     create_before_destroy = true
   }
 
-  name = "nubis-nat-${element(split(",",var.environments), count.index)}- (${element(aws_launch_configuration.nat.*.name, count.index)})"
+  name = "x-nubis-nat-${element(split(",",var.environments), count.index)}- (${element(aws_launch_configuration.nat.*.name, count.index)})"
 
   # Subnets
   vpc_zone_identifier = [
     "${element(aws_subnet.public.*.id, 3*count.index)}",
     "${element(aws_subnet.public.*.id, 3*count.index+1)}",
     "${element(aws_subnet.public.*.id, 3*count.index+2)}",
+  ]
+
+  load_balancers = [
+    "${element(aws_elb.proxy.*.name, count.index)}"
   ]
 
   max_size             = 2
@@ -862,6 +877,8 @@ resource "aws_iam_policy_attachment" "credstash" {
   #XXX: concat and compact should work here, but element() isn't a list, so BUG
   roles = [
     "${split(",",replace(replace(concat(element(split(",",module.jumphost.iam_roles), count.index), ",", element(split(",",module.consul.iam_roles), count.index), ",", element(split(",",module.fluent-collector.iam_roles), count.index), ",", element(aws_iam_role.nat.*.id, count.index) ), "/(,+)/",","),"/(^,+|,+$)/", ""))}",
+    #XXX: Bug, puts the CI system in all environment roles
+    "${module.ci.iam_role}",
   ]
 
   policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
@@ -974,7 +991,7 @@ module "ci-uuid" {
 
 # XXX: This assumes it's going in the first environment, i.e. admin
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.1.0"
+  source = "/Users/gozer/opt/src/mozilla.org/gozer/nubis/ci/nubis/terraform"
 
   enabled = "${var.enabled * var.enable_ci}"
 
@@ -1142,11 +1159,90 @@ resource "aws_route53_record" "proxy" {
   name    = "proxy.${element(split(",",var.environments), count.index)}.${var.aws_region}.${var.account_name}.${var.nubis_domain}"
 
   type = "A"
-  ttl  = "60"
 
-  records = [
-    "${element(aws_network_interface.private-nat.*.private_ips, 0 + ( count.index * 3 ))}",
-    "${element(aws_network_interface.private-nat.*.private_ips, 1 + ( count.index * 3 ))}",
-    "${element(aws_network_interface.private-nat.*.private_ips, 2 + ( count.index * 3 ))}",
+  alias {
+    name = "${element(aws_elb.proxy.*.dns_name, count.index)}"
+    zone_id = "${element(aws_elb.proxy.*.zone_id, count.index)}"
+    evaluate_target_health = false
+  }
+}
+
+## Create a new load balancer
+resource "aws_elb" "proxy" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  lifecycle { create_before_destroy = true }
+  name = "proxy-elb-${element(split(",",var.environments), count.index)}"
+
+  #XXX: Fugly, assumes 3 subnets per environments, bad assumption, but valid ATM
+  subnets = [
+    "${element(aws_subnet.public.*.id, 3*count.index)}",
+    "${element(aws_subnet.public.*.id, 3*count.index+1)}",
+    "${element(aws_subnet.public.*.id, 3*count.index+2)}",
   ]
+
+  # This is an internal ELB, only accessible form inside the VPC
+  internal = true
+
+  listener {
+    instance_port = 3128
+    instance_protocol = "tcp"
+    lb_port = 3128
+    lb_protocol = "tcp"
+  }
+
+  health_check {
+    healthy_threshold = 2
+    unhealthy_threshold = 2
+    timeout = 3
+    target = "TCP:3128"
+    interval = 60
+  }
+
+  cross_zone_load_balancing = true
+
+  security_groups = [
+    "${element(aws_security_group.proxy.*.id, count.index)}"
+  ]
+
+  tags = {
+      Name = "elb-proxy-${element(split(",",var.environments), count.index)}"
+      Region = "${var.aws_region}"
+      Environment = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
+resource "aws_security_group" "proxy" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  lifecycle { create_before_destroy = true }
+
+  name = "elb-proxy-${element(split(",",var.environments), count.index)}"
+  description = "Allow inbound traffic for Squid in ${element(split(",",var.environments), count.index)}"
+
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+
+  ingress {
+      from_port = 3128
+      to_port = 3128
+      protocol = "tcp"
+      security_groups = [
+        "${element(aws_security_group.internet_access.*.id, count.index)}",
+      ]
+  }
+
+  # Put back Amazon Default egress all rule
+  egress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+      Name = "elb-proxy-${element(split(",",var.environments), count.index)}"
+      Region = "${var.aws_region}"
+      Environment = "${element(split(",",var.environments), count.index)}"
+  }
+
 }
