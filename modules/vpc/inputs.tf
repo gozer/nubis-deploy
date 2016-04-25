@@ -97,6 +97,9 @@ variable ci_github_oauth_client_secret {
 variable ci_github_oauth_client_id {
 }
 
+variable ci_admins {
+}
+
 variable vpn_bgp_asn {
 }
 

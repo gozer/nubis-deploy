@@ -53,6 +53,7 @@ module "us-east-1" {
   ci_git_repo                   = "${var.ci_git_repo}"
   ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
   ci_github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
+  ci_admins                     = "${var.ci_admins}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -111,4 +112,5 @@ module "us-west-2" {
   ci_git_repo                   = "${var.ci_git_repo}"
   ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
   ci_github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
+  ci_admins                     = "${var.ci_admins}"
 }

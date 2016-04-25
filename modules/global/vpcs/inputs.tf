@@ -76,5 +76,8 @@ variable ci_github_oauth_client_secret {
 variable ci_github_oauth_client_id {
 }
 
+variable ci_admins {
+}
+
 variable route53_delegation_set {
 }

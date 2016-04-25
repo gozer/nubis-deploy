@@ -78,4 +78,5 @@ module "vpcs" {
   ci_git_repo                   = "${lookup(var.ci, "git_repo")}"
   ci_github_oauth_client_secret = "${lookup(var.ci, "github_oauth_client_secret")}"
   ci_github_oauth_client_id     = "${lookup(var.ci, "github_oauth_client_id")}"
+  ci_admins			= "${lookup(var.ci, "admins")}"
 }
