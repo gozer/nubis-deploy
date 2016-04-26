@@ -1,11 +1,18 @@
 # Change Log
 
-## [v1.1.0](https://github.com/nubisproject/nubis-deploy/tree/v1.1.0) (2016-04-18)
+## [v1.1.0](https://github.com/nubisproject/nubis-deploy/tree/v1.1.0) (2016-04-26)
 **Closed issues:**
 
+- \[opsec\] Remove useless variables [\#39](https://github.com/nubisproject/nubis-deploy/issues/39)
+- \[ci\] Attach to the correct credstash policy to make it part of the platorm ACL [\#38](https://github.com/nubisproject/nubis-deploy/issues/38)
+- \[ci\] Github OAuth client id is incorrectly passed in [\#36](https://github.com/nubisproject/nubis-deploy/issues/36)
+- \[opsec\] enable cloudtrail logs everywhere [\#34](https://github.com/nubisproject/nubis-deploy/issues/34)
+- \[proxy\] Front internal proxies with an ELB so the fallback proxy DNS entry always works [\#31](https://github.com/nubisproject/nubis-deploy/issues/31)
+- Figure out what to do with each account's config file in the long run [\#29](https://github.com/nubisproject/nubis-deploy/issues/29)
 - Create a README [\#26](https://github.com/nubisproject/nubis-deploy/issues/26)
 - NATs don't need EIPs [\#25](https://github.com/nubisproject/nubis-deploy/issues/25)
 - Add cloudhealth module [\#23](https://github.com/nubisproject/nubis-deploy/issues/23)
+- \[state\] Create the state user and credentials [\#22](https://github.com/nubisproject/nubis-deploy/issues/22)
 - Use Route53 delegation sets for all our zones [\#19](https://github.com/nubisproject/nubis-deploy/issues/19)
 - Add technical\_contact input variable [\#18](https://github.com/nubisproject/nubis-deploy/issues/18)
 - Handle VPN connections [\#17](https://github.com/nubisproject/nubis-deploy/issues/17)
@@ -16,6 +23,7 @@
 - s/TechnicalOwner/TechnicalContact/ [\#11](https://github.com/nubisproject/nubis-deploy/issues/11)
 - Datadog [\#7](https://github.com/nubisproject/nubis-deploy/issues/7)
 - datadog [\#6](https://github.com/nubisproject/nubis-deploy/issues/6)
+- Create the state holding bucket [\#5](https://github.com/nubisproject/nubis-deploy/issues/5)
 - Add all missing account buckets [\#4](https://github.com/nubisproject/nubis-deploy/issues/4)
 - Need separate Credstash IAM policies per environments [\#3](https://github.com/nubisproject/nubis-deploy/issues/3)
 - Credstash Policy missing from NAT instance IAM role [\#2](https://github.com/nubisproject/nubis-deploy/issues/2)
@@ -23,6 +31,13 @@
 
 **Merged pull requests:**
 
+- Rollbak local change that shouldn't have been pushed [\#42](https://github.com/nubisproject/nubis-deploy/pull/42) ([gozer](https://github.com/gozer))
+- Create an ELB-based proxy endpoint for initial bootstrap [\#41](https://github.com/nubisproject/nubis-deploy/pull/41) ([gozer](https://github.com/gozer))
+- Cleanup useless stuff [\#40](https://github.com/nubisproject/nubis-deploy/pull/40) ([gozer](https://github.com/gozer))
+- Correctly pass in ci\_github\_oauth\_client\_id where needed [\#37](https://github.com/nubisproject/nubis-deploy/pull/37) ([gozer](https://github.com/gozer))
+- Enable global cloudtrail as per opsec's request [\#35](https://github.com/nubisproject/nubis-deploy/pull/35) ([gozer](https://github.com/gozer))
+- Large PR with leftover bits. [\#33](https://github.com/nubisproject/nubis-deploy/pull/33) ([gozer](https://github.com/gozer))
+- Update CHANGELOG for v1.1.0 release [\#30](https://github.com/nubisproject/nubis-deploy/pull/30) ([tinnightcap](https://github.com/tinnightcap))
 - Issue/26/readme [\#28](https://github.com/nubisproject/nubis-deploy/pull/28) ([gozer](https://github.com/gozer))
 - EIPs are not needed for the NATs, and once released, we are done. [\#27](https://github.com/nubisproject/nubis-deploy/pull/27) ([gozer](https://github.com/gozer))
 - Issue/23/cloudhealth [\#24](https://github.com/nubisproject/nubis-deploy/pull/24) ([gozer](https://github.com/gozer))
