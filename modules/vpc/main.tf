@@ -737,7 +737,7 @@ resource "aws_autoscaling_group" "nat" {
     create_before_destroy = true
   }
 
-  name = "x-nubis-nat-${element(split(",",var.environments), count.index)}- (${element(aws_launch_configuration.nat.*.name, count.index)})"
+  name = "nubis-nat-${element(split(",",var.environments), count.index)}- (${element(aws_launch_configuration.nat.*.name, count.index)})"
 
   # Subnets
   vpc_zone_identifier = [
@@ -815,6 +815,7 @@ NUBIS_DOMAIN='${var.nubis_domain}'
 NUBIS_MIGRATE='1'
 NUBIS_ACCOUNT='${var.account_name}'
 NUBIS_PURPOSE='Nat Instance'
+NUBIS_NAT_EIP='${element(aws_eip.nat.*.id, count.index)}'
 USER_DATA
 }
 
@@ -951,7 +952,7 @@ module "consul" {
   aws_region     = "${var.aws_region}"
   aws_account_id = "${var.aws_account_id}"
 
-  my_ip           = "${var.my_ip}"
+  my_ip           = "${var.my_ip},${element(aws_eip.nat.*.public_ip,0)}/32"
   lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
 
   key_name           = "${var.ssh_key_name}"
@@ -1246,4 +1247,12 @@ resource "aws_security_group" "proxy" {
       Environment = "${element(split(",",var.environments), count.index)}"
   }
 
+}
+
+resource "aws_eip" "nat" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+  vpc   = true
+  lifecycle {
+    create_before_destroy = true
+  }
 }
