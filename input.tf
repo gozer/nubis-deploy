@@ -89,6 +89,7 @@ variable ci {
     git_repo                   = "https://github.com/nubisproject/nubis-skel.git"
     github_oauth_client_secret = "AAA"
     github_oauth_client_id     = "BBB"
+    admins                     = "gozer"
   }
 }
 
