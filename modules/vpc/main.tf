@@ -877,9 +877,8 @@ resource "aws_iam_policy_attachment" "credstash" {
 
   #XXX: concat and compact should work here, but element() isn't a list, so BUG
   roles = [
-    "${split(",",replace(replace(concat(element(split(",",module.jumphost.iam_roles), count.index), ",", element(split(",",module.consul.iam_roles), count.index), ",", element(split(",",module.fluent-collector.iam_roles), count.index), ",", element(aws_iam_role.nat.*.id, count.index) ), "/(,+)/",","),"/(^,+|,+$)/", ""))}",
     #XXX: Bug, puts the CI system in all environment roles
-    "${module.ci.iam_role}",
+    "${split(",",replace(replace(concat(element(split(",",module.jumphost.iam_roles), count.index), ",", element(split(",",module.consul.iam_roles), count.index), ",", element(split(",",module.fluent-collector.iam_roles), count.index), ",", element(aws_iam_role.nat.*.id, count.index), ",", module.ci.iam_role ), "/(,+)/",","),"/(^,+|,+$)/", ""))}",
   ]
 
   policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
@@ -992,7 +991,8 @@ module "ci-uuid" {
 
 # XXX: This assumes it's going in the first environment, i.e. admin
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.1.0"
+#  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.1.0"
+  source = "/Users/gozer/opt/src/mozilla.org/gozer/nubis/ci/nubis/terraform"
 
   enabled = "${var.enabled * var.enable_ci}"
 
