@@ -991,8 +991,7 @@ module "ci-uuid" {
 
 # XXX: This assumes it's going in the first environment, i.e. admin
 module "ci" {
-#  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.1.0"
-  source = "/Users/gozer/opt/src/mozilla.org/gozer/nubis/ci/nubis/terraform"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.1.0"
 
   enabled = "${var.enabled * var.enable_ci}"
 
