@@ -1,11 +1,8 @@
-variable aws_profile {
-}
+variable aws_profile {}
 
-variable account_name {
-}
+variable account_name {}
 
-variable admin_users {
-}
+variable admin_users {}
 
 variable aws_region {
   default = "us-east-1"

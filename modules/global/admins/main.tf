@@ -22,11 +22,12 @@ resource "aws_iam_user" "admin" {
 }
 
 resource "aws_iam_role_policy" "admin" {
-    count = "${length(split(",",var.admin_users))}"
-    name = "${element(split(",",var.admin_users), count.index)}"
+  count = "${length(split(",",var.admin_users))}"
+  name  = "${element(split(",",var.admin_users), count.index)}"
 
-    role = "${element(aws_iam_role.admin.*.id, count.index)}"
-    policy = <<EOF
+  role = "${element(aws_iam_role.admin.*.id, count.index)}"
+
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -41,10 +42,11 @@ EOF
 }
 
 resource "aws_iam_role" "admin" {
-    count = "${length(split(",",var.admin_users))}" 
-    path  = "/nubis/admin/"
-    name = "${element(split(",",var.admin_users), count.index)}"
-    assume_role_policy = <<EOF
+  count = "${length(split(",",var.admin_users))}"
+  path  = "/nubis/admin/"
+  name  = "${element(split(",",var.admin_users), count.index)}"
+
+  assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
