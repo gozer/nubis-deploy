@@ -55,6 +55,20 @@ resource "aws_iam_role_policy" "admin" {
 EOF
 }
 
+resource "template_file" "mfa" {
+  template = "${file("${path.module}/mfa-policy.json.tmpl")}"
+  vars {
+    account_id = "${element(split(":",aws_iam_group.admins.arn), 4)}"
+  }
+}
+
+resource "aws_iam_policy" "mfa" {
+  name = "mfa-access"
+  path = "/nubis/admin/"
+  description = "Policy that enforces MFA access"
+  policy = "${template_file.mfa.rendered}"
+}
+
 resource "aws_iam_role" "admin" {
   count = "${length(split(",",var.admin_users))}"
   path  = "/nubis/admin/"
@@ -131,6 +145,12 @@ resource "aws_iam_policy_attachment" "admins" {
   name       = "admins"
   groups     = ["${aws_iam_group.admins.name}"]
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
+resource "aws_iam_policy_attachment" "mfa" {
+  name       = "mfa"
+  groups     = ["${aws_iam_group.admins.name}"]
+  policy_arn = "${aws_iam_policy.mfa.arn}"
 }
 
 resource "aws_iam_group_policy" "nacl_admins" {
