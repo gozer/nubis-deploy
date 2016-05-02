@@ -12,6 +12,4 @@ output "admins_secret_keys" {
 
 output "account_id" {
   value = "${element(split(":",aws_iam_group.admins.arn), 4)}"
-
-  #330914478726
 }
