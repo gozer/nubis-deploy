@@ -61,7 +61,7 @@ EOF
 
 resource "aws_iam_role" "readonly" {
     count = 1
-    path  = "/nubis/admin/"
+    path  = "/nubis/"
     name = "readonly"
     assume_role_policy = <<EOF
 {
