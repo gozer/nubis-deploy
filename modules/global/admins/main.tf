@@ -61,6 +61,25 @@ resource "aws_iam_role" "admin" {
 EOF
 }
 
+resource "aws_iam_role" "readonly" {
+    count = 1
+    path  = "/nubis/admin/"
+    name = "readonly"
+    assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal" : { "AWS" : [ ${join(",", formatlist("\"%s\"", aws_iam_user.admin.*.arn))} ]},
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_access_key" "admins" {
   count = "${length(split(",",var.admin_users))}"
   user  = "${element(aws_iam_user.admin.*.name, count.index)}"
@@ -84,6 +103,7 @@ resource "aws_iam_group" "read_only_users" {
 resource "aws_iam_policy_attachment" "read_only" {
   name       = "read-only-attachments"
   groups     = ["${aws_iam_group.read_only_users.name}"]
+  roles      = ["${aws_iam_role.readonly.name}"]
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
