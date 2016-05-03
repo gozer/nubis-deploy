@@ -9,6 +9,13 @@ output "admins_access_keys" {
 output "admins_secret_keys" {
   value = "${module.global_admins.admins_secret_keys}"
 }
+output "admins_roles" {
+  value = "${module.global_admins.admins_roles}"
+}
+
+output "admins_readonly_role" {
+  value = "${module.global_admins.admins_readonly_role}"
+}
 
 output "account_id" {
   value = "${module.global_admins.account_id}"
