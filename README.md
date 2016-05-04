@@ -109,6 +109,9 @@ environments_networks = "10.x.y.0/24,10.x.y.0/24,10.x.y.0/24"
 # Usernames of admin IAM users to create
 admin_users = "alice,bob,chris"
 
+# Usernames of guest IAM users to create
+guest_users = "jim,jack"
+
 # Optionnal features
 
 features.consul = 1

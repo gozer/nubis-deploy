@@ -7,6 +7,9 @@ variable account_name {
 variable admin_users {
 }
 
+variable guest_users {
+}
+
 variable aws_region {
   default = "us-east-1"
 }

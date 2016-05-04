@@ -20,6 +20,10 @@ variable admin_users {
   default = "gozer,limed,riweiss,jcrowe"
 }
 
+variable guest_users {
+  default = "guest"
+}
+
 variable aws_regions {
   default = "us-east-1,us-west-2"
 }

@@ -19,6 +19,19 @@ resource "aws_iam_user" "admin" {
   count = "${length(split(",",var.admin_users))}"
   path  = "/nubis/admin/"
   name  = "${element(split(",",var.admin_users), count.index)}"
+
+  provisioner "local-exec" {
+    command = "sleep 10"
+  }
+}
+
+resource "aws_iam_user" "guest" {
+  count = "${length(split(",",var.guest_users))}"
+  path  = "/nubis/guest/"
+  name  = "${element(split(",",var.guest_users), count.index)}"
+  provisioner "local-exec" {
+    command = "sleep 10"
+  }
 }
 
 resource "aws_iam_role_policy" "admin" {
@@ -69,7 +82,7 @@ resource "aws_iam_role" "readonly" {
   "Statement": [
     {
       "Action": "sts:AssumeRole",
-      "Principal" : { "AWS" : [ ${join(",", formatlist("\"%s\"", aws_iam_user.admin.*.arn))} ]},
+      "Principal" : { "AWS" : [ ${join(",", formatlist("\"%s\"", concat(aws_iam_user.admin.*.arn, aws_iam_user.guest.*.arn)))} ]},
       "Effect": "Allow",
       "Sid": ""
     }
@@ -81,6 +94,11 @@ EOF
 resource "aws_iam_access_key" "admins" {
   count = "${length(split(",",var.admin_users))}"
   user  = "${element(aws_iam_user.admin.*.name, count.index)}"
+}
+
+resource "aws_iam_access_key" "guests" {
+  count = "${length(split(",",var.guest_users))}"
+  user  = "${element(aws_iam_user.guest.*.name, count.index)}"
 }
 
 resource "aws_iam_group" "admins" {
@@ -144,4 +162,15 @@ resource "aws_iam_group_membership" "admins" {
   ]
 
   group = "${aws_iam_group.admins.name}"
+}
+
+resource "aws_iam_group_membership" "guest" {
+  count = "${length(split(",",var.guest_users))}"
+  name = "guest-group-membership"
+
+  users = [
+    "${aws_iam_user.guest.*.name}",
+  ]
+
+  group = "${aws_iam_group.read_only_users.name}"
 }

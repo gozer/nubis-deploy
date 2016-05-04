@@ -9,12 +9,26 @@ output "admins_access_keys" {
 output "admins_secret_keys" {
   value = "${module.global_admins.admins_secret_keys}"
 }
+
+output "guests_users" {
+  value = "${module.global_admins.guests_users}"
+}
+
+output "guests_access_keys" {
+  value = "${module.global_admins.guests_access_keys}"
+}
+
+output "guests_secret_keys" {
+  value = "${module.global_admins.guests_secret_keys}"
+}
+
+
 output "admins_roles" {
   value = "${module.global_admins.admins_roles}"
 }
 
-output "admins_readonly_role" {
-  value = "${module.global_admins.admins_readonly_role}"
+output "readonly_role" {
+  value = "${module.global_admins.readonly_role}"
 }
 
 output "account_id" {
