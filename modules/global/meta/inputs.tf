@@ -1,6 +1,8 @@
-variable aws_profile {}
+variable aws_profile {
+}
 
-variable account_name {}
+variable account_name {
+}
 
 variable aws_region {
   default = ""

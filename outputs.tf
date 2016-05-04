@@ -22,7 +22,6 @@ output "guests_secret_keys" {
   value = "${module.global_admins.guests_secret_keys}"
 }
 
-
 output "admins_roles" {
   value = "${module.global_admins.admins_roles}"
 }

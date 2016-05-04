@@ -1,9 +1,14 @@
-variable aws_profile {}
+variable aws_profile {
+}
 
-variable aws_region {}
+variable aws_region {
+}
 
-variable enabled {}
+variable enabled {
+}
 
-variable cloudtrail_sns_topic {}
+variable cloudtrail_sns_topic {
+}
 
-variable cloudtrail_bucket {}
+variable cloudtrail_bucket {
+}

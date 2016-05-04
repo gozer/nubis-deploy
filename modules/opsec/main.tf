@@ -14,5 +14,6 @@ resource "aws_cloudformation_stack" "opsec" {
 
   template_body = "${file("${path.module}/audit.json")}"
 
-  parameters = {}
+  parameters = {
+  }
 }

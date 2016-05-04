@@ -29,6 +29,7 @@ resource "aws_iam_user" "guest" {
   count = "${length(split(",",var.guest_users))}"
   path  = "/nubis/guest/"
   name  = "${element(split(",",var.guest_users), count.index)}"
+
   provisioner "local-exec" {
     command = "sleep 10"
   }
@@ -75,10 +76,11 @@ EOF
 }
 
 resource "aws_iam_role" "readonly" {
-    count = 1
-    path  = "/nubis/"
-    name = "readonly"
-    assume_role_policy = <<EOF
+  count = 1
+  path  = "/nubis/"
+  name  = "readonly"
+
+  assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -168,7 +170,7 @@ resource "aws_iam_group_membership" "admins" {
 
 resource "aws_iam_group_membership" "guest" {
   count = "${length(split(",",var.guest_users))}"
-  name = "guest-group-membership"
+  name  = "guest-group-membership"
 
   users = [
     "${aws_iam_user.guest.*.name}",
