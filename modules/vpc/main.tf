@@ -737,7 +737,7 @@ resource "aws_autoscaling_group" "nat" {
     create_before_destroy = true
   }
 
-  name = "nubis-nat-${element(split(",",var.environments), count.index)}- (${element(aws_launch_configuration.nat.*.name, count.index)})"
+  name = "nubis-nat-${element(split(",",var.environments), count.index)} (${element(aws_launch_configuration.nat.*.name, count.index)})"
 
   # Subnets
   vpc_zone_identifier = [

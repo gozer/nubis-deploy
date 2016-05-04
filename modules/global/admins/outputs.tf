@@ -14,7 +14,19 @@ output "admins_secret_keys" {
   value = "${join(",", aws_iam_access_key.admins.*.secret)}"
 }
 
-output "admins_readonly_role" {
+output "guests_users" {
+  value = "${join(",", aws_iam_access_key.guests.*.user)}"
+}
+
+output "guests_access_keys" {
+  value = "${join(",", aws_iam_access_key.guests.*.id)}"
+}
+
+output "guests_secret_keys" {
+  value = "${join(",", aws_iam_access_key.guests.*.secret)}"
+}
+
+output "readonly_role" {
   value = "${aws_iam_role.readonly.arn}"
 }
 
