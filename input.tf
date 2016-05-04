@@ -78,7 +78,7 @@ variable mig {
 
 variable cloudtrail {
   default = {
-    bucket = "mozilla-cloudtrail-logs"
+    bucket    = "mozilla-cloudtrail-logs"
     sns_topic = "arn:aws:sns:us-west-2:088944123687:MozillaCloudTrailLogs"
   }
 }

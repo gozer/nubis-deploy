@@ -12,4 +12,3 @@ variable cloudtrail_sns_topic {
 
 variable cloudtrail_bucket {
 }
-
