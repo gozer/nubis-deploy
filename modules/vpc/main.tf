@@ -769,6 +769,7 @@ resource "aws_autoscaling_group" "nat" {
   tag {
     key                 = "Name"
     value               = "nubis-nat-${element(split(",",var.environments), count.index)}"
+    value               = "NAT (${var.nubis_version}) for ${var.account_name} in ${element(split(",",var.environments), count.index)}"
     propagate_at_launch = true
   }
 
