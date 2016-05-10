@@ -188,6 +188,11 @@ resource "aws_cloudformation_stack" "dummy-vpc" {
     PrivateSubnetAZ1Env3 = "${element(aws_subnet.private.*.id, 6)}"
     PrivateSubnetAZ2Env3 = "${element(aws_subnet.private.*.id, 7)}"
     PrivateSubnetAZ3Env3 = "${element(aws_subnet.private.*.id, 8)}"
+
+    # AZs
+    PrivateAvailabilityZone1 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), 0)}"
+    PrivateAvailabilityZone2 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), 1)}"
+    PrivateAvailabilityZone3 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), 2)}"
   }
 }
 
