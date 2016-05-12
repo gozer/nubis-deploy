@@ -1,3 +1,7 @@
+provider "atlas" {
+    token = "${var.atlas_token}"
+}
+
 module "global_admins" {
   source = "modules/global/admins"
 
