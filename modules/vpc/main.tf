@@ -1008,13 +1008,15 @@ module "ci-uuid" {
 
 # XXX: This assumes it's going in the first environment, i.e. admin
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.1.0"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=master"
 
   enabled = "${var.enabled * var.enable_ci}"
 
   environment = "${element(split(",",var.environments), 0)}"
   aws_profile = "${var.aws_profile}"
   region      = "${var.aws_region}"
+
+  credstash_key            = "${module.meta.CredstashKeyID}"
 
   key_name          = "${var.ssh_key_name}"
   version           = "${var.nubis_version}"
