@@ -5,6 +5,10 @@ variable aws_profile {
   default = "default"
 }
 
+variable atlas_token {
+  default = "anonymous"
+}
+
 variable nubis_version {
   default = "v1.0.1-sec1"
 }
