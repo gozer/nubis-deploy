@@ -11,3 +11,16 @@ resource "aws_cloudtrail" "opsec-cloudtrail" {
   include_global_service_events = true
   enable_logging                = true
 }
+
+resource "aws_cloudformation_stack" "opsec" {
+  name = "opsec"
+
+  capabilities = [
+    "CAPABILITY_IAM",
+  ]
+
+  template_body = "${file("${path.module}/audit.json")}"
+
+  parameters = {
+  }
+}

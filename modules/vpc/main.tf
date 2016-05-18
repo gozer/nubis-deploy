@@ -1050,15 +1050,6 @@ module "ci" {
   email = "${var.technical_contact}"
 }
 
-module "opsec" {
-  source = "../opsec"
-
-  enabled = "${var.enabled * var.enable_opsec}"
-
-  aws_profile = "${var.aws_profile}"
-  aws_region  = "${var.aws_region}"
-}
-
 #XXX: Move to a module
 
 #XXX: outputs:
