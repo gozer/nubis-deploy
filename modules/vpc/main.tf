@@ -812,7 +812,7 @@ resource "aws_launch_configuration" "nat" {
   # add on, and pick that element
   image_id = "${ element(split(",",replace(atlas_artifact.nubis-nat.id,":",",")) ,1 + index(split(",",replace(atlas_artifact.nubis-nat.id,":",",")), var.aws_region)) }"
 
-  instance_type               = "t2.nano"
+  instance_type               = "m3.medium"
   associate_public_ip_address = true
   key_name                    = "${var.ssh_key_name}"
 
