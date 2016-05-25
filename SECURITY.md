@@ -127,7 +127,7 @@ The value for *mfa_serial* was printed when we created the virtual MFA device
 
 At this point, we are fully setup to use aws-vault to access the account.
 
-We created to profiles, one account-name-ro has read-only privileges only, and should generally be used when inspecting resources, since it doesn't have the ability to modify any resources.
+We created two profiles, one account-name-ro has read-only privileges only, and should generally be used when inspecting resources, since it doesn't have the ability to modify any resources.
 
 The other profile, account-name-admin has full admin privileges and should be used carefully, when making changes to the account, typically, via terraform invocations.
 
@@ -144,7 +144,7 @@ Enter token for arn:aws:iam::1234567890:mfa/jim: 012345
 ```
 
 ```bash
-$> ws-vault exec account-name-ro -- terraform plan
+$> aws-vault exec account-name-ro -- terraform plan
 [...]
 ```
 
