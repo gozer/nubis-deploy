@@ -1273,3 +1273,19 @@ resource "aws_eip" "nat" {
     create_before_destroy = true
   }
 }
+
+resource "aws_security_group" "nubis_version" {
+  count = "${var.enabled}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  name_prefix = "NubisVersion-"
+  description = "Placeholder for current Nubis version (${var.nubis_version})"
+
+  tags = {
+    NubisVersion = "${var.nubis_version}"
+  }
+
+}
