@@ -49,13 +49,15 @@ variable technical_contact {
 
 variable features {
   default = {
-    consul       = 0
+    consul       = 1
     jumphost     = 0
     fluent       = 0
     stack_compat = 0
     mig          = 0
     ci           = 0
     vpn          = 0
+    nat          = 1
+    opsec        = 0
   }
 }
 

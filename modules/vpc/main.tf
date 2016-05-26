@@ -388,7 +388,7 @@ resource "aws_security_group" "internet_access" {
 }
 
 resource "aws_security_group" "nat" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
@@ -704,7 +704,7 @@ resource "aws_route_table_association" "private" {
 }
 
 resource "aws_network_interface" "private-nat" {
-  count = "${3 * var.enabled * length(split(",", var.environments))}"
+  count = "${3 * var.enabled * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
@@ -732,7 +732,7 @@ resource "aws_network_interface" "private-nat" {
 }
 
 resource "atlas_artifact" "nubis-nat" {
-  count = "${var.enabled}"
+  count = "${var.enabled * var.enable_nat}"
 
   lifecycle {
     create_before_destroy = true
@@ -747,7 +747,7 @@ resource "atlas_artifact" "nubis-nat" {
 }
 
 resource "aws_autoscaling_group" "nat" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
@@ -798,7 +798,7 @@ resource "aws_autoscaling_group" "nat" {
 }
 
 resource "aws_launch_configuration" "nat" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
@@ -838,7 +838,7 @@ USER_DATA
 
 # XXX: This could be a global
 resource "aws_iam_role" "nat" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
@@ -865,7 +865,7 @@ POLICY
 }
 
 resource "aws_iam_role_policy" "nat" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
@@ -877,7 +877,7 @@ resource "aws_iam_role_policy" "nat" {
 }
 
 resource "aws_iam_instance_profile" "nat" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
@@ -1180,7 +1180,7 @@ resource "aws_route53_record" "proxy" {
 
 ## Create a new load balancer
 resource "aws_elb" "proxy" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
@@ -1227,7 +1227,7 @@ resource "aws_elb" "proxy" {
 }
 
 resource "aws_security_group" "proxy" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
@@ -1263,6 +1263,8 @@ resource "aws_security_group" "proxy" {
   }
 }
 
+#XXX: Can't make this conditional on enable_nat, because of how we feed it as input to the
+#XXX: Consul module, unfortunately
 resource "aws_eip" "nat" {
   count = "${var.enabled * length(split(",", var.environments))}"
   vpc   = true

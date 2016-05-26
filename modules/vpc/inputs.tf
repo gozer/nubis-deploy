@@ -79,6 +79,9 @@ variable enable_ci {
 variable enable_vpn {
 }
 
+variable enable_nat {
+}
+
 variable my_ip {
 }
 
