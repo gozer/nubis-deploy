@@ -53,6 +53,7 @@ module "vpcs" {
   enable_opsec        = "${lookup(var.features,"opsec")}"
   enable_stack_compat = "${lookup(var.features,"stack_compat")}"
   enable_vpn          = "${lookup(var.features,"vpn")}"
+  enable_nat          = "${lookup(var.features,"nat")}"
 
   technical_contact = "${var.technical_contact}"
 

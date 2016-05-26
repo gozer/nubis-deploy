@@ -55,6 +55,9 @@ variable enable_stack_compat {
 variable enable_vpn {
 }
 
+variable enable_nat {
+}
+
 variable my_ip {
 }
 

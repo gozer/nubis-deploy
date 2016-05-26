@@ -22,6 +22,7 @@ module "us-east-1" {
   enable_opsec        = "${var.enable_opsec}"
   enable_stack_compat = "${var.enable_stack_compat}"
   enable_vpn          = "${var.enable_vpn}"
+  enable_nat          = "${var.enable_nat}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -81,6 +82,7 @@ module "us-west-2" {
   enable_opsec        = "${var.enable_opsec}"
   enable_stack_compat = "${var.enable_stack_compat}"
   enable_vpn          = "${var.enable_vpn}"
+  enable_nat          = "${var.enable_nat}"
 
   technical_contact = "${var.technical_contact}"
 
