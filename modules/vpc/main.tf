@@ -746,35 +746,40 @@ resource "atlas_artifact" "nubis-nat" {
   }
 }
 
+variable nat_side {
+  default = {
+    "0" = "left"
+    "1" = "right"
+  }
+}
+
 resource "aws_autoscaling_group" "nat" {
-  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
+  count = "${var.enabled * 2 * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
   }
 
-  name = "nubis-nat-${element(split(",",var.environments), count.index)} (${element(aws_launch_configuration.nat.*.name, count.index)})"
+  name = "nubis-nat-${element(split(",",var.environments), count.index/2)}-${lookup(var.nat_side, count.index % 2)} (${element(aws_launch_configuration.nat.*.name, count.index)})"
 
   # Subnets
   vpc_zone_identifier = [
-    "${element(aws_subnet.public.*.id, 3*count.index)}",
-    "${element(aws_subnet.public.*.id, 3*count.index+1)}",
-    "${element(aws_subnet.public.*.id, 3*count.index+2)}",
+    "${element(aws_subnet.public.*.id, 3*(count.index/2) + ( count.index % 2 ))}",
   ]
 
   load_balancers = [
-    "${element(aws_elb.proxy.*.name, count.index)}",
+    "${element(aws_elb.proxy.*.name, count.index/2)}",
   ]
 
   max_size             = 2
   min_size             = 1
   desired_capacity     = 1
-  launch_configuration = "${element(aws_launch_configuration.nat.*.name, count.index )}"
+
+  launch_configuration = "${element(aws_launch_configuration.nat.*.name, count.index)}"
 
   tag {
     key                 = "Name"
-    value               = "nubis-nat-${element(split(",",var.environments), count.index)}"
-    value               = "NAT (${var.nubis_version}) for ${var.account_name} in ${element(split(",",var.environments), count.index)}"
+    value               = "NAT (${var.nubis_version}) for ${var.account_name} in ${element(split(",",var.environments), count.index/2)}/${lookup(var.nat_side,count.index%2)}"
     propagate_at_launch = true
   }
 
@@ -792,19 +797,19 @@ resource "aws_autoscaling_group" "nat" {
 
   tag {
     key                 = "Environment"
-    value               = "${element(split(",",var.environments), count.index)}"
+    value               = "${element(split(",",var.environments), count.index/2)}"
     propagate_at_launch = true
   }
 }
 
 resource "aws_launch_configuration" "nat" {
-  count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
+  count = "${var.enabled * 2 * var.enable_nat * length(split(",", var.environments))}"
 
   lifecycle {
     create_before_destroy = true
   }
 
-  name_prefix = "nubis-nat-${element(split(",",var.environments), count.index )}-"
+  name_prefix = "nubis-nat-${element(split(",",var.environments), count.index/2 )}-${lookup(var.nat_side, count.index % 2)}-"
 
   # Somewhat nasty, since Atlas doesn't have an elegant way to access the id for a region
   # the id is "region:ami,region:ami,region:ami"
@@ -816,18 +821,18 @@ resource "aws_launch_configuration" "nat" {
   associate_public_ip_address = true
   key_name                    = "${var.ssh_key_name}"
 
-  iam_instance_profile = "${element(aws_iam_instance_profile.nat.*.id, count.index)}"
+  iam_instance_profile = "${element(aws_iam_instance_profile.nat.*.id, count.index/2)}"
 
   security_groups = [
-    "${element(aws_security_group.internet_access.*.id, count.index)}",
-    "${element(aws_security_group.nat.*.id, count.index)}",
-    "${element(aws_security_group.ssh.*.id, count.index)}",
-    "${element(aws_security_group.shared_services.*.id, count.index)}",
+    "${element(aws_security_group.internet_access.*.id, count.index/2)}",
+    "${element(aws_security_group.nat.*.id, count.index/2)}",
+    "${element(aws_security_group.ssh.*.id, count.index/2)}",
+    "${element(aws_security_group.shared_services.*.id, count.index/2)}",
   ]
 
   user_data = <<USER_DATA
-NUBIS_PROJECT='nubis-nat-${element(split(",",var.environments), count.index)}'
-NUBIS_ENVIRONMENT='${element(split(",",var.environments), count.index)}'
+NUBIS_PROJECT='nubis-nat-${element(split(",",var.environments), count.index/2)}'
+NUBIS_ENVIRONMENT='${element(split(",",var.environments), count.index/2)}'
 NUBIS_DOMAIN='${var.nubis_domain}'
 NUBIS_MIGRATE='1'
 NUBIS_ACCOUNT='${var.account_name}'
@@ -968,7 +973,7 @@ module "consul" {
   aws_region     = "${var.aws_region}"
   aws_account_id = "${var.aws_account_id}"
 
-  my_ip           = "${var.my_ip},${element(aws_eip.nat.*.public_ip,0)}/32"
+  my_ip           = "${var.my_ip},${element(aws_eip.nat.*.public_ip,0)}/32,${element(aws_eip.nat.*.public_ip,1)}/32"
   lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
 
   key_name           = "${var.ssh_key_name}"
@@ -1266,7 +1271,7 @@ resource "aws_security_group" "proxy" {
 #XXX: Can't make this conditional on enable_nat, because of how we feed it as input to the
 #XXX: Consul module, unfortunately
 resource "aws_eip" "nat" {
-  count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * 2 * length(split(",", var.environments))}"
   vpc   = true
 
   lifecycle {
