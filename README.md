@@ -88,9 +88,6 @@ $> cp variables.tf-dist variables.tf
 # Name of the account (used for display and resources)
 account_name = "some-account-name"
 
-# The name of the profile in your ~/.aws/credentials file
-aws_profile  = "project-foo"
-
 # The version of the platform you want
 nubis_version = "v1.1.0"
 
