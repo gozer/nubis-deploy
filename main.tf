@@ -6,7 +6,7 @@ module "global_admins" {
   source = "modules/global/admins"
 
   aws_profile = "${var.aws_profile}"
-  aws_region  = "us-east-1"
+  aws_region  = "${element(split(",",var.aws_regions),0)}"
 
   admin_users = "${var.admin_users}"
   guest_users = "${var.guest_users}"
@@ -21,7 +21,7 @@ module "global_meta" {
   source = "modules/global/meta"
 
   aws_profile = "${var.aws_profile}"
-  aws_region  = "us-east-1"
+  aws_region  = "${element(split(",",var.aws_regions),0)}"
 
   account_name  = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
@@ -37,7 +37,7 @@ module "global_opsec" {
   enabled = "${lookup(var.features,"opsec")}"
 
   aws_profile = "${var.aws_profile}"
-  aws_region  = "us-east-1"
+  aws_region  = "${element(split(",",var.aws_regions),0)}"
 
   cloudtrail_bucket    = "${lookup(var.cloudtrail, "bucket")}"
   cloudtrail_sns_topic = "${lookup(var.cloudtrail, "sns_topic")}"
