@@ -1024,7 +1024,7 @@ module "ci" {
   credstash_key            = "${module.meta.CredstashKeyID}"
 
   key_name          = "${var.ssh_key_name}"
-  version           = "v1.1.0"
+  version           = "${var.nubis_version}"
   technical_contact = "${var.technical_contact}"
 
   nubis_domain = "${var.nubis_domain}"
