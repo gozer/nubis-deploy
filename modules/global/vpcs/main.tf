@@ -42,7 +42,7 @@ module "us-east-1" {
   prod_network  = "${element(split(",",var.environments_networks), 1)}"
   stage_network = "${element(split(",",var.environments_networks), 2)}"
 
-  ipsec_targets = "${var.environments_ipsec_targets}"
+  ipsec_target = "${var.environments_ipsec_target}"
   vpn_bgp_asn   = "${var.vpn_bgp_asn}"
 
   consul_secret           = "${var.consul_secret}"
@@ -102,7 +102,7 @@ module "us-west-2" {
   prod_network  = "${element(split(",",var.environments_networks), 1)}"
   stage_network = "${element(split(",",var.environments_networks), 2)}"
 
-  ipsec_targets = "${var.environments_ipsec_targets}"
+  ipsec_target = "${var.environments_ipsec_target}"
   vpn_bgp_asn   = "${var.vpn_bgp_asn}"
 
   consul_secret           = "${var.consul_secret}"
