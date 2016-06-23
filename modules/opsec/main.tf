@@ -6,7 +6,7 @@ provider "aws" {
 resource "aws_cloudformation_stack" "opsec" {
   count = "${var.enabled}"
 
-  name = "opsec"
+  name = "opsec-${var.aws_region}"
 
   capabilities = [
     "CAPABILITY_IAM",

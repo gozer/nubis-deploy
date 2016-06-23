@@ -25,7 +25,7 @@ variable nubis_domain {
 variable environments_networks {
 }
 
-variable environments_ipsec_targets {
+variable environments_ipsec_target {
 }
 
 variable consul_secret {

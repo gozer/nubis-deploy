@@ -19,7 +19,7 @@ variable stage_network {
 variable prod_network {
 }
 
-variable ipsec_targets {
+variable ipsec_target {
 }
 
 variable account_name {
