@@ -1,5 +1,59 @@
 # Change Log
 
+## [v1.2.0](https://github.com/nubisproject/nubis-deploy/tree/v1.2.0) (2016-07-07)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.1.0...v1.2.0)
+
+**Implemented enhancements:**
+
+- \[nat\] Bump up instance type [\#67](https://github.com/nubisproject/nubis-deploy/issues/67)
+- Use t2.small for nat instance [\#72](https://github.com/nubisproject/nubis-deploy/pull/72) ([limed](https://github.com/limed))
+
+**Closed issues:**
+
+- For global resources, pick the first region instead of hard-coding us-east-1 [\#82](https://github.com/nubisproject/nubis-deploy/issues/82)
+- Create a resource with NubisVersion [\#77](https://github.com/nubisproject/nubis-deploy/issues/77)
+- Document the usage of aws-vault [\#73](https://github.com/nubisproject/nubis-deploy/issues/73)
+- Make NAT a disableable tunable [\#69](https://github.com/nubisproject/nubis-deploy/issues/69)
+- Deploy a single, global opsec security audit stack [\#64](https://github.com/nubisproject/nubis-deploy/issues/64)
+- Add new credstash\_key paramater to nubis-ci [\#62](https://github.com/nubisproject/nubis-deploy/issues/62)
+- Ensure we don't require an Atlas Token [\#60](https://github.com/nubisproject/nubis-deploy/issues/60)
+- \[dummy\] PrivateAvailabilityZone\[1-3\] [\#57](https://github.com/nubisproject/nubis-deploy/issues/57)
+- create read-only guest accounts too [\#52](https://github.com/nubisproject/nubis-deploy/issues/52)
+- Output IAM roles for admins [\#50](https://github.com/nubisproject/nubis-deploy/issues/50)
+- remove references to aws\_profile and just rely on AWS\* keys to be in the environment [\#49](https://github.com/nubisproject/nubis-deploy/issues/49)
+- Create a read-only policy and allow all admin users to assume it for convenience [\#46](https://github.com/nubisproject/nubis-deploy/issues/46)
+- Enable and enforce MFA for all admin accounts [\#44](https://github.com/nubisproject/nubis-deploy/issues/44)
+- get rid of my\_ip, it's really just for debugging [\#43](https://github.com/nubisproject/nubis-deploy/issues/43)
+- Output the actual top-level public route53 zones to facilitate hooking up in inventory [\#32](https://github.com/nubisproject/nubis-deploy/issues/32)
+- Turn Atlas token into a variable [\#20](https://github.com/nubisproject/nubis-deploy/issues/20)
+- Use tf\_module \(https://github.com/mengesb/tf\_filemodule\) for generating files [\#12](https://github.com/nubisproject/nubis-deploy/issues/12)
+
+**Merged pull requests:**
+
+- We only need one IPSec target on the DC side [\#86](https://github.com/nubisproject/nubis-deploy/pull/86) ([gozer](https://github.com/gozer))
+- Fix default ipsec\_targets target [\#85](https://github.com/nubisproject/nubis-deploy/pull/85) ([gozer](https://github.com/gozer))
+- Use the first region for global resources instead of hard-coding an arbitrairy one [\#84](https://github.com/nubisproject/nubis-deploy/pull/84) ([gozer](https://github.com/gozer))
+- Just remove documentation references to aws\_profile. [\#80](https://github.com/nubisproject/nubis-deploy/pull/80) ([gozer](https://github.com/gozer))
+- Add dummy SG for version tracking [\#79](https://github.com/nubisproject/nubis-deploy/pull/79) ([gozer](https://github.com/gozer))
+- Add 'nat' as en enable flag [\#78](https://github.com/nubisproject/nubis-deploy/pull/78) ([gozer](https://github.com/gozer))
+- Tyops [\#75](https://github.com/nubisproject/nubis-deploy/pull/75) ([tinnightcap](https://github.com/tinnightcap))
+- Initial drop of aws-vault documentation [\#74](https://github.com/nubisproject/nubis-deploy/pull/74) ([gozer](https://github.com/gozer))
+- Revert "Use a bigger instance" [\#71](https://github.com/nubisproject/nubis-deploy/pull/71) ([tinnightcap](https://github.com/tinnightcap))
+- Provisions for HA NAT [\#70](https://github.com/nubisproject/nubis-deploy/pull/70) ([limed](https://github.com/limed))
+- Use a bigger instance [\#68](https://github.com/nubisproject/nubis-deploy/pull/68) ([limed](https://github.com/limed))
+- Deploy a single, global opsec security audit stack [\#65](https://github.com/nubisproject/nubis-deploy/pull/65) ([gozer](https://github.com/gozer))
+- Add new required credstash\_key to nubis-ci [\#63](https://github.com/nubisproject/nubis-deploy/pull/63) ([gozer](https://github.com/gozer))
+- Create an atlas\_token variable, defaults to 'anonymous'  [\#61](https://github.com/nubisproject/nubis-deploy/pull/61) ([gozer](https://github.com/gozer))
+- update bugzilla GitHub settings [\#59](https://github.com/nubisproject/nubis-deploy/pull/59) ([gozer](https://github.com/gozer))
+- Provide PrivateAvailabilityZone\[1-3\] inputs [\#58](https://github.com/nubisproject/nubis-deploy/pull/58) ([gozer](https://github.com/gozer))
+- Name the NAT instances like other platform instances   Name \(v0.0.0\) for account in environment [\#56](https://github.com/nubisproject/nubis-deploy/pull/56) ([gozer](https://github.com/gozer))
+- terraform fmt [\#55](https://github.com/nubisproject/nubis-deploy/pull/55) ([gozer](https://github.com/gozer))
+- Add support for read-only guest accounts [\#53](https://github.com/nubisproject/nubis-deploy/pull/53) ([gozer](https://github.com/gozer))
+- Add admin roles as outputs [\#51](https://github.com/nubisproject/nubis-deploy/pull/51) ([gozer](https://github.com/gozer))
+- Move readonly role to the /nubis/ path, to avoid calshes with usernames [\#48](https://github.com/nubisproject/nubis-deploy/pull/48) ([gozer](https://github.com/gozer))
+- Add a readonly IAM role intended for Nubis Admins [\#47](https://github.com/nubisproject/nubis-deploy/pull/47) ([gozer](https://github.com/gozer))
+- Enforce MFA policies on all admin users [\#45](https://github.com/nubisproject/nubis-deploy/pull/45) ([gozer](https://github.com/gozer))
+
 ## [v1.1.0](https://github.com/nubisproject/nubis-deploy/tree/v1.1.0) (2016-04-26)
 **Closed issues:**
 
