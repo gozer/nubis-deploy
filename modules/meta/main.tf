@@ -144,7 +144,15 @@ resource "aws_db_parameter_group" "mysql56" {
 
   parameter {
     name  = "max_allowed_packet"
-    value = "25165824"
+    value = "1073741824"
+  }
+  parameter {
+    name  = "innodb_log_file_size"
+    value = "536870912"
+  }
+  parameter {
+    name  = "innodb_log_buffer_size"
+    value = "8388608"
   }
 
   tags {
