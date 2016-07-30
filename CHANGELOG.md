@@ -1,15 +1,31 @@
 # Change Log
 
-## [v1.2.0](https://github.com/nubisproject/nubis-deploy/tree/v1.2.0) (2016-07-07)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.1.0...v1.2.0)
+## [v1.2.1](https://github.com/nubisproject/nubis-deploy/tree/v1.2.1) (2016-07-30)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.2.0...v1.2.1)
+
+**Closed issues:**
+
+- \[datadog\] Update IAM permissions granted to DataDog [\#95](https://github.com/nubisproject/nubis-deploy/issues/95)
+
+**Merged pull requests:**
+
+- Update pinned release version for v1.2.1 release [\#99](https://github.com/nubisproject/nubis-deploy/pull/99) ([tinnightcap](https://github.com/tinnightcap))
+- Update DataDog permissions as per their docs [\#96](https://github.com/nubisproject/nubis-deploy/pull/96) ([gozer](https://github.com/gozer))
+
+## [v1.2.0](https://github.com/nubisproject/nubis-deploy/tree/v1.2.0) (2016-07-11)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/bugzilla...v1.2.0)
 
 **Implemented enhancements:**
 
 - \[nat\] Bump up instance type [\#67](https://github.com/nubisproject/nubis-deploy/issues/67)
-- Use t2.small for nat instance [\#72](https://github.com/nubisproject/nubis-deploy/pull/72) ([limed](https://github.com/limed))
 
 **Closed issues:**
 
+- Turn Atlas token into a variable [\#20](https://github.com/nubisproject/nubis-deploy/issues/20)
+- Use tf\_module \(https://github.com/mengesb/tf\_filemodule\) for generating files [\#12](https://github.com/nubisproject/nubis-deploy/issues/12)
+- ipsec\_targets is now ipsec\_target \(singular\) [\#91](https://github.com/nubisproject/nubis-deploy/issues/91)
+- Update external module references to v1.2.0 [\#90](https://github.com/nubisproject/nubis-deploy/issues/90)
+- Tag v1.2.0 release [\#87](https://github.com/nubisproject/nubis-deploy/issues/87)
 - For global resources, pick the first region instead of hard-coding us-east-1 [\#82](https://github.com/nubisproject/nubis-deploy/issues/82)
 - Create a resource with NubisVersion [\#77](https://github.com/nubisproject/nubis-deploy/issues/77)
 - Document the usage of aws-vault [\#73](https://github.com/nubisproject/nubis-deploy/issues/73)
@@ -24,22 +40,40 @@
 - Create a read-only policy and allow all admin users to assume it for convenience [\#46](https://github.com/nubisproject/nubis-deploy/issues/46)
 - Enable and enforce MFA for all admin accounts [\#44](https://github.com/nubisproject/nubis-deploy/issues/44)
 - get rid of my\_ip, it's really just for debugging [\#43](https://github.com/nubisproject/nubis-deploy/issues/43)
+- \[opsec\] Remove useless variables [\#39](https://github.com/nubisproject/nubis-deploy/issues/39)
+- \[ci\] Attach to the correct credstash policy to make it part of the platorm ACL [\#38](https://github.com/nubisproject/nubis-deploy/issues/38)
+- \[ci\] Github OAuth client id is incorrectly passed in [\#36](https://github.com/nubisproject/nubis-deploy/issues/36)
+- \[opsec\] enable cloudtrail logs everywhere [\#34](https://github.com/nubisproject/nubis-deploy/issues/34)
 - Output the actual top-level public route53 zones to facilitate hooking up in inventory [\#32](https://github.com/nubisproject/nubis-deploy/issues/32)
-- Turn Atlas token into a variable [\#20](https://github.com/nubisproject/nubis-deploy/issues/20)
-- Use tf\_module \(https://github.com/mengesb/tf\_filemodule\) for generating files [\#12](https://github.com/nubisproject/nubis-deploy/issues/12)
+- \[proxy\] Front internal proxies with an ELB so the fallback proxy DNS entry always works [\#31](https://github.com/nubisproject/nubis-deploy/issues/31)
 
 **Merged pull requests:**
 
+- Add config for nubis-market Upgrade to v1.2.0 \( and rotate datadog api key \) [\#94](https://github.com/nubisproject/nubis-deploy/pull/94) ([gozer](https://github.com/gozer))
+- Upgrade external TF module references to v1.2.0 [\#93](https://github.com/nubisproject/nubis-deploy/pull/93) ([gozer](https://github.com/gozer))
+- ipsec\_targets was renamed ipsec\_target [\#92](https://github.com/nubisproject/nubis-deploy/pull/92) ([gozer](https://github.com/gozer))
+- Update CHANGELOG for v1.2.0 release [\#88](https://github.com/nubisproject/nubis-deploy/pull/88) ([tinnightcap](https://github.com/tinnightcap))
 - We only need one IPSec target on the DC side [\#86](https://github.com/nubisproject/nubis-deploy/pull/86) ([gozer](https://github.com/gozer))
 - Fix default ipsec\_targets target [\#85](https://github.com/nubisproject/nubis-deploy/pull/85) ([gozer](https://github.com/gozer))
 - Use the first region for global resources instead of hard-coding an arbitrairy one [\#84](https://github.com/nubisproject/nubis-deploy/pull/84) ([gozer](https://github.com/gozer))
+- Provisions for HA NAT [\#70](https://github.com/nubisproject/nubis-deploy/pull/70) ([limed](https://github.com/limed))
+- Enforce MFA policies on all admin users [\#45](https://github.com/nubisproject/nubis-deploy/pull/45) ([gozer](https://github.com/gozer))
+
+## [bugzilla](https://github.com/nubisproject/nubis-deploy/tree/bugzilla) (2016-05-27)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.1.0...bugzilla)
+
+**Implemented enhancements:**
+
+- Use t2.small for nat instance [\#72](https://github.com/nubisproject/nubis-deploy/pull/72) ([limed](https://github.com/limed))
+
+**Merged pull requests:**
+
 - Just remove documentation references to aws\_profile. [\#80](https://github.com/nubisproject/nubis-deploy/pull/80) ([gozer](https://github.com/gozer))
 - Add dummy SG for version tracking [\#79](https://github.com/nubisproject/nubis-deploy/pull/79) ([gozer](https://github.com/gozer))
 - Add 'nat' as en enable flag [\#78](https://github.com/nubisproject/nubis-deploy/pull/78) ([gozer](https://github.com/gozer))
 - Tyops [\#75](https://github.com/nubisproject/nubis-deploy/pull/75) ([tinnightcap](https://github.com/tinnightcap))
 - Initial drop of aws-vault documentation [\#74](https://github.com/nubisproject/nubis-deploy/pull/74) ([gozer](https://github.com/gozer))
 - Revert "Use a bigger instance" [\#71](https://github.com/nubisproject/nubis-deploy/pull/71) ([tinnightcap](https://github.com/tinnightcap))
-- Provisions for HA NAT [\#70](https://github.com/nubisproject/nubis-deploy/pull/70) ([limed](https://github.com/limed))
 - Use a bigger instance [\#68](https://github.com/nubisproject/nubis-deploy/pull/68) ([limed](https://github.com/limed))
 - Deploy a single, global opsec security audit stack [\#65](https://github.com/nubisproject/nubis-deploy/pull/65) ([gozer](https://github.com/gozer))
 - Add new required credstash\_key to nubis-ci [\#63](https://github.com/nubisproject/nubis-deploy/pull/63) ([gozer](https://github.com/gozer))
@@ -52,16 +86,10 @@
 - Add admin roles as outputs [\#51](https://github.com/nubisproject/nubis-deploy/pull/51) ([gozer](https://github.com/gozer))
 - Move readonly role to the /nubis/ path, to avoid calshes with usernames [\#48](https://github.com/nubisproject/nubis-deploy/pull/48) ([gozer](https://github.com/gozer))
 - Add a readonly IAM role intended for Nubis Admins [\#47](https://github.com/nubisproject/nubis-deploy/pull/47) ([gozer](https://github.com/gozer))
-- Enforce MFA policies on all admin users [\#45](https://github.com/nubisproject/nubis-deploy/pull/45) ([gozer](https://github.com/gozer))
 
 ## [v1.1.0](https://github.com/nubisproject/nubis-deploy/tree/v1.1.0) (2016-04-26)
 **Closed issues:**
 
-- \[opsec\] Remove useless variables [\#39](https://github.com/nubisproject/nubis-deploy/issues/39)
-- \[ci\] Attach to the correct credstash policy to make it part of the platorm ACL [\#38](https://github.com/nubisproject/nubis-deploy/issues/38)
-- \[ci\] Github OAuth client id is incorrectly passed in [\#36](https://github.com/nubisproject/nubis-deploy/issues/36)
-- \[opsec\] enable cloudtrail logs everywhere [\#34](https://github.com/nubisproject/nubis-deploy/issues/34)
-- \[proxy\] Front internal proxies with an ELB so the fallback proxy DNS entry always works [\#31](https://github.com/nubisproject/nubis-deploy/issues/31)
 - Figure out what to do with each account's config file in the long run [\#29](https://github.com/nubisproject/nubis-deploy/issues/29)
 - Create a README [\#26](https://github.com/nubisproject/nubis-deploy/issues/26)
 - NATs don't need EIPs [\#25](https://github.com/nubisproject/nubis-deploy/issues/25)
