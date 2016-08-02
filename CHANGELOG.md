@@ -1,14 +1,24 @@
 # Change Log
 
+## [v1.2.2](https://github.com/nubisproject/nubis-deploy/tree/v1.2.2) (2016-08-02)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.2.1...v1.2.2)
+
+**Merged pull requests:**
+
+- Update pinned release version for v1.2.2 release [\#103](https://github.com/nubisproject/nubis-deploy/pull/103) ([tinnightcap](https://github.com/tinnightcap))
+- Add more parameters to our mysql parameter groups  [\#101](https://github.com/nubisproject/nubis-deploy/pull/101) ([gozer](https://github.com/gozer))
+
 ## [v1.2.1](https://github.com/nubisproject/nubis-deploy/tree/v1.2.1) (2016-07-30)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.2.0...v1.2.1)
 
 **Closed issues:**
 
 - \[datadog\] Update IAM permissions granted to DataDog [\#95](https://github.com/nubisproject/nubis-deploy/issues/95)
+- Tag v1.2.1 release [\#98](https://github.com/nubisproject/nubis-deploy/issues/98)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v1.2.1 release [\#100](https://github.com/nubisproject/nubis-deploy/pull/100) ([tinnightcap](https://github.com/tinnightcap))
 - Update pinned release version for v1.2.1 release [\#99](https://github.com/nubisproject/nubis-deploy/pull/99) ([tinnightcap](https://github.com/tinnightcap))
 - Update DataDog permissions as per their docs [\#96](https://github.com/nubisproject/nubis-deploy/pull/96) ([gozer](https://github.com/gozer))
 
