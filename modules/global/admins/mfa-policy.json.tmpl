@@ -51,6 +51,19 @@
       ]
     },
     {
+      "Sid": "DeactivatingMFANeedsMFA",
+      "Effect": "Deny",
+      "Action": [
+        "iam:DeactivateMFADevice"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "aws:MultiFactorAuthPresent": "false"
+        }
+      }
+    },
+    {
       "Sid": "DoNotAllowAnythingOtherThanAboveUnlessMFAd",
       "Effect": "Deny",
       "NotAction": "iam:*",
