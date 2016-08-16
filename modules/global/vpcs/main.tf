@@ -27,6 +27,9 @@ module "us-east-1" {
   technical_contact = "${var.technical_contact}"
 
   route53_delegation_set = "${var.route53_delegation_set}"
+  route53_master_zone_id = "${var.route53_master_zone_id}"
+  public_state_bucket    = "${var.public_state_bucket}"
+  aws_state_region       = "${var.aws_state_region}"
 
   my_ip = "${var.my_ip}"
 
@@ -87,6 +90,9 @@ module "us-west-2" {
   technical_contact = "${var.technical_contact}"
 
   route53_delegation_set = "${var.route53_delegation_set}"
+  route53_master_zone_id = "${var.route53_master_zone_id}"
+  public_state_bucket    = "${var.public_state_bucket}"
+  aws_state_region       = "${var.aws_state_region}"
 
   my_ip = "${var.my_ip}"
 

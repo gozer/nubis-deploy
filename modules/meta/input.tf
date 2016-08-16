@@ -21,3 +21,6 @@ variable technical_contact {
 
 variable route53_delegation_set {
 }
+
+variable route53_master_zone_id {
+}

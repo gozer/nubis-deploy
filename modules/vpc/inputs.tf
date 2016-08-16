@@ -108,3 +108,12 @@ variable vpn_bgp_asn {
 
 variable route53_delegation_set {
 }
+
+variable route53_master_zone_id {
+}
+
+variable public_state_bucket {
+}
+
+variable aws_state_region {
+}
