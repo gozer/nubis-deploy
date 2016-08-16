@@ -19,6 +19,17 @@ resource "aws_route53_zone" "hosted_zone" {
   }
 }
 
+resource "aws_route53_record" "hosted_zone" {
+  zone_id = "${var.route53_master_zone_id}"
+  name    = "${var.aws_region}"
+
+  type = "NS"
+  ttl = "86400"
+  records = [
+    "${aws_route53_zone.hosted_zone.name_servers}"
+  ]
+}
+
 resource "aws_kms_key" "credstash" {
   count = "${var.enabled}"
 

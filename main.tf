@@ -21,10 +21,11 @@ module "global_meta" {
   source = "modules/global/meta"
 
   aws_profile = "${var.aws_profile}"
-  aws_region  = "${element(split(",",var.aws_regions),0)}"
+  aws_region  = "${var.global_region}"
 
   account_name  = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
+  nubis_domain  = "${var.nubis_domain}"
 
   state_uuid = "${var.state_uuid}"
 
@@ -58,12 +59,16 @@ module "vpcs" {
   technical_contact = "${var.technical_contact}"
 
   route53_delegation_set = "${module.global_meta.route53_delegation_set}"
+  route53_master_zone_id = "${module.global_meta.route53_master_zone_id}"
+  public_state_bucket    = "${module.global_meta.public_state_bucket}"
 
   my_ip = "${var.my_ip}"
 
   aws_regions    = "${var.aws_regions}"
   aws_profile    = "${var.aws_profile}"
   aws_account_id = "${module.global_admins.account_id}"
+
+  aws_state_region = "${var.global_region}"
 
   # This exists to force a dependency on the global admins module
   account_name = "${module.global_admins.account_name}"

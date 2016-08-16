@@ -256,6 +256,7 @@ module "meta" {
   service_name = "${var.account_name}"
 
   route53_delegation_set = "${var.route53_delegation_set}"
+  route53_master_zone_id = "${var.route53_master_zone_id}"
 }
 
 resource "aws_vpc" "nubis" {
@@ -1278,6 +1279,7 @@ resource "aws_eip" "nat" {
   }
 }
 
+# Only needed by cloudwatch
 resource "aws_security_group" "nubis_version" {
   count = "${var.enabled}"
 
@@ -1292,4 +1294,47 @@ resource "aws_security_group" "nubis_version" {
     NubisVersion = "${var.nubis_version}"
   }
 
+}
+
+provider "aws" {
+  profile = "${var.aws_profile}"
+  region  = "${var.aws_state_region}"
+  alias = "public-state"
+}
+
+resource "aws_s3_bucket_object" "public_state" {
+  provider = "aws.public-state"
+  count = "${var.enabled * 2 * length(split(",", var.environments))}"
+  bucket = "${var.public_state_bucket}"
+  content_type = "text/json"
+  key = "aws/${var.aws_region}/${element(split(",",var.environments), count.index)}.tfstate"
+  content = <<EOF
+{
+    "version": 1,
+    "serial": 0,
+    "modules": [
+        {
+            "path": [
+                "root"
+            ],
+            "outputs": {
+              "nubis_version": ${jsonencode(var.nubis_version)},
+              "availability_zones": ${jsonencode(aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones)},
+              "hosted_zone_name": ${jsonencode(module.meta.HostedZoneName)},
+              "hosted_zone_id": ${jsonencode(module.meta.HostedZoneId)},
+              "vpc_id": ${jsonencode(element(aws_vpc.nubis.*.id,count.index))},
+              "account_id": ${jsonencode(var.aws_account_id)},
+              "rds_mysql_parameter_group": ${jsonencode(module.meta.NubisMySQL56ParameterGroup)},
+              "shared_services_security_group": ${jsonencode(element(aws_security_group.shared_services.*.id,count.index))},
+              "internet_access_security_group": ${jsonencode(element(aws_security_group.internet_access.*.id,count.index))},
+              "ssh_security_group": ${jsonencode(element(aws_security_group.ssh.*.id,count.index))},
+              "private_subnets": "${element(aws_subnet.private.*.id, (3*count.index) + 0)},${element(aws_subnet.private.*.id, (3*count.index) + 1)},${element(aws_subnet.private.*.id, (3*count.index) + 2)}",
+              "public_subnets": "${element(aws_subnet.public.*.id, (3*count.index) + 0)},${element(aws_subnet.public.*.id, (3*count.index) + 1)},${element(aws_subnet.public.*.id, (3*count.index) + 2)}",
+              "dummy": "dummy"
+            },
+            "resources": {}
+        }
+    ]
+}
+EOF
 }

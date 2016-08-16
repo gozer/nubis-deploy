@@ -32,6 +32,10 @@ variable aws_regions {
   default = "us-east-1,us-west-2"
 }
 
+variable global_region {
+  default = "eu-west-1"
+}
+
 variable consul {
   default = {
     master_acl_token = "00000000-0000-0000-0000-000000000000"

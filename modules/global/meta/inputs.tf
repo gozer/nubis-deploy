@@ -8,10 +8,6 @@ variable aws_region {
   default = ""
 }
 
-variable aws_region_state {
-  default = "eu-west-1"
-}
-
 variable technical_contact {
   default = "infra-aws@mozilla.com"
 }
@@ -22,6 +18,10 @@ variable nubis_version {
 
 variable ssh_key_name {
   default = "nubis"
+}
+
+variable nubis_domain {
+  default = "nubis.allizom.org"
 }
 
 variable state_uuid {
