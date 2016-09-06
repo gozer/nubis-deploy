@@ -82,6 +82,14 @@ variable enable_vpn {
 variable enable_nat {
 }
 
+variable enable_user_management {
+    default = 1
+}
+
+variable user_management_rate {
+    default = "rate(15 minutes)"
+}
+
 variable my_ip {
 }
 
