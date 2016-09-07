@@ -1499,6 +1499,7 @@ resource "aws_security_group" "ldap" {
 resource "aws_lambda_permission" "allow_cloudwatch" {
     count           = "${var.enabled * var.enable_user_management * length(split(",", var.environments))}"
     depends_on      = [
+        "aws_lambda_function.user_management",
         "aws_cloudwatch_event_rule.user_management_event_consul"
     ]
 
