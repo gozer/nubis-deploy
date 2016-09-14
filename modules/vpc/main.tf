@@ -1412,25 +1412,6 @@ resource "aws_iam_role_policy" "user_management" {
                 "ec2:DeleteNetworkInterface"
             ],
             "Resource": "*"
-        },
-        {
-            "Sid": "CreateIAMUsers",
-            "Effect": "Allow",
-            "Action": [
-                "iam:AttachRolePolicy",
-                "iam:AttachUserPolicy",
-                "iam:CreateAccessKey",
-                "iam:DeleteAccessKey",
-                "iam:DeleteRole",
-                "iam:DeleteRolePolicy",
-                "iam:DeleteUser",
-                "iam:DeleteUserPolicy",
-                "iam:CreateRole",
-                "iam:CreateUser",
-                "iam:List*",
-                "iam:Get*"
-            ],
-            "Resource": "*"
         }
     ]
 }
