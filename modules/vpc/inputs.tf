@@ -83,7 +83,6 @@ variable enable_nat {
 }
 
 variable enable_user_management {
-    default = 1
 }
 
 variable user_management_rate {

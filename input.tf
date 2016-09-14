@@ -63,6 +63,7 @@ variable features {
     vpn          = 0
     nat          = 1
     opsec        = 0
+    user_management = 1
   }
 }
 

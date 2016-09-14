@@ -61,6 +61,9 @@ variable enable_vpn {
 variable enable_nat {
 }
 
+variable enable_user_management {
+}
+
 variable my_ip {
 }
 
