@@ -1540,6 +1540,7 @@ resource "aws_cloudwatch_event_target" "user_management_consul" {
         "-service=nubis",
         "-accountName=${var.account_name}",
         "-consulDomain=${var.nubis_domain}",
+        "-consulPort=80",
         "-key=nubis/${element(split(",", var.environments), count.index)}/user-sync/config",
         "-lambda=true"
     ]
