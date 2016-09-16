@@ -1,10 +1,12 @@
 output CredstashKeyID {
-    # FIXME: we copy paste this module twice and I can't really figure out why
-    # ${join("," ${module.*.CredstashKeyID} doesn't work so we are listing it this way for now
-    value   = "${list("${module.us-east-1.CredstashKeyID}", "${module.us-west-2.CredstashKeyID}")}"
+    # XXX: Somehow, the correct way to build this would be with the chain:
+    #  - list(module.us-east-1.CredstashKeyID, module.us-west-2.CredstashKeyID)
+    #  - compact() to remove empty ones
+    #  - join(",") to make a final coma delimited list
+    # But somehow, this doesn't work and causes TF to not even try and interpolate the variable ?!
+    value = "${module.us-east-1.CredstashKeyID},${module.us-west-2.CredstashKeyID}"
 }
 
 output CredstashDynamoDB {
-    # FIXME: See above
-    value = "${list("${module.us-east-1.CredstashDynamoDB}", "${module.us-west-2.CredstashKeyID}")}"
+    value = "${module.us-east-1.CredstashDynamoDB},${module.us-west-2.CredstashKeyID}"
 }
