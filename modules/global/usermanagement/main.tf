@@ -12,39 +12,39 @@ resource "aws_iam_policy" "user_management_credstash" {
     description = "Policy for reading the Credstash DynamoDB for user management"
 
     policy = <<POLICY
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Action": [
-                    "kms:Decrypt"
-                ],
-                "Effect": "Allow",
-                "Resource": "${var.CredstashKeyID}",
-                "Condition": {
-                    "StringEquals": {
-                        "kms:EncryptionContext:environment: global",
-                        "kms:EncryptionContext:region": "${var.aws_region}",
-                        "kms:EncryptionContext:service": "nubis"
-                    }
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "kms:Decrypt"
+            ],
+            "Effect": "Allow",
+            "Resource": "${var.CredstashKeyID}",
+            "Condition": {
+                "StringEquals": {
+                    "kms:EncryptionContext:environment": "global",
+                    "kms:EncryptionContext:region": "${var.aws_region}",
+                    "kms:EncryptionContext:service": "nubis"
                 }
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "dynamodb:BatchGetItem",
-                    "dynamodb:DescribeTable",
-                    "dynamodb:GetItem",
-                    "dynamodb:ListTables",
-                    "dynamodb:Query",
-                    "dynamodb:Scan",
-                    "dynamodb:DescribeReservedCapacity",
-                    "dynamodb:DescribeReservedCapacityOfferings"
-                ],
-                "Resource": "${var.CredstashDynamoDB}"
             }
-        ]
-    }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:DescribeTable",
+                "dynamodb:GetItem",
+                "dynamodb:ListTables",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:DescribeReservedCapacity",
+                "dynamodb:DescribeReservedCapacityOfferings"
+            ],
+            "Resource": "${var.CredstashDynamoDB}"
+        }
+    ]
+}
 POLICY
 }
 
@@ -69,23 +69,23 @@ resource "aws_iam_role" "user_management_iam" {
     }
 
     assume_role_policy = <<EOF
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Principal": {
-                    "Service": [
-                        "lambda.amazonaws.com"
-                    ]
-                },
-                "Action": [
-                    "sts:AssumeRole"
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": [
+                    "lambda.amazonaws.com"
                 ]
-            }
-        ]
-    }
-    EOF
+            },
+            "Action": [
+                "sts:AssumeRole"
+            ]
+        }
+    ]
+}
+EOF
 }
 
 resource "aws_iam_role_policy" "user_management_iam" {
@@ -101,45 +101,45 @@ resource "aws_iam_role_policy" "user_management_iam" {
     name = "user_management_iam"
     role = "${aws_iam_role.user_management_iam.id}"
     policy = <<EOF
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "logs:*"
-                ],
-                "Resource": "arn:aws:logs:*:*:*"
-            },
-            {
-                "Sid": "CreateIAMUsers",
-                "Effect": "Allow",
-                "Action": [
-                    "iam:AttachRolePolicy",
-                    "iam:AttachUserPolicy",
-                    "iam:AddUserToGroup",
-                    "iam:CreateAccessKey",
-                    "iam:CreateRole",
-                    "iam:CreateUser",
-                    "iam:DeleteAccessKey",
-                    "iam:DeleteRole",
-                    "iam:DeleteRolePolicy",
-                    "iam:DeleteUser",
-                    "iam:DeleteUserPolicy",
-                    "iam:DetachRolePolicy",
-                    "iam:GetUser",
-                    "iam:GetRole",
-                    "iam:ListAccessKeys",
-                    "iam:ListGroupsForUser",
-                    "iam:ListUsers",
-                    "iam:PutRolePolicy",
-                    "iam:RemoveUserFromGroup"
-                ],
-                "Resource": "*"
-            }
-        ]
-    }
-    EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:*"
+            ],
+            "Resource": "arn:aws:logs:*:*:*"
+        },
+        {
+            "Sid": "CreateIAMUsers",
+            "Effect": "Allow",
+            "Action": [
+                "iam:AttachRolePolicy",
+                "iam:AttachUserPolicy",
+                "iam:AddUserToGroup",
+                "iam:CreateAccessKey",
+                "iam:CreateRole",
+                "iam:CreateUser",
+                "iam:DeleteAccessKey",
+                "iam:DeleteRole",
+                "iam:DeleteRolePolicy",
+                "iam:DeleteUser",
+                "iam:DeleteUserPolicy",
+                "iam:DetachRolePolicy",
+                "iam:GetUser",
+                "iam:GetRole",
+                "iam:ListAccessKeys",
+                "iam:ListGroupsForUser",
+                "iam:ListUsers",
+                "iam:PutRolePolicy",
+                "iam:RemoveUserFromGroup"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
 }
 
 resource "aws_lambda_function" "user_management_iam" {
