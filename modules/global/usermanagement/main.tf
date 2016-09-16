@@ -144,10 +144,6 @@ EOF
 
 resource "aws_lambda_function" "user_management_iam" {
 
-    depends_on = [
-        "aws_iam_role_policy.user_management_iam"
-    ]
-
     function_name   = "user_management_iam"
     s3_bucket       = "nubis-stacks"
     s3_key          = "${var.nubis_version}/lambda/UserManagement.zip"
@@ -190,11 +186,6 @@ resource "aws_cloudwatch_event_target" "user_management_iam" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
-    depends_on      = [
-        "aws_lambda_function.user_management_iam",
-        "aws_cloudwatch_event_rule.user_management_event_iam"
-    ]
-
     statement_id    = "AllowExecutionFromCloudWatch"
     action          = "lambda:InvokeFunction"
     function_name   = "user_management_iam"
