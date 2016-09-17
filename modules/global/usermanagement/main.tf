@@ -157,7 +157,7 @@ resource "aws_lambda_function" "user_management_iam" {
 }
 
 resource "aws_cloudwatch_event_rule" "user_management_event_iam" {
-    name                = "user_management_iam"
+    name                = "user_management_iam_event_rule"
     depends_on          = [
         "aws_lambda_function.user_management_iam"
     ]
@@ -167,7 +167,7 @@ resource "aws_cloudwatch_event_rule" "user_management_event_iam" {
 }
 
 resource "aws_cloudwatch_event_target" "user_management_iam" {
-    rule        = "user_management_iam"
+    rule        = "${aws_cloudwatch_event_rule.user_management_event_iam.name}"
     arn         = "${aws_lambda_function.user_management_iam.arn}"
     input       = <<EOF
     {
