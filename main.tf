@@ -2,20 +2,6 @@ provider "atlas" {
     token = "${var.atlas_token}"
 }
 
-module "user_management_iam" {
-    source = "modules/global/usermanagement"
-
-    aws_profile         = "${var.aws_profile}"
-    aws_region          = "${element(split(",", var.aws_regions),0)}"
-
-    account_name        = "${var.account_name}"
-    environment         = "${element(split(",", var.environments),0)}"
-    nubis_version       = "${var.nubis_version}"
-
-    CredstashKeyID      = "${element(split(",", module.vpcs.CredstashKeyID),0)}"
-    CredstashDynamoDB   = "${element(split(",", module.vpcs.CredstashDynamoDB),0)}"
-}
-
 module "global_admins" {
   source = "modules/global/admins"
 

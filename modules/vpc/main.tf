@@ -136,7 +136,7 @@ resource "aws_cloudformation_stack" "dummy-vpc" {
 
   name = "${var.aws_region}-vpc"
 
-  template_url = "http://nubis-stacks.s3.amazonaws.com/${var.nubis_version}/vpc/dummy.template"
+  template_url = "http://nubis-stacks-${var.aws_region}.s3.amazonaws.com/${var.nubis_version}/vpc/dummy.template"
 
   parameters = {
     StacksVersion = "${var.nubis_version}"
@@ -205,7 +205,7 @@ resource "aws_lambda_function" "UUID" {
   }
 
   function_name = "UUID"
-  s3_bucket     = "nubis-stacks"
+  s3_bucket     = "nubis-stacks-${var.aws_region}"
   s3_key        = "${var.nubis_version}/lambda/UUID.zip"
   handler       = "index.handler"
   description   = "Generate UUIDs for use in Cloudformation stacks"
@@ -218,7 +218,7 @@ resource "aws_lambda_function" "UUID" {
 resource "aws_lambda_function" "LookupStackOutputs" {
   count         = "${var.enabled * var.enable_stack_compat}"
   function_name = "LookupStackOutputs"
-  s3_bucket     = "nubis-stacks"
+  s3_bucket     = "nubis-stacks-${var.aws_region}"
   s3_key        = "${var.nubis_version}/lambda/LookupStackOutputs.zip"
   handler       = "index.handler"
   description   = "Gather outputs from Cloudformation stacks to be used in other Cloudformation stacks"
@@ -231,7 +231,7 @@ resource "aws_lambda_function" "LookupStackOutputs" {
 resource "aws_lambda_function" "LookupNestedStackOutputs" {
   count         = "${var.enabled * var.enable_stack_compat}"
   function_name = "LookupNestedStackOutputs"
-  s3_bucket     = "nubis-stacks"
+  s3_bucket     = "nubis-stacks-${var.aws_region}"
   s3_key        = "${var.nubis_version}/lambda/LookupNestedStackOutputs.zip"
   handler       = "index.handler"
   description   = "Gather outputs from Cloudformation enviroment specific nested stacks to be used in other Cloudformation stacks"
@@ -908,7 +908,7 @@ resource "aws_iam_policy_attachment" "credstash" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v1.2.2"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=master"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -935,7 +935,7 @@ module "jumphost" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=v1.2.2"
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=master"
 
   enabled = "${var.enabled * var.enable_fluent}"
 
@@ -1016,7 +1016,7 @@ module "ci-uuid" {
 module "ci" {
   source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=master"
 
-  enabled = "${var.enabled * var.enable_ci}"
+  enabled = "${var.enabled * var.enable_ci * ( ( 1 + signum(index(split(",",concat(var.aws_regions, ",", var.aws_region)), var.aws_region))) % 2 ) }"
 
   environment = "${element(split(",",var.environments), 0)}"
   aws_profile = "${var.aws_profile}"
@@ -1054,6 +1054,20 @@ module "ci" {
   s3_bucket_name = "ci-${var.ci_project}-${module.ci-uuid.uuids}"
 
   email = "${var.technical_contact}"
+}
+
+module "user_management" {
+  source = "user_management"
+
+  # set enabled to '1' only if enabled and if we are in the first configured region, yeah, I know.
+  enabled = "${var.enabled * var.enable_user_management * ( ( 1 + signum(index(split(",",concat(var.aws_regions, ",", var.aws_region)), var.aws_region))) % 2 ) }"
+
+  region      = "${var.aws_region}"
+  version           = "${var.nubis_version}"
+  account_name = "${var.account_name}"
+
+  credstash_key            = "${module.meta.CredstashKeyID}"
+  credstash_db             = "${module.meta.CredstashDynamoDB}"
 }
 
 #XXX: Move to a module
@@ -1319,6 +1333,8 @@ resource "aws_s3_bucket_object" "public_state" {
             ],
             "outputs": {
               "nubis_version": ${jsonencode(var.nubis_version)},
+              "region": ${jsonencode(var.aws_region)},
+              "regions": ${jsonencode(var.aws_regions)},
               "availability_zones": ${jsonencode(aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones)},
               "hosted_zone_name": ${jsonencode(module.meta.HostedZoneName)},
               "hosted_zone_id": ${jsonencode(module.meta.HostedZoneId)},
@@ -1426,7 +1442,7 @@ resource "aws_lambda_function" "user_management" {
     ]
 
     function_name   = "user_management-${element(split(",",var.environments), count.index)}"
-    s3_bucket       = "nubis-stacks"
+    s3_bucket       = "nubis-stacks-${var.aws_region}"
     s3_key          = "${var.nubis_version}/lambda/UserManagement.zip"
     role            = "${element(aws_iam_role.user_management.*.arn, count.index)}"
     handler         = "index.handler"
