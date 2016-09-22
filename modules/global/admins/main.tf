@@ -39,7 +39,9 @@ resource "aws_iam_role_policy" "admin" {
   count = "${length(split(",",var.admin_users))}"
   name  = "${element(split(",",var.admin_users), count.index)}"
 
-  role = "${element(aws_iam_role.admin.*.id, count.index)}"
+  # TF 0.6.x bug somehow, using element(aws_iam_role.admin.*.id, count.index) causes
+  # useless resource update and churns, down into forcing policies to be deleted / created
+  role = "${element(split(",",var.admin_users), count.index)}"
 
   policy = <<EOF
 {
@@ -48,7 +50,8 @@ resource "aws_iam_role_policy" "admin" {
     {
       "Action": "*",
       "Effect": "Allow",
-      "Resource": "*"
+      "Resource": "*",
+      "Sid": "admin"
     }
   ]
 }
@@ -82,7 +85,7 @@ resource "aws_iam_role" "admin" {
       "Action": "sts:AssumeRole",
       "Principal" : { "AWS" : "${element(aws_iam_user.admin.*.arn, count.index)}" },
       "Effect": "Allow",
-      "Sid": ""
+      "Sid": "${element(split(",",var.admin_users), count.index)}"
     }
   ]
 }
@@ -102,7 +105,7 @@ resource "aws_iam_role" "readonly" {
       "Action": "sts:AssumeRole",
       "Principal" : { "AWS" : [ ${join(",", formatlist("\"%s\"", concat(aws_iam_user.admin.*.arn, aws_iam_user.guest.*.arn)))} ]},
       "Effect": "Allow",
-      "Sid": ""
+      "Sid": "readonly"
     }
   ]
 }
