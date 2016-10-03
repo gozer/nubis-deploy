@@ -1318,7 +1318,7 @@ provider "aws" {
 
 resource "aws_s3_bucket_object" "public_state" {
   provider = "aws.public-state"
-  count = "${var.enabled * 2 * length(split(",", var.environments))}"
+  count = "${var.enabled * length(split(",", var.environments))}"
   bucket = "${var.public_state_bucket}"
   content_type = "text/json"
   key = "aws/${var.aws_region}/${element(split(",",var.environments), count.index)}.tfstate"
