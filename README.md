@@ -1,4 +1,4 @@
-# Nubis - Deployment
+﻿# Nubis - Deployment
 
 This is the repo to use if you want to deploy the Nubis platform into an AWS account.
 
@@ -71,7 +71,7 @@ It must be named **nubis-deploy-#UUID#**, where UUID is a random
 string, not strictly speaking a UUID proper.
 
 ```
-$> aws --profile some-account-name-profile --region eu-west-1 s3 mb s3://nubis-deploy-$(openssl rand -hex 16)
+$> aws --profile ${AWS_PROFILE} --region eu-west-1 s3 mb s3://nubis-deploy-$(openssl rand -hex 16)
 make_bucket: s3://nubis-deploy-479220c3efeaa0dfcba3e0078886c68a/
 ```
 
@@ -80,6 +80,7 @@ Make sure to note the name of the bucket in question, as it's going to be needed
 ### setup the variables file
 
 ```
+$> cd accounts/${AWS_PROFILE}
 $> cp variables.tf-dist variables.tf
 [edit]
 ```
@@ -140,18 +141,25 @@ consul.secret = "AAAAAAAAAAAAAAAAAAAAAA=="
 datadog.api_key = "00000000000000000000000000000000"
 ```
 
+### Download modules
+```bash
+terraform get --update=true ../../
+[...]
+Get: git::https://github.com/nubisproject/nubis-consul.git?ref=master (update)
+```
+
 ### Plan
 
 ```
-terraform plan
+terraform plan ../../
 [...]
-Plan: 176 to add, 0 to change, 0 to destroy.
+Plan: 321 to add, 0 to change, 0 to destroy.
 ```
 
 ### Deploy
 
 ```
-terraform apply
+terraform apply ../../
 [...]
 Apply complete! Resources: 176 added, 0 changed, 0 destroyed.
 
@@ -187,5 +195,22 @@ terraform remote config
   -backend-config="region=eu-west-1"
   -backend-config="bucket=nubis-deploy-479220c3efeaa0dfcba3e0078886c68a"
   -backend-config="key=terraform/nubis-deploy"
-
+[...]
+Remote state management enabled
+Remote state configured and pulled.
 ```
+
+### Set up DNS delegation
+
+To create a new domain in inventory:
+
+**NOTE**: You must be on the VPN to connect to inventory.
+ * Go to the [domain creation page](https://inventory.mozilla.org/en-US/mozdns/record/create/DOMAIN/) and create the account domain
+  * Soa: SOA for allizom.org
+  * Name: ${ACCOUNT_NAME}.nubis.allizom.org
+ * Go to the [NS delegation page](https://inventory.mozilla.org/en-US/mozdns/record/create/NS/) and add NS records (4 times, once for each AWS NS server)
+  * Domain: ${ACCOUNT_NAME}.nubis.allizom.org
+  * Server: 1 of 4 AWS NameServers for the HostedZones
+  * Views:
+        * check private
+        * check public
