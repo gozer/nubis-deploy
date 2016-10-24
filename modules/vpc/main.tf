@@ -966,7 +966,7 @@ module "fluent-collector" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform/multi?ref=master"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=master"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
