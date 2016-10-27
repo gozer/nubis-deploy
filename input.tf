@@ -63,7 +63,8 @@ variable features {
     vpn          = 0
     nat          = 1
     opsec        = 0
-    user_management = 1
+    user_management_iam    = 0
+    user_management_consul = 1
     monitoring   = 0
   }
 }
@@ -116,4 +117,24 @@ variable vpn {
     ipsec_network = "10.0.0.0/8"
     bgp_asn       = "65022"
   }
+}
+
+variable user_management {
+    default = {
+        smtp_from_address   = "nubis-team@mozilla.com"
+        smtp_username       = "ABCDEFGHIJK"
+        smtp_password       = "randomstringhere"
+        smtp_host           = "email-smtp.us-west-2.amazonaws.com"
+        smtp_port           = "587"
+        ldap_server         = "ldap.mozilla.org"
+        ldap_port           = "6363"
+        ldap_base_dn        = "dc=mozilla"
+        ldap_bind_user      = "cn=example,o=com"
+        ldap_bind_password  = "xxxxx"
+        tls_cert            = "user_management.crt"
+        tls_key             = "user_management.key"
+        global_admins       = "nubis_global_admins"
+        sudo_users          = "nubis_sudo_users"
+        users               = "nubis_users"
+    }
 }

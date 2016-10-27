@@ -57,7 +57,8 @@ module "vpcs" {
   enable_stack_compat = "${lookup(var.features,"stack_compat")}"
   enable_vpn          = "${lookup(var.features,"vpn")}"
   enable_nat          = "${lookup(var.features,"nat")}"
-  enable_user_management = "${lookup(var.features,"user_management")}"
+  enable_user_management_iam    = "${lookup(var.features, "user_management_iam")}"
+  enable_user_management_consul = "${lookup(var.features,"user_management_consul")}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -93,4 +94,22 @@ module "vpcs" {
   ci_github_oauth_client_secret = "${lookup(var.ci, "github_oauth_client_secret")}"
   ci_github_oauth_client_id     = "${lookup(var.ci, "github_oauth_client_id")}"
   ci_admins                     = "${lookup(var.ci, "admins")}"
+
+  # user management
+  user_management_smtp_from_address     = "${lookup(var.user_management, "smtp_from_address")}"
+  user_management_smtp_username         = "${lookup(var.user_management, "smtp_username")}"
+  user_management_smtp_password         = "${lookup(var.user_management, "smtp_password")}"
+  user_management_smtp_host             = "${lookup(var.user_management, "smtp_host")}"
+  user_management_smtp_port             = "${lookup(var.user_management, "smtp_port")}"
+  user_management_ldap_server           = "${lookup(var.user_management, "ldap_server")}"
+  user_management_ldap_port             = "${lookup(var.user_management, "ldap_port")}"
+  user_management_ldap_base_dn          = "${lookup(var.user_management, "ldap_base_dn")}"
+  user_management_ldap_bind_user        = "${lookup(var.user_management, "ldap_bind_user")}"
+  user_management_ldap_bind_password    = "${lookup(var.user_management, "ldap_bind_password")}"
+  user_management_tls_cert              = "${lookup(var.user_management, "tls_cert")}"
+  user_management_tls_key               = "${lookup(var.user_management, "tls_key")}"
+  user_management_global_admins         = "${lookup(var.user_management, "global_admins")}"
+  user_management_sudo_users            = "${lookup(var.user_management, "sudo_users")}"
+  user_management_users                 = "${lookup(var.user_management, "users")}"
+
 }
