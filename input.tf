@@ -110,6 +110,14 @@ variable ci {
   }
 }
 
+variable monitoring {
+  default = {
+    slack_url = ""
+    slack_channel = "#monitoring"
+    notification_email = "gozer+prometheus@mozilla.com"
+  }
+}
+
 variable vpn {
   default = {
     ipsec_target = "63.245.214.100"

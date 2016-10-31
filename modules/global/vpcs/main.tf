@@ -60,6 +60,10 @@ module "us-east-1" {
   ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
   ci_github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
   ci_admins                     = "${var.ci_admins}"
+
+  monitoring_slack_url                 = "${var.monitoring_slack_url}"
+  monitoring_slack_channel             = "${var.monitoring_slack_channel}"
+  monitoring_notification_email  = "${var.monitoring_notification_email}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -125,4 +129,8 @@ module "us-west-2" {
   ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
   ci_github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
   ci_admins                     = "${var.ci_admins}"
+
+  monitoring_slack_url                 = "${var.monitoring_slack_url}"
+  monitoring_slack_channel             = "${var.monitoring_slack_channel}"
+  monitoring_notification_email  = "${var.monitoring_notification_email}"
 }
