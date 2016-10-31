@@ -990,6 +990,10 @@ module "monitoring" {
 
   nubis_domain = "${var.nubis_domain}"
   service_name = "${var.account_name}"
+
+  slack_url                = "${var.monitoring_slack_url}"
+  slack_channel            = "${var.monitoring_slack_channel}"
+  notification_email = "${var.monitoring_notification_email}"
 }
 
 module "consul" {

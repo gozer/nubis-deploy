@@ -93,4 +93,8 @@ module "vpcs" {
   ci_github_oauth_client_secret = "${lookup(var.ci, "github_oauth_client_secret")}"
   ci_github_oauth_client_id     = "${lookup(var.ci, "github_oauth_client_id")}"
   ci_admins                     = "${lookup(var.ci, "admins")}"
+
+  monitoring_slack_url                = "${lookup(var.monitoring, "slack_url")}"
+  monitoring_slack_channel            = "${lookup(var.monitoring, "slack_channel")}"
+  monitoring_notification_email = "${lookup(var.monitoring, "notification_email")}"
 }

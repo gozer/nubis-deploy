@@ -75,6 +75,13 @@ variable datadog_api_key {
 variable vpn_bgp_asn {
 }
 
+variable monitoring_slack_url {
+}
+variable monitoring_slack_channel {
+}
+variable monitoring_notification_email {
+}
+
 variable ci_project {
 }
 
