@@ -1093,7 +1093,7 @@ module "user_management" {
   source = "user_management"
 
   # set enabled to '1' only if enabled and if we are in the first configured region, yeah, I know.
-  enabled = "${var.enabled * var.enable_user_management * ( ( 1 + signum(index(split(",",concat(var.aws_regions, ",", var.aws_region)), var.aws_region))) % 2 ) }"
+  enabled = "${var.enabled * var.enable_user_management_iam * ( ( 1 + signum(index(split(",",concat(var.aws_regions, ",", var.aws_region)), var.aws_region))) % 2 ) }"
 
   region      = "${var.aws_region}"
   version           = "${var.nubis_version}"
@@ -1101,6 +1101,23 @@ module "user_management" {
 
   credstash_key            = "${module.meta.CredstashKeyID}"
   credstash_db             = "${module.meta.CredstashDynamoDB}"
+
+  # user management
+  user_management_smtp_from_address = "${var.user_management_smtp_from_address}"
+  user_management_smtp_username     = "${var.user_management_smtp_username}"
+  user_management_smtp_password     = "${var.user_management_smtp_password}"
+  user_management_smtp_host         = "${var.user_management_smtp_host}"
+  user_management_smtp_port         = "${var.user_management_smtp_port}"
+  user_management_ldap_server       = "${var.user_management_ldap_server}"
+  user_management_ldap_port         = "${var.user_management_ldap_port}"
+  user_management_ldap_base_dn      = "${var.user_management_ldap_base_dn}"
+  user_management_ldap_bind_user        = "${var.user_management_ldap_bind_user}"
+  user_management_ldap_bind_password    = "${var.user_management_ldap_bind_password}"
+  user_management_tls_cert              = "${var.user_management_tls_cert}"
+  user_management_tls_key               = "${var.user_management_tls_key}"
+  user_management_global_admins         = "${var.user_management_global_admins}"
+  user_management_sudo_users            = "${var.user_management_sudo_users}"
+  user_management_users                 = "${var.user_management_users}"
 }
 
 #XXX: Move to a module
@@ -1393,7 +1410,7 @@ EOF
 }
 
 resource "aws_iam_role" "user_management" {
-    count = "${var.enabled * var.enable_user_management * length(split(",", var.environments))}"
+    count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
     lifecycle {
         create_before_destroy = true
     }
@@ -1425,7 +1442,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "user_management" {
-    count = "${var.enabled * var.enable_user_management * length(split(",", var.environments))}"
+    count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
     lifecycle {
         create_before_destroy = true
@@ -1470,7 +1487,7 @@ EOF
 }
 
 resource "aws_lambda_function" "user_management" {
-    count = "${var.enabled * var.enable_user_management * length(split(",", var.environments))}"
+    count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
     depends_on = [
         "aws_iam_role_policy.user_management"
@@ -1529,7 +1546,7 @@ resource "aws_security_group" "ldap" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
-    count           = "${var.enabled * var.enable_user_management * length(split(",", var.environments))}"
+    count           = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
     depends_on      = [
         "aws_lambda_function.user_management",
         "aws_cloudwatch_event_rule.user_management_event_consul"
@@ -1543,7 +1560,7 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
 }
 
 resource "aws_cloudwatch_event_rule" "user_management_event_consul" {
-    count               = "${var.enabled * var.enable_user_management * length(split(",", var.environments))}"
+    count               = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
     name                = "user_management-consul-${element(split(",", var.environments), count.index)}"
     depends_on          = [
         "aws_lambda_function.user_management"
@@ -1554,7 +1571,7 @@ resource "aws_cloudwatch_event_rule" "user_management_event_consul" {
 }
 
 resource "aws_cloudwatch_event_target" "user_management_consul" {
-    count       = "${var.enabled * var.enable_user_management * length(split(",", var.environments))}"
+    count       = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
     depends_on  = [
         "aws_cloudwatch_event_rule.user_management_event_consul"
     ]
@@ -1578,4 +1595,53 @@ resource "aws_cloudwatch_event_target" "user_management_consul" {
     ]
 }
 EOF
+}
+
+resource template_file "user_management_config" {
+    count   = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
+    template = "${file("${path.module}/user_management.yml.tmpl")}"
+
+    lifecycle {
+        create_before_destroy = true
+    }
+
+    vars {
+        region              = "${var.aws_region}"
+        environment         = "${element(split(",", var.environments), count.index)}"
+        smtp_from_address   = "${var.user_management_smtp_from_address}"
+        smtp_username       = "${var.user_management_smtp_username}"
+        smtp_password       = "${var.user_management_smtp_password}"
+        smtp_host           = "${var.user_management_smtp_host}"
+        smtp_port           = "${var.user_management_smtp_port}"
+        ldap_server         = "${var.user_management_ldap_server}"
+        ldap_port           = "${var.user_management_ldap_port}"
+        ldap_base_dn        = "${var.user_management_ldap_base_dn}"
+        ldap_bind_user      = "${var.user_management_ldap_bind_user}"
+        ldap_bind_password  = "${var.user_management_ldap_bind_password}"
+        tls_cert            = "${replace(file("${path.cwd}/${var.user_management_tls_cert}"), "/(.*)\\n/", "    $1\n")}"
+        tls_key             = "${replace(file("${path.cwd}/${var.user_management_tls_key}"), "/(.*)\\n/", "    $1\n")}"
+        global_admin_ldap_group     = "${var.user_management_global_admins}"
+        sudo_user_ldap_group        = "${var.user_management_sudo_users}"
+        users_ldap_group            = "${var.user_management_users}"
+    }
+}
+
+resource "null_resource" "user_management_unicreds" {
+    count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
+
+    lifecycle {
+        create_before_destroy = true
+    }
+
+    triggers {
+        region              = "${var.aws_region}"
+        environment         = "${element(split(",", var.environments), count.index)}"
+        context             = "-E region:${var.aws_region} -E environment:${element(split(",", var.environments), count.index)} -E service:nubis"
+        rendered_template   = "${element(template_file.user_management_config.*.rendered, count.index)}"
+        unicreds            = "unicreds -r ${var.aws_region} put-file nubis/${element(split(",", var.environments), count.index)}"
+    }
+
+    provisioner "local-exec" {
+        command = "echo \"${element(template_file.user_management_config.*.rendered, count.index)}\" | ${self.triggers.unicreds}/user-sync/config /dev/stdin ${self.triggers.context}"
+    }
 }
