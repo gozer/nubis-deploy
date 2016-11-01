@@ -963,6 +963,13 @@ module "fluent-collector" {
   nubis_domain = "${var.nubis_domain}"
 
   service_name = "${var.account_name}"
+
+  credstash_key            = "${module.meta.CredstashKeyID}"
+
+  sqs_queues      = "${var.fluentd_sqs_queues}"
+  sqs_access_keys = "${var.fluentd_sqs_access_keys}"
+  sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
+  sqs_regions     = "${var.fluentd_sqs_regions}"
 }
 
 module "monitoring" {

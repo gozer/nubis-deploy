@@ -146,3 +146,12 @@ variable user_management {
         users               = "nubis_users"
     }
 }
+
+variable fluentd {
+  default = {
+    sqs_queues = ""
+    sqs_access_keys = ""
+    sqs_secret_keys = ""
+    sqs_regions = ""
+  }
+}

@@ -67,6 +67,12 @@ module "us-east-1" {
   monitoring_slack_channel             = "${var.monitoring_slack_channel}"
   monitoring_notification_email  = "${var.monitoring_notification_email}"
 
+  # fluentd
+  fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"
+  fluentd_sqs_access_keys = "${var.fluentd_sqs_access_keys}"
+  fluentd_sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
+  fluentd_sqs_regions     = "${var.fluentd_sqs_regions}"
+
   # user management
   user_management_smtp_from_address = "${var.user_management_smtp_from_address}"
   user_management_smtp_username     = "${var.user_management_smtp_username}"
@@ -154,6 +160,12 @@ module "us-west-2" {
   monitoring_slack_url                 = "${var.monitoring_slack_url}"
   monitoring_slack_channel             = "${var.monitoring_slack_channel}"
   monitoring_notification_email  = "${var.monitoring_notification_email}"
+
+  # fluentd
+  fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"
+  fluentd_sqs_access_keys = "${var.fluentd_sqs_access_keys}"
+  fluentd_sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
+  fluentd_sqs_regions     = "${var.fluentd_sqs_regions}"
 
   # user management
   user_management_smtp_from_address = "${var.user_management_smtp_from_address}"
