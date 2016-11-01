@@ -183,3 +183,8 @@ variable user_management_sudo_users {
 
 variable user_management_users {
 }
+
+variable fluentd_sqs_queues {}
+variable fluentd_sqs_access_keys {}
+variable fluentd_sqs_secret_keys {}
+variable fluentd_sqs_regions {}

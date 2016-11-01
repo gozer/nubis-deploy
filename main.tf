@@ -100,6 +100,12 @@ module "vpcs" {
   monitoring_slack_channel            = "${lookup(var.monitoring, "slack_channel")}"
   monitoring_notification_email = "${lookup(var.monitoring, "notification_email")}"
 
+  # fluentd
+  fluentd_sqs_queues      = "${lookup(var.fluentd, "sqs_queues")}"
+  fluentd_sqs_access_keys = "${lookup(var.fluentd, "sqs_access_keys")}"
+  fluentd_sqs_secret_keys = "${lookup(var.fluentd, "sqs_secret_keys")}"
+  fluentd_sqs_regions     = "${lookup(var.fluentd, "sqs_regions")}"
+
   # user management
   user_management_smtp_from_address     = "${lookup(var.user_management, "smtp_from_address")}"
   user_management_smtp_username         = "${lookup(var.user_management, "smtp_username")}"
