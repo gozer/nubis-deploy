@@ -116,6 +116,7 @@ variable monitoring {
     slack_url = ""
     slack_channel = "#monitoring"
     notification_email = "gozer+prometheus@mozilla.com"
+    pagerduty_service_key = ""
   }
 }
 

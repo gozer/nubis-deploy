@@ -108,6 +108,8 @@ variable monitoring_slack_channel {
 variable monitoring_notification_email {
 }
 
+variable monitoring_pagerduty_service_key {}
+
 variable ci_project {
 }
 

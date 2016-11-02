@@ -1001,6 +1001,7 @@ module "monitoring" {
   slack_url                = "${var.monitoring_slack_url}"
   slack_channel            = "${var.monitoring_slack_channel}"
   notification_email = "${var.monitoring_notification_email}"
+  pagerduty_service_key  = "${var.monitoring_pagerduty_service_key}"
 }
 
 module "consul" {
