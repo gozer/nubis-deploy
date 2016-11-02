@@ -66,6 +66,7 @@ module "us-east-1" {
   monitoring_slack_url                 = "${var.monitoring_slack_url}"
   monitoring_slack_channel             = "${var.monitoring_slack_channel}"
   monitoring_notification_email  = "${var.monitoring_notification_email}"
+  monitoring_pagerduty_service_key  = "${var.monitoring_pagerduty_service_key}"
 
   # fluentd
   fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"
@@ -160,6 +161,7 @@ module "us-west-2" {
   monitoring_slack_url                 = "${var.monitoring_slack_url}"
   monitoring_slack_channel             = "${var.monitoring_slack_channel}"
   monitoring_notification_email  = "${var.monitoring_notification_email}"
+  monitoring_pagerduty_service_key  = "${var.monitoring_pagerduty_service_key}"
 
   # fluentd
   fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"
