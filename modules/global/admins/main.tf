@@ -60,16 +60,17 @@ EOF
 
 resource "template_file" "mfa" {
   template = "${file("${path.module}/mfa-policy.json.tmpl")}"
+
   vars {
     account_id = "${element(split(":",aws_iam_group.admins.arn), 4)}"
   }
 }
 
 resource "aws_iam_policy" "mfa" {
-  name = "mfa-access"
-  path = "/nubis/admin/"
+  name        = "mfa-access"
+  path        = "/nubis/admin/"
   description = "Policy that enforces MFA access"
-  policy = "${template_file.mfa.rendered}"
+  policy      = "${template_file.mfa.rendered}"
 }
 
 resource "aws_iam_role" "admin" {

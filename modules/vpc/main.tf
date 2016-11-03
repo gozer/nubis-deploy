@@ -772,9 +772,9 @@ resource "aws_autoscaling_group" "nat" {
     "${element(aws_elb.proxy.*.name, count.index/2)}",
   ]
 
-  max_size             = 2
-  min_size             = 1
-  desired_capacity     = 1
+  max_size         = 2
+  min_size         = 1
+  desired_capacity = 1
 
   launch_configuration = "${element(aws_launch_configuration.nat.*.name, count.index)}"
 
@@ -937,12 +937,12 @@ module "jumphost" {
 module "fluent-collector" {
   source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=master"
 
-  enabled = "${var.enabled * var.enable_fluent}"
+  enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
 
-  environments = "${var.environments}"
-  aws_profile  = "${var.aws_profile}"
-  aws_region   = "${var.aws_region}"
+  environments   = "${var.environments}"
+  aws_profile    = "${var.aws_profile}"
+  aws_region     = "${var.aws_region}"
   aws_account_id = "${var.aws_account_id}"
 
   lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
@@ -964,7 +964,7 @@ module "fluent-collector" {
 
   service_name = "${var.account_name}"
 
-  credstash_key            = "${module.meta.CredstashKeyID}"
+  credstash_key = "${module.meta.CredstashKeyID}"
 
   sqs_queues      = "${var.fluentd_sqs_queues}"
   sqs_access_keys = "${var.fluentd_sqs_access_keys}"
@@ -998,10 +998,10 @@ module "monitoring" {
   nubis_domain = "${var.nubis_domain}"
   service_name = "${var.account_name}"
 
-  slack_url                = "${var.monitoring_slack_url}"
-  slack_channel            = "${var.monitoring_slack_channel}"
-  notification_email = "${var.monitoring_notification_email}"
-  pagerduty_service_key  = "${var.monitoring_pagerduty_service_key}"
+  slack_url             = "${var.monitoring_slack_url}"
+  slack_channel         = "${var.monitoring_slack_channel}"
+  notification_email    = "${var.monitoring_notification_email}"
+  pagerduty_service_key = "${var.monitoring_pagerduty_service_key}"
 }
 
 module "consul" {
@@ -1063,7 +1063,7 @@ module "ci" {
   aws_profile = "${var.aws_profile}"
   region      = "${var.aws_region}"
 
-  credstash_key            = "${module.meta.CredstashKeyID}"
+  credstash_key = "${module.meta.CredstashKeyID}"
 
   key_name          = "${var.ssh_key_name}"
   version           = "${var.nubis_version}"
@@ -1103,29 +1103,29 @@ module "user_management" {
   # set enabled to '1' only if enabled and if we are in the first configured region, yeah, I know.
   enabled = "${var.enabled * var.enable_user_management_iam * ( ( 1 + signum(index(split(",",concat(var.aws_regions, ",", var.aws_region)), var.aws_region))) % 2 ) }"
 
-  region      = "${var.aws_region}"
-  version           = "${var.nubis_version}"
+  region       = "${var.aws_region}"
+  version      = "${var.nubis_version}"
   account_name = "${var.account_name}"
 
-  credstash_key            = "${module.meta.CredstashKeyID}"
-  credstash_db             = "${module.meta.CredstashDynamoDB}"
+  credstash_key = "${module.meta.CredstashKeyID}"
+  credstash_db  = "${module.meta.CredstashDynamoDB}"
 
   # user management
-  user_management_smtp_from_address = "${var.user_management_smtp_from_address}"
-  user_management_smtp_username     = "${var.user_management_smtp_username}"
-  user_management_smtp_password     = "${var.user_management_smtp_password}"
-  user_management_smtp_host         = "${var.user_management_smtp_host}"
-  user_management_smtp_port         = "${var.user_management_smtp_port}"
-  user_management_ldap_server       = "${var.user_management_ldap_server}"
-  user_management_ldap_port         = "${var.user_management_ldap_port}"
-  user_management_ldap_base_dn      = "${var.user_management_ldap_base_dn}"
-  user_management_ldap_bind_user        = "${var.user_management_ldap_bind_user}"
-  user_management_ldap_bind_password    = "${var.user_management_ldap_bind_password}"
-  user_management_tls_cert              = "${var.user_management_tls_cert}"
-  user_management_tls_key               = "${var.user_management_tls_key}"
-  user_management_global_admins         = "${var.user_management_global_admins}"
-  user_management_sudo_users            = "${var.user_management_sudo_users}"
-  user_management_users                 = "${var.user_management_users}"
+  user_management_smtp_from_address  = "${var.user_management_smtp_from_address}"
+  user_management_smtp_username      = "${var.user_management_smtp_username}"
+  user_management_smtp_password      = "${var.user_management_smtp_password}"
+  user_management_smtp_host          = "${var.user_management_smtp_host}"
+  user_management_smtp_port          = "${var.user_management_smtp_port}"
+  user_management_ldap_server        = "${var.user_management_ldap_server}"
+  user_management_ldap_port          = "${var.user_management_ldap_port}"
+  user_management_ldap_base_dn       = "${var.user_management_ldap_base_dn}"
+  user_management_ldap_bind_user     = "${var.user_management_ldap_bind_user}"
+  user_management_ldap_bind_password = "${var.user_management_ldap_bind_password}"
+  user_management_tls_cert           = "${var.user_management_tls_cert}"
+  user_management_tls_key            = "${var.user_management_tls_key}"
+  user_management_global_admins      = "${var.user_management_global_admins}"
+  user_management_sudo_users         = "${var.user_management_sudo_users}"
+  user_management_users              = "${var.user_management_users}"
 }
 
 #XXX: Move to a module
@@ -1365,21 +1365,21 @@ resource "aws_security_group" "nubis_version" {
   tags = {
     NubisVersion = "${var.nubis_version}"
   }
-
 }
 
 provider "aws" {
   profile = "${var.aws_profile}"
   region  = "${var.aws_state_region}"
-  alias = "public-state"
+  alias   = "public-state"
 }
 
 resource "aws_s3_bucket_object" "public_state" {
-  provider = "aws.public-state"
-  count = "${var.enabled * length(split(",", var.environments))}"
-  bucket = "${var.public_state_bucket}"
+  provider     = "aws.public-state"
+  count        = "${var.enabled * length(split(",", var.environments))}"
+  bucket       = "${var.public_state_bucket}"
   content_type = "text/json"
-  key = "aws/${var.aws_region}/${element(split(",",var.environments), count.index)}.tfstate"
+  key          = "aws/${var.aws_region}/${element(split(",",var.environments), count.index)}.tfstate"
+
   content = <<EOF
 {
     "version": 1,
@@ -1418,18 +1418,19 @@ EOF
 }
 
 resource "aws_iam_role" "user_management" {
-    count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
-    lifecycle {
-        create_before_destroy = true
-    }
+  count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
-    name = "user_management-${var.aws_region}-${element(split(",", var.environments), count.index)}"
+  lifecycle {
+    create_before_destroy = true
+  }
 
-    provisioner "local-exec" {
-        command = "sleep 30"
-    }
+  name = "user_management-${var.aws_region}-${element(split(",", var.environments), count.index)}"
 
-    assume_role_policy = <<EOF
+  provisioner "local-exec" {
+    command = "sleep 30"
+  }
+
+  assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -1450,22 +1451,23 @@ EOF
 }
 
 resource "aws_iam_role_policy" "user_management" {
-    count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
-    lifecycle {
-        create_before_destroy = true
-    }
+  lifecycle {
+    create_before_destroy = true
+  }
 
-    # Sometimes when we create the lambda function it complains about
-    # not having ec2:CreateNetworkInterface permissions, this is here so that
-    # it can help with that problem
-    provisioner "local-exec" {
-        command = "sleep 10"
-    }
+  # Sometimes when we create the lambda function it complains about
+  # not having ec2:CreateNetworkInterface permissions, this is here so that
+  # it can help with that problem
+  provisioner "local-exec" {
+    command = "sleep 10"
+  }
 
-    name = "user_management-${var.aws_region}-${element(split(",", var.environments), count.index)}"
-    role = "${element(aws_iam_role.user_management.*.id, count.index)}"
-    policy = <<EOF
+  name = "user_management-${var.aws_region}-${element(split(",", var.environments), count.index)}"
+  role = "${element(aws_iam_role.user_management.*.id, count.index)}"
+
+  policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -1495,98 +1497,104 @@ EOF
 }
 
 resource "aws_lambda_function" "user_management" {
-    count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
-    depends_on = [
-        "aws_iam_role_policy.user_management"
+  depends_on = [
+    "aws_iam_role_policy.user_management",
+  ]
+
+  function_name = "user_management-${element(split(",",var.environments), count.index)}"
+  s3_bucket     = "nubis-stacks-${var.aws_region}"
+  s3_key        = "${var.nubis_version}/lambda/UserManagement.zip"
+  role          = "${element(aws_iam_role.user_management.*.arn, count.index)}"
+  handler       = "index.handler"
+  description   = "Queries LDAP and inserts user into consul and create and delete IAM users"
+  memory_size   = 128
+  runtime       = "nodejs4.3"
+  timeout       = "30"
+
+  vpc_config = {
+    subnet_ids = [
+      "${element(aws_subnet.private.*.id, 3*count.index)}",
+      "${element(aws_subnet.private.*.id, 3*count.index+1)}",
+      "${element(aws_subnet.private.*.id, 3*count.index+2)}",
     ]
 
-    function_name   = "user_management-${element(split(",",var.environments), count.index)}"
-    s3_bucket       = "nubis-stacks-${var.aws_region}"
-    s3_key          = "${var.nubis_version}/lambda/UserManagement.zip"
-    role            = "${element(aws_iam_role.user_management.*.arn, count.index)}"
-    handler         = "index.handler"
-    description     = "Queries LDAP and inserts user into consul and create and delete IAM users"
-    memory_size     = 128
-    runtime         = "nodejs4.3"
-    timeout         = "30"
-
-    vpc_config = {
-        subnet_ids = [
-            "${element(aws_subnet.private.*.id, 3*count.index)}",
-            "${element(aws_subnet.private.*.id, 3*count.index+1)}",
-            "${element(aws_subnet.private.*.id, 3*count.index+2)}",
-        ]
-        security_group_ids = [
-            "${element(aws_security_group.shared_services.*.id, count.index)}",
-            "${element(aws_security_group.internet_access.*.id, count.index)}",
-            "${element(aws_security_group.ldap.*.id, count.index)}",
-        ]
-    }
+    security_group_ids = [
+      "${element(aws_security_group.shared_services.*.id, count.index)}",
+      "${element(aws_security_group.internet_access.*.id, count.index)}",
+      "${element(aws_security_group.ldap.*.id, count.index)}",
+    ]
+  }
 }
 
 resource "aws_security_group" "ldap" {
-    count = "${var.enabled * length(split(",", var.environments))}"
+  count = "${var.enabled * length(split(",", var.environments))}"
 
-    lifecycle {
-        create_before_destroy = true
-    }
+  lifecycle {
+    create_before_destroy = true
+  }
 
-    vpc_id      = "${element(aws_vpc.nubis.*.id, count.index)}"
-    name_prefix = "MocoLdapOutbound-${element(split(",", var.environments), count.index)}-"
-    description = "Allow outbound ldap connection to moco ldap"
+  vpc_id      = "${element(aws_vpc.nubis.*.id, count.index)}"
+  name_prefix = "MocoLdapOutbound-${element(split(",", var.environments), count.index)}-"
+  description = "Allow outbound ldap connection to moco ldap"
 
-    egress {
-        from_port   = "6363"
-        to_port     = "6363"
-        protocol    = "tcp"
-        cidr_blocks = [
-            "0.0.0.0/0"
-        ]
-    }
+  egress {
+    from_port = "6363"
+    to_port   = "6363"
+    protocol  = "tcp"
 
-    tags {
-        Name                = "MocoLdapOutboundSecurityGroup"
-        ServiceName         = "${var.account_name}"
-        TechnicalContact    = "${var.technical_contact}"
-        Environment         = "${element(split(",",var.environments), count.index)}"
-    }
+    cidr_blocks = [
+      "0.0.0.0/0",
+    ]
+  }
+
+  tags {
+    Name             = "MocoLdapOutboundSecurityGroup"
+    ServiceName      = "${var.account_name}"
+    TechnicalContact = "${var.technical_contact}"
+    Environment      = "${element(split(",",var.environments), count.index)}"
+  }
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
-    count           = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
-    depends_on      = [
-        "aws_lambda_function.user_management",
-        "aws_cloudwatch_event_rule.user_management_event_consul"
-    ]
+  count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
-    statement_id    = "AllowExecutionFromCloudWatch"
-    action          = "lambda:InvokeFunction"
-    function_name   = "user_management-${element(split(",",var.environments), count.index)}"
-    principal       = "events.amazonaws.com"
-    source_arn      = "${element(aws_cloudwatch_event_rule.user_management_event_consul.*.arn, count.index)}"
+  depends_on = [
+    "aws_lambda_function.user_management",
+    "aws_cloudwatch_event_rule.user_management_event_consul",
+  ]
+
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = "user_management-${element(split(",",var.environments), count.index)}"
+  principal     = "events.amazonaws.com"
+  source_arn    = "${element(aws_cloudwatch_event_rule.user_management_event_consul.*.arn, count.index)}"
 }
 
 resource "aws_cloudwatch_event_rule" "user_management_event_consul" {
-    count               = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
-    name                = "user_management-consul-${element(split(",", var.environments), count.index)}"
-    depends_on          = [
-        "aws_lambda_function.user_management"
-    ]
+  count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
+  name  = "user_management-consul-${element(split(",", var.environments), count.index)}"
 
-    description         = "Sends payload over a periodic time"
-    schedule_expression = "${var.user_management_rate}"
+  depends_on = [
+    "aws_lambda_function.user_management",
+  ]
+
+  description         = "Sends payload over a periodic time"
+  schedule_expression = "${var.user_management_rate}"
 }
 
 resource "aws_cloudwatch_event_target" "user_management_consul" {
-    count       = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
-    depends_on  = [
-        "aws_cloudwatch_event_rule.user_management_event_consul"
-    ]
+  count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
-    rule        = "user_management-consul-${element(split(",", var.environments), count.index)}"
-    arn         = "${element(aws_lambda_function.user_management.*.arn, count.index)}"
-    input       = <<EOF
+  depends_on = [
+    "aws_cloudwatch_event_rule.user_management_event_consul",
+  ]
+
+  rule = "user_management-consul-${element(split(",", var.environments), count.index)}"
+  arn  = "${element(aws_lambda_function.user_management.*.arn, count.index)}"
+
+  input = <<EOF
 {
     "command": "./nubis-user-management",
     "args": [
@@ -1606,50 +1614,50 @@ EOF
 }
 
 resource template_file "user_management_config" {
-    count   = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
-    template = "${file("${path.module}/user_management.yml.tmpl")}"
+  count    = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
+  template = "${file("${path.module}/user_management.yml.tmpl")}"
 
-    lifecycle {
-        create_before_destroy = true
-    }
+  lifecycle {
+    create_before_destroy = true
+  }
 
-    vars {
-        region              = "${var.aws_region}"
-        environment         = "${element(split(",", var.environments), count.index)}"
-        smtp_from_address   = "${var.user_management_smtp_from_address}"
-        smtp_username       = "${var.user_management_smtp_username}"
-        smtp_password       = "${var.user_management_smtp_password}"
-        smtp_host           = "${var.user_management_smtp_host}"
-        smtp_port           = "${var.user_management_smtp_port}"
-        ldap_server         = "${var.user_management_ldap_server}"
-        ldap_port           = "${var.user_management_ldap_port}"
-        ldap_base_dn        = "${var.user_management_ldap_base_dn}"
-        ldap_bind_user      = "${var.user_management_ldap_bind_user}"
-        ldap_bind_password  = "${var.user_management_ldap_bind_password}"
-        tls_cert            = "${replace(file("${path.cwd}/${var.user_management_tls_cert}"), "/(.*)\\n/", "    $1\n")}"
-        tls_key             = "${replace(file("${path.cwd}/${var.user_management_tls_key}"), "/(.*)\\n/", "    $1\n")}"
-        global_admin_ldap_group     = "${var.user_management_global_admins}"
-        sudo_user_ldap_group        = "${var.user_management_sudo_users}"
-        users_ldap_group            = "${var.user_management_users}"
-    }
+  vars {
+    region                  = "${var.aws_region}"
+    environment             = "${element(split(",", var.environments), count.index)}"
+    smtp_from_address       = "${var.user_management_smtp_from_address}"
+    smtp_username           = "${var.user_management_smtp_username}"
+    smtp_password           = "${var.user_management_smtp_password}"
+    smtp_host               = "${var.user_management_smtp_host}"
+    smtp_port               = "${var.user_management_smtp_port}"
+    ldap_server             = "${var.user_management_ldap_server}"
+    ldap_port               = "${var.user_management_ldap_port}"
+    ldap_base_dn            = "${var.user_management_ldap_base_dn}"
+    ldap_bind_user          = "${var.user_management_ldap_bind_user}"
+    ldap_bind_password      = "${var.user_management_ldap_bind_password}"
+    tls_cert                = "${replace(file("${path.cwd}/${var.user_management_tls_cert}"), "/(.*)\\n/", "    $1\n")}"
+    tls_key                 = "${replace(file("${path.cwd}/${var.user_management_tls_key}"), "/(.*)\\n/", "    $1\n")}"
+    global_admin_ldap_group = "${var.user_management_global_admins}"
+    sudo_user_ldap_group    = "${var.user_management_sudo_users}"
+    users_ldap_group        = "${var.user_management_users}"
+  }
 }
 
 resource "null_resource" "user_management_unicreds" {
-    count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
+  count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
-    lifecycle {
-        create_before_destroy = true
-    }
+  lifecycle {
+    create_before_destroy = true
+  }
 
-    triggers {
-        region              = "${var.aws_region}"
-        environment         = "${element(split(",", var.environments), count.index)}"
-        context             = "-E region:${var.aws_region} -E environment:${element(split(",", var.environments), count.index)} -E service:nubis"
-        rendered_template   = "${element(template_file.user_management_config.*.rendered, count.index)}"
-        unicreds            = "unicreds -r ${var.aws_region} put-file nubis/${element(split(",", var.environments), count.index)}"
-    }
+  triggers {
+    region            = "${var.aws_region}"
+    environment       = "${element(split(",", var.environments), count.index)}"
+    context           = "-E region:${var.aws_region} -E environment:${element(split(",", var.environments), count.index)} -E service:nubis"
+    rendered_template = "${element(template_file.user_management_config.*.rendered, count.index)}"
+    unicreds          = "unicreds -r ${var.aws_region} put-file nubis/${element(split(",", var.environments), count.index)}"
+  }
 
-    provisioner "local-exec" {
-        command = "echo \"${element(template_file.user_management_config.*.rendered, count.index)}\" | ${self.triggers.unicreds}/user-sync/config /dev/stdin ${self.triggers.context}"
-    }
+  provisioner "local-exec" {
+    command = "echo \"${element(template_file.user_management_config.*.rendered, count.index)}\" | ${self.triggers.unicreds}/user-sync/config /dev/stdin ${self.triggers.context}"
+  }
 }

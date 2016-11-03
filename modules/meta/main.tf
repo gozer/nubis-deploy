@@ -24,9 +24,10 @@ resource "aws_route53_record" "hosted_zone" {
   name    = "${var.aws_region}"
 
   type = "NS"
-  ttl = "86400"
+  ttl  = "86400"
+
   records = [
-    "${aws_route53_zone.hosted_zone.name_servers}"
+    "${aws_route53_zone.hosted_zone.name_servers}",
   ]
 }
 
@@ -157,10 +158,11 @@ resource "aws_db_parameter_group" "mysql56" {
     name  = "max_allowed_packet"
     value = "1073741824"
   }
+
   parameter {
-    name  = "innodb_log_file_size"
+    name         = "innodb_log_file_size"
     apply_method = "pending-reboot"
-    value = "536870912"
+    value        = "536870912"
   }
 
   tags {
