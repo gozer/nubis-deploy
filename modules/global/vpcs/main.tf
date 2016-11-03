@@ -15,17 +15,17 @@ module "us-east-1" {
   #  Result, 1 if the region is found, 0 otherwise
   enabled = "${var.enable_vpc * replace(replace(replace(replace(var.aws_regions, "/.*,?us-east-1,?.*/", "XXX"), "/[^X]+/", "Y" ), "XXX", "1"),"/Y+/","0")}"
 
-  enable_consul       = "${var.enable_consul}"
-  enable_jumphost     = "${var.enable_jumphost}"
-  enable_fluent       = "${var.enable_fluent}"
-  enable_monitoring   = "${var.enable_monitoring}"
-  enable_ci           = "${var.enable_ci}"
-  enable_opsec        = "${var.enable_opsec}"
-  enable_stack_compat = "${var.enable_stack_compat}"
-  enable_vpn          = "${var.enable_vpn}"
-  enable_nat          = "${var.enable_nat}"
-  enable_user_management_consul   = "${var.enable_user_management_consul}"
-  enable_user_management_iam      = "${var.enable_user_management_iam}"
+  enable_consul                 = "${var.enable_consul}"
+  enable_jumphost               = "${var.enable_jumphost}"
+  enable_fluent                 = "${var.enable_fluent}"
+  enable_monitoring             = "${var.enable_monitoring}"
+  enable_ci                     = "${var.enable_ci}"
+  enable_opsec                  = "${var.enable_opsec}"
+  enable_stack_compat           = "${var.enable_stack_compat}"
+  enable_vpn                    = "${var.enable_vpn}"
+  enable_nat                    = "${var.enable_nat}"
+  enable_user_management_consul = "${var.enable_user_management_consul}"
+  enable_user_management_iam    = "${var.enable_user_management_iam}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -49,7 +49,7 @@ module "us-east-1" {
   stage_network = "${element(split(",",var.environments_networks), 2)}"
 
   ipsec_target = "${var.environments_ipsec_target}"
-  vpn_bgp_asn   = "${var.vpn_bgp_asn}"
+  vpn_bgp_asn  = "${var.vpn_bgp_asn}"
 
   consul_secret           = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
@@ -63,10 +63,10 @@ module "us-east-1" {
   ci_admins                     = "${var.ci_admins}"
 
   # monitoring
-  monitoring_slack_url                 = "${var.monitoring_slack_url}"
-  monitoring_slack_channel             = "${var.monitoring_slack_channel}"
-  monitoring_notification_email  = "${var.monitoring_notification_email}"
-  monitoring_pagerduty_service_key  = "${var.monitoring_pagerduty_service_key}"
+  monitoring_slack_url             = "${var.monitoring_slack_url}"
+  monitoring_slack_channel         = "${var.monitoring_slack_channel}"
+  monitoring_notification_email    = "${var.monitoring_notification_email}"
+  monitoring_pagerduty_service_key = "${var.monitoring_pagerduty_service_key}"
 
   # fluentd
   fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"
@@ -75,21 +75,21 @@ module "us-east-1" {
   fluentd_sqs_regions     = "${var.fluentd_sqs_regions}"
 
   # user management
-  user_management_smtp_from_address = "${var.user_management_smtp_from_address}"
-  user_management_smtp_username     = "${var.user_management_smtp_username}"
-  user_management_smtp_password     = "${var.user_management_smtp_password}"
-  user_management_smtp_host         = "${var.user_management_smtp_host}"
-  user_management_smtp_port         = "${var.user_management_smtp_port}"
-  user_management_ldap_server       = "${var.user_management_ldap_server}"
-  user_management_ldap_port         = "${var.user_management_ldap_port}"
-  user_management_ldap_base_dn      = "${var.user_management_ldap_base_dn}"
-  user_management_ldap_bind_user        = "${var.user_management_ldap_bind_user}"
-  user_management_ldap_bind_password    = "${var.user_management_ldap_bind_password}"
-  user_management_tls_cert              = "${var.user_management_tls_cert}"
-  user_management_tls_key               = "${var.user_management_tls_key}"
-  user_management_global_admins         = "${var.user_management_global_admins}"
-  user_management_sudo_users            = "${var.user_management_sudo_users}"
-  user_management_users                 = "${var.user_management_users}"
+  user_management_smtp_from_address  = "${var.user_management_smtp_from_address}"
+  user_management_smtp_username      = "${var.user_management_smtp_username}"
+  user_management_smtp_password      = "${var.user_management_smtp_password}"
+  user_management_smtp_host          = "${var.user_management_smtp_host}"
+  user_management_smtp_port          = "${var.user_management_smtp_port}"
+  user_management_ldap_server        = "${var.user_management_ldap_server}"
+  user_management_ldap_port          = "${var.user_management_ldap_port}"
+  user_management_ldap_base_dn       = "${var.user_management_ldap_base_dn}"
+  user_management_ldap_bind_user     = "${var.user_management_ldap_bind_user}"
+  user_management_ldap_bind_password = "${var.user_management_ldap_bind_password}"
+  user_management_tls_cert           = "${var.user_management_tls_cert}"
+  user_management_tls_key            = "${var.user_management_tls_key}"
+  user_management_global_admins      = "${var.user_management_global_admins}"
+  user_management_sudo_users         = "${var.user_management_sudo_users}"
+  user_management_users              = "${var.user_management_users}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -110,17 +110,17 @@ module "us-west-2" {
   #  Result, 1 if the region is found, 0 otherwise
   enabled = "${var.enable_vpc * replace(replace(replace(replace(var.aws_regions, "/.*,?us-west-2,?.*/", "XXX"), "/[^X]+/", "Y" ), "XXX", "1"),"/Y+/","0")}"
 
-  enable_consul       = "${var.enable_consul}"
-  enable_jumphost     = "${var.enable_jumphost}"
-  enable_fluent       = "${var.enable_fluent}"
-  enable_monitoring   = "${var.enable_monitoring}"
-  enable_ci           = "${var.enable_ci}"
-  enable_opsec        = "${var.enable_opsec}"
-  enable_stack_compat = "${var.enable_stack_compat}"
-  enable_vpn          = "${var.enable_vpn}"
-  enable_nat          = "${var.enable_nat}"
-  enable_user_management_consul   = "${var.enable_user_management_consul}"
-  enable_user_management_iam      = "${var.enable_user_management_iam}"
+  enable_consul                 = "${var.enable_consul}"
+  enable_jumphost               = "${var.enable_jumphost}"
+  enable_fluent                 = "${var.enable_fluent}"
+  enable_monitoring             = "${var.enable_monitoring}"
+  enable_ci                     = "${var.enable_ci}"
+  enable_opsec                  = "${var.enable_opsec}"
+  enable_stack_compat           = "${var.enable_stack_compat}"
+  enable_vpn                    = "${var.enable_vpn}"
+  enable_nat                    = "${var.enable_nat}"
+  enable_user_management_consul = "${var.enable_user_management_consul}"
+  enable_user_management_iam    = "${var.enable_user_management_iam}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -144,7 +144,7 @@ module "us-west-2" {
   stage_network = "${element(split(",",var.environments_networks), 2)}"
 
   ipsec_target = "${var.environments_ipsec_target}"
-  vpn_bgp_asn   = "${var.vpn_bgp_asn}"
+  vpn_bgp_asn  = "${var.vpn_bgp_asn}"
 
   consul_secret           = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
@@ -158,10 +158,10 @@ module "us-west-2" {
   ci_admins                     = "${var.ci_admins}"
 
   # monitoring
-  monitoring_slack_url                 = "${var.monitoring_slack_url}"
-  monitoring_slack_channel             = "${var.monitoring_slack_channel}"
-  monitoring_notification_email  = "${var.monitoring_notification_email}"
-  monitoring_pagerduty_service_key  = "${var.monitoring_pagerduty_service_key}"
+  monitoring_slack_url             = "${var.monitoring_slack_url}"
+  monitoring_slack_channel         = "${var.monitoring_slack_channel}"
+  monitoring_notification_email    = "${var.monitoring_notification_email}"
+  monitoring_pagerduty_service_key = "${var.monitoring_pagerduty_service_key}"
 
   # fluentd
   fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"
@@ -170,19 +170,19 @@ module "us-west-2" {
   fluentd_sqs_regions     = "${var.fluentd_sqs_regions}"
 
   # user management
-  user_management_smtp_from_address = "${var.user_management_smtp_from_address}"
-  user_management_smtp_username     = "${var.user_management_smtp_username}"
-  user_management_smtp_password     = "${var.user_management_smtp_password}"
-  user_management_smtp_host         = "${var.user_management_smtp_host}"
-  user_management_smtp_port         = "${var.user_management_smtp_port}"
-  user_management_ldap_server       = "${var.user_management_ldap_server}"
-  user_management_ldap_port         = "${var.user_management_ldap_port}"
-  user_management_ldap_base_dn      = "${var.user_management_ldap_base_dn}"
-  user_management_ldap_bind_user        = "${var.user_management_ldap_bind_user}"
-  user_management_ldap_bind_password    = "${var.user_management_ldap_bind_password}"
-  user_management_tls_cert              = "${var.user_management_tls_cert}"
-  user_management_tls_key               = "${var.user_management_tls_key}"
-  user_management_global_admins         = "${var.user_management_global_admins}"
-  user_management_sudo_users            = "${var.user_management_sudo_users}"
-  user_management_users                 = "${var.user_management_users}"
+  user_management_smtp_from_address  = "${var.user_management_smtp_from_address}"
+  user_management_smtp_username      = "${var.user_management_smtp_username}"
+  user_management_smtp_password      = "${var.user_management_smtp_password}"
+  user_management_smtp_host          = "${var.user_management_smtp_host}"
+  user_management_smtp_port          = "${var.user_management_smtp_port}"
+  user_management_ldap_server        = "${var.user_management_ldap_server}"
+  user_management_ldap_port          = "${var.user_management_ldap_port}"
+  user_management_ldap_base_dn       = "${var.user_management_ldap_base_dn}"
+  user_management_ldap_bind_user     = "${var.user_management_ldap_bind_user}"
+  user_management_ldap_bind_password = "${var.user_management_ldap_bind_password}"
+  user_management_tls_cert           = "${var.user_management_tls_cert}"
+  user_management_tls_key            = "${var.user_management_tls_key}"
+  user_management_global_admins      = "${var.user_management_global_admins}"
+  user_management_sudo_users         = "${var.user_management_sudo_users}"
+  user_management_users              = "${var.user_management_users}"
 }

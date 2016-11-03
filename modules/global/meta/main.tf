@@ -84,8 +84,8 @@ resource "aws_route53_record" "nubis-version" {
   zone_id = "${aws_route53_zone.master_zone.id}"
   name    = "version.nubis"
 
-  type = "TXT"
-  ttl = "300"
+  type    = "TXT"
+  ttl     = "300"
   records = ["${var.nubis_version}"]
 }
 
@@ -96,8 +96,8 @@ resource "aws_route53_record" "nubis-state" {
   type = "A"
 
   alias {
-    name = "${aws_cloudfront_distribution.public-state.domain_name}"
-    zone_id = "${aws_cloudfront_distribution.public-state.hosted_zone_id}"
+    name                   = "${aws_cloudfront_distribution.public-state.domain_name}"
+    zone_id                = "${aws_cloudfront_distribution.public-state.hosted_zone_id}"
     evaluate_target_health = true
   }
 }
@@ -136,7 +136,9 @@ EOF
 # XXX: Duplicated here to avoid chicken-and-egg with VPCs
 resource "aws_lambda_function" "GlobalUUID" {
   #lifecycle {
+
   #  create_before_destroy = true
+
   #}
 
   function_name = "GlobalUUID"
@@ -201,7 +203,7 @@ resource "aws_cloudfront_distribution" "public-state" {
     }
   }
 
-  aliases = [ "state.nubis.${var.account_name}.${var.nubis_domain}" ]
+  aliases = ["state.nubis.${var.account_name}.${var.nubis_domain}"]
 
   enabled             = true
   comment             = "Nubis Public State"
@@ -236,7 +238,6 @@ resource "aws_cloudfront_distribution" "public-state" {
     cloudfront_default_certificate = true
   }
 }
-
 
 resource "aws_route53_delegation_set" "meta" {
   lifecycle {

@@ -1,17 +1,12 @@
-variable aws_profile {
-}
+variable aws_profile {}
 
-variable account_name {
-}
+variable account_name {}
 
-variable admin_users {
-}
+variable admin_users {}
 
-variable guest_users {
-}
+variable guest_users {}
 
-variable aws_region {
-}
+variable aws_region {}
 
 variable technical_contact {
   default = "infra-aws@mozilla.com"
