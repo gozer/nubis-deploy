@@ -1090,6 +1090,10 @@ module "ci" {
   git_repo                   = "${var.ci_git_repo}"
   github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
   github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
+  slack_domain               = "${var.ci_slack_domain}"
+  slack_channel              = "${var.ci_slack_channel}"
+  slack_token                = "${var.ci_slack_token}"
+
   admins                     = "${var.ci_admins}"
 
   s3_bucket_name = "ci-${var.ci_project}-${module.ci-uuid.uuids}"

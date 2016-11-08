@@ -106,6 +106,9 @@ variable ci {
     github_oauth_client_secret = "AAA"
     github_oauth_client_id     = "BBB"
     admins                     = "gozer"
+    slack_domain               = "nubisproject"
+    slack_channel              = "#changes"
+    slack_token                = ""
   }
 }
 
