@@ -90,6 +90,12 @@ variable ci_github_oauth_client_id {}
 
 variable ci_admins {}
 
+variable ci_slack_domain {}
+
+variable ci_slack_channel {}
+
+variable ci_slack_token {}
+
 variable vpn_bgp_asn {}
 
 variable route53_delegation_set {}
