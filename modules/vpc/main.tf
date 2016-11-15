@@ -1084,6 +1084,7 @@ module "ci" {
   internet_security_group_id        = "${element(aws_security_group.internet_access.*.id, 0)}"
   shared_services_security_group_id = "${element(aws_security_group.shared_services.*.id, 0)}"
   ssh_security_group_id             = "${element(aws_security_group.ssh.*.id, 0)}"
+  monitoring_security_group_id      = "${element(aws_security_group.monitoring.*.id, 0)}"
 
   domain = "${var.nubis_domain}"
 
