@@ -1660,7 +1660,7 @@ resource "null_resource" "user_management_unicreds" {
     environment       = "${element(split(",", var.environments), count.index)}"
     context           = "-E region:${var.aws_region} -E environment:${element(split(",", var.environments), count.index)} -E service:nubis"
     rendered_template = "${element(template_file.user_management_config.*.rendered, count.index)}"
-    unicreds          = "unicreds -r ${var.aws_region} put-file nubis/${element(split(",", var.environments), count.index)}"
+    unicreds          = "unicreds -k ${module.meta.CredstashKeyID} -r ${var.aws_region} put-file nubis/${element(split(",", var.environments), count.index)}"
   }
 
   provisioner "local-exec" {

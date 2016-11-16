@@ -225,7 +225,7 @@ resource "null_resource" "user_management_unicreds_iam" {
     region            = "${var.region}"
     context           = "-E region:${var.region} -E environment:global -E service:nubis"
     rendered_template = "${template_file.user_management_config_iam.rendered}"
-    credstash         = "unicreds -r ${var.region} put-file nubis/global"
+    credstash         = "unicreds -k ${var.credstash_key} -r ${var.region} put-file nubis/global"
   }
 
   provisioner "local-exec" {
