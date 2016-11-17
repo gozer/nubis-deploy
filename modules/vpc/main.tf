@@ -973,6 +973,9 @@ module "fluent-collector" {
   sqs_access_keys = "${var.fluentd_sqs_access_keys}"
   sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
   sqs_regions     = "${var.fluentd_sqs_regions}"
+
+  nubis_sudo_groups = "${var.fluentd_sudo_groups}"
+  nubis_user_groups = "${var.fluentd_user_groups}"
 }
 
 module "monitoring" {
