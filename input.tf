@@ -101,6 +101,13 @@ variable my_ip {
   default = "127.0.0.1/32"
 }
 
+variable nat {
+  default = {
+    sudo_groups = "nubis_global_admins"
+    user_groups = ""
+  }
+}
+
 variable ci {
   default = {
     project                    = "skel"
