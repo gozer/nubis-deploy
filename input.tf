@@ -120,6 +120,8 @@ variable monitoring {
     slack_channel         = "#monitoring"
     notification_email    = "gozer+prometheus@mozilla.com"
     pagerduty_service_key = ""
+    sudo_groups           = "nubis_global_admins"
+    user_groups           = ""
   }
 }
 
