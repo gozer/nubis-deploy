@@ -136,4 +136,4 @@ variable jumphost_sudo_groups {}
 variable jumphost_user_groups {}
 
 variable nat_sudo_groups {}
-variable nat_user_grous {}
+variable nat_user_groups {}
