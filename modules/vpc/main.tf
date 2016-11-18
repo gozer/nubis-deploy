@@ -1573,14 +1573,9 @@ resource "aws_security_group" "ldap" {
 resource "aws_lambda_permission" "allow_cloudwatch" {
   count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
-  depends_on = [
-    "aws_lambda_function.user_management",
-    "aws_cloudwatch_event_rule.user_management_event_consul",
-  ]
-
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = "user_management-${element(split(",",var.environments), count.index)}"
+  function_name = "${element(aws_lambda_function.user_management.*.function_name, count.index)}"
   principal     = "events.amazonaws.com"
   source_arn    = "${element(aws_cloudwatch_event_rule.user_management_event_consul.*.arn, count.index)}"
 }
@@ -1589,10 +1584,6 @@ resource "aws_cloudwatch_event_rule" "user_management_event_consul" {
   count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
   name  = "user_management-consul-${element(split(",", var.environments), count.index)}"
 
-  depends_on = [
-    "aws_lambda_function.user_management",
-  ]
-
   description         = "Sends payload over a periodic time"
   schedule_expression = "${var.user_management_rate}"
 }
@@ -1600,11 +1591,7 @@ resource "aws_cloudwatch_event_rule" "user_management_event_consul" {
 resource "aws_cloudwatch_event_target" "user_management_consul" {
   count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
 
-  depends_on = [
-    "aws_cloudwatch_event_rule.user_management_event_consul",
-  ]
-
-  rule = "user_management-consul-${element(split(",", var.environments), count.index)}"
+  rule = "${element(aws_cloudwatch_event_rule.user_management_event_consul.*.name, count.index)}"
   arn  = "${element(aws_lambda_function.user_management.*.arn, count.index)}"
 
   input = <<EOF
