@@ -53,6 +53,8 @@ module "us-east-1" {
 
   consul_secret           = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
+  consul_sudo_groups      = "${var.consul_sudo_groups}"
+  consul_user_groups      = "${var.consul_user_groups}"
 
   datadog_api_key = "${var.datadog_api_key}"
 
@@ -76,6 +78,8 @@ module "us-east-1" {
   fluentd_sqs_access_keys = "${var.fluentd_sqs_access_keys}"
   fluentd_sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
   fluentd_sqs_regions     = "${var.fluentd_sqs_regions}"
+  fluentd_sudo_groups     = "${var.fluentd_sudo_groups}"
+  fluentd_user_groups     = "${var.fluentd_user_groups}"
 
   # jumphost user groups
   jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"
@@ -94,8 +98,8 @@ module "us-east-1" {
   user_management_ldap_bind_password = "${var.user_management_ldap_bind_password}"
   user_management_tls_cert           = "${var.user_management_tls_cert}"
   user_management_tls_key            = "${var.user_management_tls_key}"
-  user_management_sudo_users         = "${var.user_management_sudo_users}"
-  user_management_users              = "${var.user_management_users}"
+  user_management_sudo_groups        = "${var.user_management_sudo_groups}"
+  user_management_user_groups        = "${var.user_management_user_groups}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -154,6 +158,8 @@ module "us-west-2" {
 
   consul_secret           = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
+  consul_sudo_groups      = "${var.consul_sudo_groups}"
+  consul_user_groups      = "${var.consul_user_groups}"
 
   datadog_api_key = "${var.datadog_api_key}"
 
@@ -177,6 +183,8 @@ module "us-west-2" {
   fluentd_sqs_access_keys = "${var.fluentd_sqs_access_keys}"
   fluentd_sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
   fluentd_sqs_regions     = "${var.fluentd_sqs_regions}"
+  fluentd_sudo_groups     = "${var.fluentd_sudo_groups}"
+  fluentd_user_groups     = "${var.fluentd_user_groups}"
 
   # Jumphost user groups
   jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"
@@ -195,6 +203,6 @@ module "us-west-2" {
   user_management_ldap_bind_password = "${var.user_management_ldap_bind_password}"
   user_management_tls_cert           = "${var.user_management_tls_cert}"
   user_management_tls_key            = "${var.user_management_tls_key}"
-  user_management_sudo_users         = "${var.user_management_sudo_users}"
-  user_management_users              = "${var.user_management_users}"
+  user_management_sudo_groups        = "${var.user_management_sudo_groups}"
+  user_management_user_groups        = "${var.user_management_user_groups}"
 }

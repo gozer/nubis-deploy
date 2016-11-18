@@ -86,6 +86,8 @@ module "vpcs" {
 
   consul_secret           = "${lookup(var.consul, "secret")}"
   consul_master_acl_token = "${lookup(var.consul, "master_acl_token")}"
+  consul_sudo_groups      = "${lookup(var.consul, "sudo_groups")}"
+  consul_user_groups      = "${lookup(var.consul, "user_groups")}"
 
   datadog_api_key = "${lookup(var.datadog, "api_key")}"
 
@@ -109,6 +111,8 @@ module "vpcs" {
   fluentd_sqs_access_keys = "${lookup(var.fluentd, "sqs_access_keys")}"
   fluentd_sqs_secret_keys = "${lookup(var.fluentd, "sqs_secret_keys")}"
   fluentd_sqs_regions     = "${lookup(var.fluentd, "sqs_regions")}"
+  fluentd_sudo_groups     = "${lookup(var.fluentd, "sudo_groups")}"
+  fluentd_user_groups     = "${lookup(var.fluentd, "user_groups")}"
 
   # jumphost groups
   jumphost_sudo_groups    = "${lookup(var.jumphost, "sudo_groups")}"
@@ -127,6 +131,6 @@ module "vpcs" {
   user_management_ldap_bind_password = "${lookup(var.user_management, "ldap_bind_password")}"
   user_management_tls_cert           = "${lookup(var.user_management, "tls_cert")}"
   user_management_tls_key            = "${lookup(var.user_management, "tls_key")}"
-  user_management_sudo_users         = "${lookup(var.user_management, "sudo_users")}"
-  user_management_users              = "${lookup(var.user_management, "users")}"
+  user_management_sudo_groups        = "${lookup(var.user_management, "sudo_groups")}"
+  user_management_user_groups        = "${lookup(var.user_management, "user_groups")}"
 }

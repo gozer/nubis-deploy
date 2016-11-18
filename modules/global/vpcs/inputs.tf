@@ -22,6 +22,10 @@ variable consul_secret {}
 
 variable consul_master_acl_token {}
 
+variable consul_sudo_groups {}
+
+variable consul_user_groups {}
+
 variable enable_vpc {}
 
 variable enable_jumphost {}
@@ -108,9 +112,9 @@ variable user_management_tls_cert {}
 
 variable user_management_tls_key {}
 
-variable user_management_sudo_users {}
+variable user_management_sudo_groups {}
 
-variable user_management_users {}
+variable user_management_user_groups {}
 
 variable fluentd_sqs_queues {}
 
@@ -119,6 +123,10 @@ variable fluentd_sqs_access_keys {}
 variable fluentd_sqs_secret_keys {}
 
 variable fluentd_sqs_regions {}
+
+variable fluentd_sudo_groups {}
+
+variable fluentd_user_groups {}
 
 variable jumphost_sudo_groups {}
 variable jumphost_user_groups {}

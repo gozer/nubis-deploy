@@ -38,6 +38,8 @@ variable consul {
   default = {
     master_acl_token = "00000000-0000-0000-0000-000000000000"
     secret           = "AAAAAAAAAAAAAAAAAAAAAA=="
+    sudo_groups      = "nubis_global_admins"
+    user_groups      = ""
   }
 }
 
@@ -143,8 +145,8 @@ variable user_management {
     ldap_bind_password = "xxxxx"
     tls_cert           = "user_management.crt"
     tls_key            = "user_management.key"
-    sudo_users         = "nubis_global_admins,nubis_sudo_users"
-    users              = "nubis_users"
+    sudo_groups        = "nubis_global_admins,nubis_sudo_users"
+    user_groups        = "nubis_users"
   }
 }
 
@@ -161,5 +163,7 @@ variable fluentd {
     sqs_access_keys = ""
     sqs_secret_keys = ""
     sqs_regions     = ""
+    sudo_groups     = "nubis_global_admins"
+    user_groups     = ""
   }
 }

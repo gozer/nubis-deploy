@@ -209,8 +209,8 @@ resource template_file "user_management_config_iam" {
     ldap_bind_password      = "${var.user_management_ldap_bind_password}"
     tls_cert                = "${replace(file("${path.cwd}/${var.user_management_tls_cert}"), "/(.*)\\n/", "    $1\n")}"
     tls_key                 = "${replace(file("${path.cwd}/${var.user_management_tls_key}"), "/(.*)\\n/", "    $1\n")}"
-    sudo_user_ldap_group    = "${replace(var.user_management_sudo_users, ",", "|")}"
-    users_ldap_group        = "${replace(var.user_management_users, ",", "|")}"
+    sudo_user_ldap_group    = "${replace(var.user_management_sudo_groups, ",", "|")}"
+    users_ldap_group        = "${replace(var.user_management_user_groups, ",", "|")}"
   }
 }
 
@@ -225,7 +225,7 @@ resource "null_resource" "user_management_unicreds_iam" {
     region            = "${var.region}"
     context           = "-E region:${var.region} -E environment:global -E service:nubis"
     rendered_template = "${template_file.user_management_config_iam.rendered}"
-    credstash         = "unicreds -r ${var.region} put-file nubis/global"
+    credstash         = "unicreds -k ${var.credstash_key} -r ${var.region} put-file nubis/global"
   }
 
   provisioner "local-exec" {

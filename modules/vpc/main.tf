@@ -973,6 +973,9 @@ module "fluent-collector" {
   sqs_access_keys = "${var.fluentd_sqs_access_keys}"
   sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
   sqs_regions     = "${var.fluentd_sqs_regions}"
+
+  nubis_sudo_groups = "${var.fluentd_sudo_groups}"
+  nubis_user_groups = "${var.fluentd_user_groups}"
 }
 
 module "monitoring" {
@@ -1040,6 +1043,9 @@ module "consul" {
   service_name = "${var.account_name}"
 
   datadog_api_key = "${var.datadog_api_key}"
+
+  nubis_sudo_groups = "${var.consul_sudo_groups}"
+  nubis_user_groups = "${var.consul_user_groups}"
 }
 
 module "ci-uuid" {
@@ -1131,8 +1137,8 @@ module "user_management" {
   user_management_ldap_bind_password = "${var.user_management_ldap_bind_password}"
   user_management_tls_cert           = "${var.user_management_tls_cert}"
   user_management_tls_key            = "${var.user_management_tls_key}"
-  user_management_sudo_users         = "${var.user_management_sudo_users}"
-  user_management_users              = "${var.user_management_users}"
+  user_management_sudo_groups        = "${var.user_management_sudo_groups}"
+  user_management_user_groups        = "${var.user_management_user_groups}"
 }
 
 #XXX: Move to a module
@@ -1643,8 +1649,8 @@ resource template_file "user_management_config" {
     ldap_bind_password      = "${var.user_management_ldap_bind_password}"
     tls_cert                = "${replace(file("${path.cwd}/${var.user_management_tls_cert}"), "/(.*)\\n/", "    $1\n")}"
     tls_key                 = "${replace(file("${path.cwd}/${var.user_management_tls_key}"), "/(.*)\\n/", "    $1\n")}"
-    sudo_user_ldap_group    = "${replace(var.user_management_sudo_users, ",", "|")}"
-    users_ldap_group        = "${replace(var.user_management_users, ",", "|")}"
+    sudo_user_ldap_group    = "${replace(var.user_management_sudo_groups, ",", "|")}"
+    users_ldap_group        = "${replace(var.user_management_user_groups, ",", "|")}"
   }
 }
 
@@ -1660,7 +1666,7 @@ resource "null_resource" "user_management_unicreds" {
     environment       = "${element(split(",", var.environments), count.index)}"
     context           = "-E region:${var.aws_region} -E environment:${element(split(",", var.environments), count.index)} -E service:nubis"
     rendered_template = "${element(template_file.user_management_config.*.rendered, count.index)}"
-    unicreds          = "unicreds -r ${var.aws_region} put-file nubis/${element(split(",", var.environments), count.index)}"
+    unicreds          = "unicreds -k ${module.meta.CredstashKeyID} -r ${var.aws_region} put-file nubis/${element(split(",", var.environments), count.index)}"
   }
 
   provisioner "local-exec" {
