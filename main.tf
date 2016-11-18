@@ -105,6 +105,8 @@ module "vpcs" {
   monitoring_slack_channel         = "${lookup(var.monitoring, "slack_channel")}"
   monitoring_notification_email    = "${lookup(var.monitoring, "notification_email")}"
   monitoring_pagerduty_service_key = "${lookup(var.monitoring, "pagerduty_service_key")}"
+  monitoring_sudo_groups           = "${lookup(var.monitoring, "sudo_groups")}"
+  monitoring_user_groups           = "${lookup(var.monitoring, "user_groups")}"
 
   # fluentd
   fluentd_sqs_queues      = "${lookup(var.fluentd, "sqs_queues")}"
