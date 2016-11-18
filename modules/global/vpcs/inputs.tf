@@ -84,6 +84,10 @@ variable ci_slack_channel {}
 
 variable ci_slack_token {}
 
+variable ci_sudo_groups {}
+
+variable ci_user_groups {}
+
 variable route53_delegation_set {}
 
 variable route53_master_zone_id {}

@@ -111,6 +111,8 @@ variable ci {
     slack_domain               = "nubisproject"
     slack_channel              = "#changes"
     slack_token                = ""
+    nubis_sudo_groups          = "nubis_sudo_groups"
+    nubis_user_groups          = "nubis_user_groups"
   }
 }
 
