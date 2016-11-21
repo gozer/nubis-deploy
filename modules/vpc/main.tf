@@ -1112,6 +1112,9 @@ module "ci" {
   s3_bucket_name = "ci-${var.ci_project}-${module.ci-uuid.uuids}"
 
   email = "${var.technical_contact}"
+
+  nubis_sudo_groups = "${var.ci_sudo_groups}"
+  nubis_user_groups = "${var.ci_user_groups}"
 }
 
 module "user_management" {
