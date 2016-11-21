@@ -839,6 +839,8 @@ NUBIS_MIGRATE='1'
 NUBIS_ACCOUNT='${var.account_name}'
 NUBIS_PURPOSE='Nat Instance'
 NUBIS_NAT_EIP='${element(aws_eip.nat.*.id, count.index)}'
+NUBIS_SUDO_GROUPS="${var.nat_sudo_groups}"
+NUBIS_USER_GROUPS="${var.nat_user_groups}"
 USER_DATA
 }
 

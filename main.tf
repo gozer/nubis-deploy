@@ -102,6 +102,10 @@ module "vpcs" {
   ci_sudo_groups                = "${lookup(var.ci, "sudo_groups")}"
   ci_user_groups                = "${lookup(var.ci, "user_groups")}"
 
+  # nat
+  nat_sudo_groups               = "${lookup(var.nat, "sudo_groups")}"
+  nat_user_groups               = "${lookup(var.nat, "user_groups")}"
+
   # monitoring
   monitoring_slack_url             = "${lookup(var.monitoring, "slack_url")}"
   monitoring_slack_channel         = "${lookup(var.monitoring, "slack_channel")}"
