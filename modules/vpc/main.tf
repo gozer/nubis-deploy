@@ -997,6 +997,7 @@ module "monitoring" {
 
   vpc_ids    = "${join(",", aws_vpc.nubis.*.id)}"
   subnet_ids = "${join(",", aws_subnet.private.*.id)}"
+  public_subnet_ids = "${join(",", aws_subnet.public.*.id)}"
 
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
