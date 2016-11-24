@@ -1006,6 +1006,7 @@ module "monitoring" {
 
   nubis_domain = "${var.nubis_domain}"
   service_name = "${var.account_name}"
+  zone_id      = "${module.meta.HostedZoneId}"
 
   slack_url             = "${var.monitoring_slack_url}"
   slack_channel         = "${var.monitoring_slack_channel}"
