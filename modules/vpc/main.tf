@@ -1004,6 +1004,9 @@ module "monitoring" {
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
   monitoring_security_groups      = "${join(",",aws_security_group.monitoring.*.id)}"
 
+  credstash_key            = "${module.meta.CredstashKeyID}"
+  credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
+
   nubis_domain = "${var.nubis_domain}"
   service_name = "${var.account_name}"
   zone_id      = "${module.meta.HostedZoneId}"
