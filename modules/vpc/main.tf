@@ -964,6 +964,7 @@ module "fluent-collector" {
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
+  monitoring_security_groups      = "${join(",",aws_security_group.monitoring.*.id)}"
 
   nubis_domain = "${var.nubis_domain}"
 
@@ -1018,6 +1019,8 @@ module "monitoring" {
 
   nubis_sudo_groups     = "${var.monitoring_sudo_groups}"
   nubis_user_groups     = "${var.monitoring_user_groups}"
+
+  password              = "${var.monitoring_password}"
 }
 
 module "consul" {

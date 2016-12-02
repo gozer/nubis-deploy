@@ -80,6 +80,7 @@ module "us-east-1" {
   monitoring_pagerduty_service_key = "${var.monitoring_pagerduty_service_key}"
   monitoring_sudo_groups           = "${var.monitoring_sudo_groups}"
   monitoring_user_groups           = "${var.monitoring_user_groups}"
+  monitoring_password              = "${var.monitoring_password}"
 
   # fluentd
   fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"
@@ -193,6 +194,7 @@ module "us-west-2" {
   monitoring_pagerduty_service_key = "${var.monitoring_pagerduty_service_key}"
   monitoring_sudo_groups           = "${var.monitoring_sudo_groups}"
   monitoring_user_groups           = "${var.monitoring_user_groups}"
+  monitoring_password              = "${var.monitoring_password}"
 
   # fluentd
   fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"

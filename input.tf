@@ -131,6 +131,7 @@ variable monitoring {
     pagerduty_service_key = ""
     sudo_groups           = "nubis_global_admins"
     user_groups           = ""
+    password              = ""
   }
 }
 

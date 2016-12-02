@@ -67,6 +67,7 @@ variable monitoring_pagerduty_service_key {}
 variable monitoring_sudo_groups {}
 
 variable monitoring_user_groups {}
+variable monitoring_password {}
 
 variable ci_project {}
 

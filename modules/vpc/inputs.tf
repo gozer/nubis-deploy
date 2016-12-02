@@ -88,6 +88,8 @@ variable monitoring_sudo_groups {}
 
 variable monitoring_user_groups {}
 
+variable monitoring_password {}
+
 variable ci_project {}
 
 variable ci_git_repo {}

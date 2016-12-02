@@ -113,6 +113,7 @@ module "vpcs" {
   monitoring_pagerduty_service_key = "${lookup(var.monitoring, "pagerduty_service_key")}"
   monitoring_sudo_groups           = "${lookup(var.monitoring, "sudo_groups")}"
   monitoring_user_groups           = "${lookup(var.monitoring, "user_groups")}"
+  monitoring_password              = "${lookup(var.monitoring, "password")}"
 
   # fluentd
   fluentd_sqs_queues      = "${lookup(var.fluentd, "sqs_queues")}"
