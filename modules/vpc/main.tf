@@ -776,6 +776,10 @@ resource "aws_autoscaling_group" "nat" {
   min_size         = 1
   desired_capacity = 1
 
+  # ELB
+  health_check_type = "ELB"
+  health_check_grace_period = 300
+
   launch_configuration = "${element(aws_launch_configuration.nat.*.name, count.index)}"
 
   tag {
