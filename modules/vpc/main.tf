@@ -832,7 +832,7 @@ resource "aws_launch_configuration" "nat" {
   ]
 
   user_data = <<USER_DATA
-NUBIS_PROJECT='nubis-nat-${element(split(",",var.environments), count.index/2)}'
+NUBIS_PROJECT='nat'
 NUBIS_ENVIRONMENT='${element(split(",",var.environments), count.index/2)}'
 NUBIS_DOMAIN='${var.nubis_domain}'
 NUBIS_MIGRATE='1'
