@@ -2,6 +2,112 @@
 
 This is the repo to use if you want to deploy the Nubis platform into an AWS account.
 
+This document covers some layout information and then goes into tooling and finally describes how to deploy an account.
+
+ - [VPC Deployment](#vpc-deployment)
+ - [OpSec Deployment](#opsec-deployment)
+ - [Prerequisites](#prerequisites)
+ - [INSTALLING](#installing)
+
+## VPC Deployment
+The VPC is designed to be deployed into a standard Nubis Account. It takes advantage of the standard deployment found [here](https://github.com/nubisproject/nubis-docs/blob/master/DEPLOYMENT_OVERVIEW.md).
+
+The VPC deployment contains a number of other deployments. For example this is where the NAT deployment is defined. Additionally all other account services are deployed into the VPC.
+
+### Deployment Notes
+The Nubis VPC deployment consists of:
+ - A number of VPC wide security policies
+ - A number of lambda functions which will be deprecated soon
+ - All of the IP (network) configuration
+ - A VPC wide Route53 zone
+ - The nubis-nat deployment (for some strange reason)
+
+### Deployment Resources
+Details for the deployment including; naming conventions, relationships, permissions, etcetera, can be found in the [Terraform template](modules/vpc/main.tf) used for deployment. Links to specific resources can be found in the following table.
+
+Resource Type|Resource Title|Code Location|
+|-------------|--------------|-------------|
+|aws_key_pair|nubis|[modules/vpc/main.tf#L6](modules/vpc/main.tf#L6)|
+|aws_iam_policy|credstash|[modules/vpc/main.tf#L21](modules/vpc/main.tf#L21)|
+|aws_iam_role_policy|lambda|[modules/vpc/main.tf#L64](modules/vpc/main.tf#L64)|
+|aws_iam_role|lambda|[modules/vpc/main.tf#L98](modules/vpc/main.tf#L98)|
+|aws_cloudformation_stack|dummy-vpc|[modules/vpc/main.tf#L130](modules/vpc/main.tf#L130)|
+|aws_lambda_function|UUID|[modules/vpc/main.tf#L201](modules/vpc/main.tf#L201)|
+|aws_lambda_function|LookupStackOutputs|[modules/vpc/main.tf#L218](modules/vpc/main.tf#L218)|
+|aws_lambda_function|LookupNestedStackOutputs|[modules/vpc/main.tf#L231](modules/vpc/main.tf#L231)|
+|aws_vpc|nubis|[modules/vpc/main.tf#L262](modules/vpc/main.tf#L262)|
+|aws_main_route_table_association|public|[modules/vpc/main.tf#L285](modules/vpc/main.tf#L285)|
+|aws_security_group|monitoring|[modules/vpc/main.tf#L296](modules/vpc/main.tf#L296)|
+|aws_security_group|ssh|[modules/vpc/main.tf#L337](modules/vpc/main.tf#L337)|
+|aws_security_group|internet_access|[modules/vpc/main.tf#L364](modules/vpc/main.tf#L364)|
+|aws_security_group|nat|[modules/vpc/main.tf#L391](modules/vpc/main.tf#L391)|
+|aws_security_group|shared_services|[modules/vpc/main.tf#L470](modules/vpc/main.tf#L470)|
+|aws_cloudformation_stack|availability_zones|[modules/vpc/main.tf#L531](modules/vpc/main.tf#L531)|
+|aws_subnet|public|[modules/vpc/main.tf#L543](modules/vpc/main.tf#L543)|
+|aws_subnet|private|[modules/vpc/main.tf#L565](modules/vpc/main.tf#L565)|
+|aws_route_table_association|public|[modules/vpc/main.tf#L586](modules/vpc/main.tf#L586)|
+|aws_internet_gateway|nubis|[modules/vpc/main.tf#L597](modules/vpc/main.tf#L597)|
+|aws_route_table|public|[modules/vpc/main.tf#L614](modules/vpc/main.tf#L614)|
+|aws_route|public|[modules/vpc/main.tf#L635](modules/vpc/main.tf#L635)|
+|aws_route_table|private|[modules/vpc/main.tf#L674](modules/vpc/main.tf#L674)|
+|aws_route_table_association|private|[modules/vpc/main.tf#L696](modules/vpc/main.tf#L696)|
+|aws_network_interface|private-nat|[modules/vpc/main.tf#L707](modules/vpc/main.tf#L707)|
+|atlas_artifact|nubis-nat|[modules/vpc/main.tf#L735](modules/vpc/main.tf#L735)|
+|aws_autoscaling_group|nat|[modules/vpc/main.tf#L757](modules/vpc/main.tf#L757)|
+|aws_launch_configuration|nat|[modules/vpc/main.tf#L806](modules/vpc/main.tf#L806)|
+|aws_iam_role|nat|[modules/vpc/main.tf#L848](modules/vpc/main.tf#L848)|
+|aws_iam_role_policy|nat|[modules/vpc/main.tf#L875](modules/vpc/main.tf#L875)|
+|aws_iam_instance_profile|nat|[modules/vpc/main.tf#L887](modules/vpc/main.tf#L887)|
+|aws_iam_policy_attachment|credstash|[modules/vpc/main.tf#L898](modules/vpc/main.tf#L898)|
+|aws_vpn_gateway|vpn_gateway|[modules/vpc/main.tf#L1172](modules/vpc/main.tf#L1172)|
+|aws_customer_gateway|customer_gateway|[modules/vpc/main.tf#L1189](modules/vpc/main.tf#L1189)|
+|aws_vpn_connection|main|[modules/vpc/main.tf#L1208](modules/vpc/main.tf#L1208)|
+|aws_route|vpn-public|[modules/vpc/main.tf#L1228](modules/vpc/main.tf#L1228)|
+|aws_route|vpn-private|[modules/vpc/main.tf#L1243](modules/vpc/main.tf#L1243)|
+|aws_route53_zone|proxy|[modules/vpc/main.tf#L1259](modules/vpc/main.tf#L1259)|
+|aws_route53_record|proxy|[modules/vpc/main.tf#L1273](modules/vpc/main.tf#L1273)|
+|aws_elb|proxy|[modules/vpc/main.tf#L1288](modules/vpc/main.tf#L1288)|
+|aws_security_group|proxy|[modules/vpc/main.tf#L1335](modules/vpc/main.tf#L1335)|
+|aws_eip|nat|[modules/vpc/main.tf#L1374](modules/vpc/main.tf#L1374)|
+|aws_security_group|nubis_version|[modules/vpc/main.tf#L1384](modules/vpc/main.tf#L1384)|
+|aws_s3_bucket_object|public_state|[modules/vpc/main.tf#L1405](modules/vpc/main.tf#L1405)|
+|aws_iam_role|user_management|[modules/vpc/main.tf#L1449](modules/vpc/main.tf#L1449)|
+|aws_iam_role_policy|user_management|[modules/vpc/main.tf#L1482](modules/vpc/main.tf#L1482)|
+|aws_lambda_function|user_management|[modules/vpc/main.tf#L1528](modules/vpc/main.tf#L1528)|
+|aws_security_group|ldap|[modules/vpc/main.tf#L1560](modules/vpc/main.tf#L1560)|
+|aws_lambda_permission|allow_cloudwatch|[modules/vpc/main.tf#L1589](modules/vpc/main.tf#L1589)|
+|aws_cloudwatch_event_rule|user_management_event_consul|[modules/vpc/main.tf#L1599](modules/vpc/main.tf#L1599)|
+|aws_cloudwatch_event_target|user_management_consul|[modules/vpc/main.tf#L1607](modules/vpc/main.tf#L1607)|
+|template_file|user_management_config|[modules/vpc/main.tf#L1632](modules/vpc/main.tf#L1632)|
+|null_resource|user_management_unicreds|[modules/vpc/main.tf#L1660](modules/vpc/main.tf#L1660)|
+
+## OpSec Deployment
+The OpSec deployment is basically just CloudTrail and a security audit role
+
+This can be deployed independent of a VPC which provides the capability of deploying these required assets even when a VPC is not required.
+
+### Deployment Notes
+The Nubis OpSec deployment consists of:
+ - An IAM role which allows the InfoSec team god like privileges into all of our accounts
+ - An external SNS topic to which we send all of our logs
+
+### Deployment Resources
+Details for the deployment including; naming conventions, relationships, permissions, etcetera, can be found in the [Terraform template](modules/opsec/main.tf) used for deployment. Links to specific resources can be found in the following table.
+
+Resource Type|Resource Title|Code Location|
+|-------------|--------------|-------------|
+|aws_cloudformation_stack|opsec|[modules/opsec/main.tf#L6](modules/opsec/main.tf#L6)|
+
+In this case we simply load a CloudFormation template found [here](modules/global/opsec/audit.json)
+
+Resource Type|Resource Title|Code Location|
+|-------------|--------------|-------------|
+|AWS::IAM::Role|InfosecSecurityAuditRole|[modules/global/opsec/audit.json#L3](modules/global/opsec/audit.json#L3)|
+|AWS::IAM::Role|InfosecIncidentResponseRole|[modules/global/opsec/audit.json#L81](modules/global/opsec/audit.json#L81)|
+|Custom::PublishToSNSInfo|PublishToSNSInfo|[modules/global/opsec/audit.json#L174](modules/global/opsec/audit.json#L174)|
+|AWS::Lambda::Function|PublishToSNS|[modules/global/opsec/audit.json#L208](modules/global/opsec/audit.json#L208)|
+|AWS::IAM::Role|LambdaExecutionRole|[modules/global/opsec/audit.json#L236](modules/global/opsec/audit.json#L236)|
+
 ## Prerequisites
 
 We've tried to keep the prerequisites as short as possible, but you'll still need to do some work if this is a first time.
