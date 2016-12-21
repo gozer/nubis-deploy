@@ -1,10 +1,100 @@
 # Change Log
 
-## [v1.2.2](https://github.com/nubisproject/nubis-deploy/tree/v1.2.2) (2016-08-02)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.2.1...v1.2.2)
+## [v1.3.0](https://github.com/nubisproject/nubis-deploy/tree/v1.3.0) (2016-12-20)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.2.2...v1.3.0)
+
+**Implemented enhancements:**
+
+- \[user-management\] Rename variables [\#177](https://github.com/nubisproject/nubis-deploy/issues/177)
+- Bubble up nubis\_\*\_groups user data to various deploy components [\#174](https://github.com/nubisproject/nubis-deploy/issues/174)
+- \[user-managment\] Support specifying multiple groups [\#157](https://github.com/nubisproject/nubis-deploy/issues/157)
+- \[user-management\] Bump up timeout for lambda function [\#129](https://github.com/nubisproject/nubis-deploy/issues/129)
+- \[user-management\] Split up IAM roles for user management [\#125](https://github.com/nubisproject/nubis-deploy/issues/125)
+- \[user-management\] Terraform for user management IAM [\#124](https://github.com/nubisproject/nubis-deploy/issues/124)
+- \[user-management\] Specify consul port in cloudwatch event [\#123](https://github.com/nubisproject/nubis-deploy/issues/123)
+
+**Fixed bugs:**
+
+- \\[user-management\\] Bump up timeout for lambda function [\#129](https://github.com/nubisproject/nubis-deploy/issues/129)
+
+**Closed issues:**
+
+- \[user-management\] Fix credstash dependency [\#172](https://github.com/nubisproject/nubis-deploy/issues/172)
+- \[ci\] Pass monitoring\_security\_group\_id [\#169](https://github.com/nubisproject/nubis-deploy/issues/169)
+- \[ci\] Support slack notifications [\#165](https://github.com/nubisproject/nubis-deploy/issues/165)
+- \[user management\] Bubble up new inputs for jumphost module [\#164](https://github.com/nubisproject/nubis-deploy/issues/164)
+- \[pagerduty\] Support PagerDuty [\#160](https://github.com/nubisproject/nubis-deploy/issues/160)
+- \[fluentd\] Support SQS arguments [\#158](https://github.com/nubisproject/nubis-deploy/issues/158)
+- \[jumphost\] Remove from the trusted platform components [\#153](https://github.com/nubisproject/nubis-deploy/issues/153)
+- \[security\] Add Prometheus to the trusted platform components [\#150](https://github.com/nubisproject/nubis-deploy/issues/150)
+- \[monitoring\] Deploy nubis-prometheus [\#148](https://github.com/nubisproject/nubis-deploy/issues/148)
+- CI shouldn't be in the credstash policies for stage/prod [\#135](https://github.com/nubisproject/nubis-deploy/issues/135)
+- make sure user-managment can be deployed to a single-region account successfully [\#128](https://github.com/nubisproject/nubis-deploy/issues/128)
+- \[user-management\] Manage nubis-user-management secret config through terraform [\#122](https://github.com/nubisproject/nubis-deploy/issues/122)
+- Add a vpc feature flag [\#117](https://github.com/nubisproject/nubis-deploy/issues/117)
+- Enable features.stack\_compat for nubis-lab [\#114](https://github.com/nubisproject/nubis-deploy/issues/114)
+- \[MFA\] Deactivating a MFA device should require using a valid MFA device [\#108](https://github.com/nubisproject/nubis-deploy/issues/108)
+- Tag v1.2.3 release [\#106](https://github.com/nubisproject/nubis-deploy/issues/106)
+- Labnda function must be stored in a S3 bucket in the same region as its deployed [\#10](https://github.com/nubisproject/nubis-deploy/issues/10)
 
 **Merged pull requests:**
 
+- Update pinned release version for v1.3.0 release [\#186](https://github.com/nubisproject/nubis-deploy/pull/186) ([tinnightcap](https://github.com/tinnightcap))
+- Update doc with resource tables [\#182](https://github.com/nubisproject/nubis-deploy/pull/182) ([tinnightcap](https://github.com/tinnightcap))
+- Expose nubis\_sudo\_groups and nubis\_user\_groups to ci module [\#181](https://github.com/nubisproject/nubis-deploy/pull/181) ([limed](https://github.com/limed))
+- Exposing nubis\_sudo\_groups and nubis\_user\_groups [\#180](https://github.com/nubisproject/nubis-deploy/pull/180) ([limed](https://github.com/limed))
+- Expose nubis\_sudo\_groups and nubis\_user\_groups to monitoring module [\#179](https://github.com/nubisproject/nubis-deploy/pull/179) ([limed](https://github.com/limed))
+- Rename variables so that it doesn't sound confusing [\#178](https://github.com/nubisproject/nubis-deploy/pull/178) ([limed](https://github.com/limed))
+- Accept user data arguments for consul module [\#176](https://github.com/nubisproject/nubis-deploy/pull/176) ([limed](https://github.com/limed))
+- Fluent userdata [\#175](https://github.com/nubisproject/nubis-deploy/pull/175) ([limed](https://github.com/limed))
+- Fixes dependency issue when uplading user\_management config to credstash [\#173](https://github.com/nubisproject/nubis-deploy/pull/173) ([limed](https://github.com/limed))
+- Ability to accept multiple groups for user\_management [\#171](https://github.com/nubisproject/nubis-deploy/pull/171) ([limed](https://github.com/limed))
+- Pass in CI's now needed monitoring\_security\_group\_id [\#170](https://github.com/nubisproject/nubis-deploy/pull/170) ([gozer](https://github.com/gozer))
+- \[review\] Bubble up userdata for nubis user groups [\#168](https://github.com/nubisproject/nubis-deploy/pull/168) ([limed](https://github.com/limed))
+- Admin pruning nubis-limed [\#167](https://github.com/nubisproject/nubis-deploy/pull/167) ([limed](https://github.com/limed))
+- \[ci\] Enable Slack Notification [\#166](https://github.com/nubisproject/nubis-deploy/pull/166) ([gozer](https://github.com/gozer))
+- Terraform fmt [\#162](https://github.com/nubisproject/nubis-deploy/pull/162) ([gozer](https://github.com/gozer))
+- Enable PagerDuty support [\#161](https://github.com/nubisproject/nubis-deploy/pull/161) ([gozer](https://github.com/gozer))
+- Add fluent SQS settings [\#159](https://github.com/nubisproject/nubis-deploy/pull/159) ([gozer](https://github.com/gozer))
+- Add support for nubis-prometheus [\#156](https://github.com/nubisproject/nubis-deploy/pull/156) ([gozer](https://github.com/gozer))
+- Don't give the jumphost access to the platform ACL [\#155](https://github.com/nubisproject/nubis-deploy/pull/155) ([gozer](https://github.com/gozer))
+- Manage user\_management config file [\#154](https://github.com/nubisproject/nubis-deploy/pull/154) ([limed](https://github.com/limed))
+- features.vpc currently defaults to 1 on my configuration, so setting it to 0 just in case [\#152](https://github.com/nubisproject/nubis-deploy/pull/152) ([limed](https://github.com/limed))
+- Give prometheus nodes access to platform credstash secrets [\#151](https://github.com/nubisproject/nubis-deploy/pull/151) ([gozer](https://github.com/gozer))
+- Deploy nubis-prometheus when feature.monitoring is enabled [\#149](https://github.com/nubisproject/nubis-deploy/pull/149) ([gozer](https://github.com/gozer))
+- Add a feature.monitoring option, defaults to disabled [\#147](https://github.com/nubisproject/nubis-deploy/pull/147) ([gozer](https://github.com/gozer))
+- Adding deployment config for nubis-limed account [\#146](https://github.com/nubisproject/nubis-deploy/pull/146) ([limed](https://github.com/limed))
+- Adding deployment config for the nubis-jd account [\#143](https://github.com/nubisproject/nubis-deploy/pull/143) ([tinnightcap](https://github.com/tinnightcap))
+- Updates to the readme [\#141](https://github.com/nubisproject/nubis-deploy/pull/141) ([tinnightcap](https://github.com/tinnightcap))
+- Strange issue with admin user modification causing unnecessary resource churn [\#137](https://github.com/nubisproject/nubis-deploy/pull/137) ([gozer](https://github.com/gozer))
+- make sure the CI instances get only placed into the admin credstash policy [\#136](https://github.com/nubisproject/nubis-deploy/pull/136) ([gozer](https://github.com/gozer))
+- Big refactoring exercise of the user-managment IAM stuff [\#134](https://github.com/nubisproject/nubis-deploy/pull/134) ([gozer](https://github.com/gozer))
+- Set consulPort [\#132](https://github.com/nubisproject/nubis-deploy/pull/132) ([limed](https://github.com/limed))
+- Bump up lambda timeout for user management iam lambda function [\#131](https://github.com/nubisproject/nubis-deploy/pull/131) ([limed](https://github.com/limed))
+- Better names [\#130](https://github.com/nubisproject/nubis-deploy/pull/130) ([gozer](https://github.com/gozer))
+- \[Needs-review\] Create user management IAM [\#127](https://github.com/nubisproject/nubis-deploy/pull/127) ([limed](https://github.com/limed))
+- Add consul port parameter [\#126](https://github.com/nubisproject/nubis-deploy/pull/126) ([limed](https://github.com/limed))
+- \[do not merge\] User management [\#121](https://github.com/nubisproject/nubis-deploy/pull/121) ([limed](https://github.com/limed))
+- Enable stack compat [\#119](https://github.com/nubisproject/nubis-deploy/pull/119) ([limed](https://github.com/limed))
+- Create a vpc feature flag, disabling all VPCs in one go and everyhign in them [\#118](https://github.com/nubisproject/nubis-deploy/pull/118) ([gozer](https://github.com/gozer))
+- Add 2 more outputs to our state  - monitoring\_security\_group    - instance\_security\_group \(synthetic merge of ssh/internet/shared services SGs\) [\#116](https://github.com/nubisproject/nubis-deploy/pull/116) ([gozer](https://github.com/gozer))
+- upgrade lab to v1.3.0-dev [\#115](https://github.com/nubisproject/nubis-deploy/pull/115) ([gozer](https://github.com/gozer))
+- When nat=0, still create some IAM foo, as we have dependencies we can't avoid atm [\#113](https://github.com/nubisproject/nubis-deploy/pull/113) ([gozer](https://github.com/gozer))
+- \[complex\] Generate a discoverable and accessible fake TF output module with metadata [\#110](https://github.com/nubisproject/nubis-deploy/pull/110) ([gozer](https://github.com/gozer))
+- Require MFA device to deregister a MFA device [\#109](https://github.com/nubisproject/nubis-deploy/pull/109) ([gozer](https://github.com/gozer))
+- Upgrade to Nubis v1.2.3 [\#107](https://github.com/nubisproject/nubis-deploy/pull/107) ([gozer](https://github.com/gozer))
+- Upgrade bugzilla-aws and nubis-lab to v1.2.2 [\#105](https://github.com/nubisproject/nubis-deploy/pull/105) ([gozer](https://github.com/gozer))
+
+## [v1.2.2](https://github.com/nubisproject/nubis-deploy/tree/v1.2.2) (2016-08-02)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.2.1...v1.2.2)
+
+**Closed issues:**
+
+- Tag v1.2.2 release [\#102](https://github.com/nubisproject/nubis-deploy/issues/102)
+
+**Merged pull requests:**
+
+- Update CHANGELOG for v1.2.2 release [\#104](https://github.com/nubisproject/nubis-deploy/pull/104) ([tinnightcap](https://github.com/tinnightcap))
 - Update pinned release version for v1.2.2 release [\#103](https://github.com/nubisproject/nubis-deploy/pull/103) ([tinnightcap](https://github.com/tinnightcap))
 - Add more parameters to our mysql parameter groups  [\#101](https://github.com/nubisproject/nubis-deploy/pull/101) ([gozer](https://github.com/gozer))
 
