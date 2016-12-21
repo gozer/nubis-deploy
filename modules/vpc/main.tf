@@ -914,7 +914,7 @@ resource "aws_iam_policy_attachment" "credstash" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=master"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v1.3.0"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -944,7 +944,7 @@ module "jumphost" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=master"
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=v1.3.0"
 
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
@@ -986,7 +986,7 @@ module "fluent-collector" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=master"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v1.3.0"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
@@ -1081,7 +1081,7 @@ module "ci-uuid" {
 
 # XXX: This assumes it's going in the first environment, i.e. admin
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=master"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.3.0"
 
   enabled = "${var.enabled * var.enable_ci * ( ( 1 + signum(index(split(",",concat(var.aws_regions, ",", var.aws_region)), var.aws_region))) % 2 ) }"
 
