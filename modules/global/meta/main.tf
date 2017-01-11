@@ -147,7 +147,7 @@ resource "aws_lambda_function" "GlobalUUID" {
   handler       = "index.handler"
   description   = "Generate UUIDs for use in Nubis Meta"
   memory_size   = 128
-  runtime       = "nodejs"
+  runtime       = "nodejs4.3"
   timeout       = "10"
   role          = "${aws_iam_role.global_lambda.arn}"
 }

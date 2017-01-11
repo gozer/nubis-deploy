@@ -210,7 +210,7 @@ resource "aws_lambda_function" "UUID" {
   handler       = "index.handler"
   description   = "Generate UUIDs for use in Cloudformation stacks"
   memory_size   = 128
-  runtime       = "nodejs"
+  runtime       = "nodejs4.3"
   timeout       = "10"
   role          = "${aws_iam_role.lambda.arn}"
 }
@@ -223,7 +223,7 @@ resource "aws_lambda_function" "LookupStackOutputs" {
   handler       = "index.handler"
   description   = "Gather outputs from Cloudformation stacks to be used in other Cloudformation stacks"
   memory_size   = 128
-  runtime       = "nodejs"
+  runtime       = "nodejs4.3"
   timeout       = "10"
   role          = "${aws_iam_role.lambda.arn}"
 }
@@ -236,7 +236,7 @@ resource "aws_lambda_function" "LookupNestedStackOutputs" {
   handler       = "index.handler"
   description   = "Gather outputs from Cloudformation enviroment specific nested stacks to be used in other Cloudformation stacks"
   memory_size   = 128
-  runtime       = "nodejs"
+  runtime       = "nodejs4.3"
   timeout       = "10"
   role          = "${aws_iam_role.lambda.arn}"
 }
