@@ -202,6 +202,9 @@ resource "aws_lambda_function" "UUID" {
   #    count = "${var.enabled}"
   lifecycle {
     create_before_destroy = true
+    ignore_changes = [
+      "runtime"
+    ]
   }
 
   function_name = "UUID"
@@ -216,6 +219,12 @@ resource "aws_lambda_function" "UUID" {
 }
 
 resource "aws_lambda_function" "LookupStackOutputs" {
+  lifecycle {
+    ignore_changes = [
+      "runtime"
+    ]
+  }
+
   count         = "${var.enabled * var.enable_stack_compat}"
   function_name = "LookupStackOutputs"
   s3_bucket     = "nubis-stacks-${var.aws_region}"
@@ -229,6 +238,12 @@ resource "aws_lambda_function" "LookupStackOutputs" {
 }
 
 resource "aws_lambda_function" "LookupNestedStackOutputs" {
+  lifecycle {
+    ignore_changes = [
+      "runtime"
+    ]
+  }
+
   count         = "${var.enabled * var.enable_stack_compat}"
   function_name = "LookupNestedStackOutputs"
   s3_bucket     = "nubis-stacks-${var.aws_region}"
@@ -1531,6 +1546,12 @@ EOF
 
 resource "aws_lambda_function" "user_management" {
   count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
+
+  lifecycle {
+    ignore_changes = [
+      "runtime"
+    ]
+  }
 
   depends_on = [
     "aws_iam_role_policy.user_management",
