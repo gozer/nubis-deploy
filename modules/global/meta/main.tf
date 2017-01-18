@@ -171,6 +171,10 @@ resource "aws_s3_bucket" "public-state" {
   bucket = "public-state-${module.public-state-uuid.uuids}"
   acl    = "private"
 
+  versioning {
+    enabled = true
+  }
+
   policy = <<EOF
 {
 	"Version": "2008-10-17",
