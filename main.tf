@@ -27,8 +27,6 @@ module "global_meta" {
   nubis_version = "${var.nubis_version}"
   nubis_domain  = "${var.nubis_domain}"
 
-  state_uuid = "${var.state_uuid}"
-
   technical_contact = "${var.technical_contact}"
 }
 

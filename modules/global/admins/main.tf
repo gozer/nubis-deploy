@@ -58,7 +58,7 @@ resource "aws_iam_role_policy" "admin" {
 EOF
 }
 
-resource "template_file" "mfa" {
+data "template_file" "mfa" {
   template = "${file("${path.module}/mfa-policy.json.tmpl")}"
 
   vars {
@@ -70,7 +70,7 @@ resource "aws_iam_policy" "mfa" {
   name        = "mfa-access"
   path        = "/nubis/admin/"
   description = "Policy that enforces MFA access"
-  policy      = "${template_file.mfa.rendered}"
+  policy      = "${data.template_file.mfa.rendered}"
 }
 
 resource "aws_iam_role" "admin" {

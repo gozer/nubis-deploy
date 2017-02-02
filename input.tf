@@ -69,14 +69,10 @@ variable features {
   }
 }
 
-variable state_uuid {
-  default = ""
-}
-
 # Turn into features ?
 variable datadog {
   default = {
-    api_key = "unset"
+    api_key = "XXXDISABLEDXXX"
   }
 }
 

@@ -4,6 +4,7 @@ provider "aws" {
 }
 
 resource "aws_cloudtrail" "opsec-cloudtrail" {
+  count                         = "${var.enabled}"
   name                          = "opsec-cloudtrail"
   s3_bucket_name                = "${var.cloudtrail_bucket}"
   sns_topic_name                = "${var.cloudtrail_sns_topic}"
@@ -13,6 +14,7 @@ resource "aws_cloudtrail" "opsec-cloudtrail" {
 }
 
 resource "aws_cloudformation_stack" "opsec" {
+  count                         = "${var.enabled}"
   name = "opsec"
 
   capabilities = [

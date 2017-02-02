@@ -21,7 +21,3 @@ variable ssh_key_name {
 variable nubis_domain {
   default = "nubis.allizom.org"
 }
-
-variable state_uuid {
-  default = ""
-}

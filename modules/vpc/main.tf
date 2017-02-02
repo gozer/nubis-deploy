@@ -13,9 +13,6 @@ resource "aws_key_pair" "nubis" {
   key_name   = "${var.ssh_key_name}"
   public_key = "${var.nubis_ssh_key}"
 
-  provisioner "local-exec" {
-    command = "sleep 30"
-  }
 }
 
 resource "aws_iam_policy" "credstash" {
@@ -102,10 +99,6 @@ resource "aws_iam_role" "lambda" {
   }
 
   name = "lambda-${var.aws_region}"
-
-  provisioner "local-exec" {
-    command = "sleep 30"
-  }
 
   assume_role_policy = <<EOF
 {
@@ -564,7 +557,7 @@ resource "aws_subnet" "public" {
 
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
 
-  availability_zone = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), count.index % 3 )}"
+  availability_zone = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), count.index % 3 )}"
 
   cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, count.index % 3 )}"
 
@@ -586,7 +579,7 @@ resource "aws_subnet" "private" {
 
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
 
-  availability_zone = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), count.index % 3 )}"
+  availability_zone = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), count.index % 3 )}"
 
   cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, (count.index % 3) + 3 )}"
 
@@ -634,10 +627,6 @@ resource "aws_route_table" "public" {
   }
 
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
-
-  provisioner "local-exec" {
-    command = "sleep 10"
-  }
 
   tags {
     Name             = "PublicRoute-${element(split(",",var.environments), count.index)}"
@@ -693,10 +682,6 @@ resource "aws_route_table" "private" {
     create_before_destroy = true
   }
 
-  provisioner "local-exec" {
-    command = "sleep 10"
-  }
-
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
 
   tags {
@@ -747,12 +732,8 @@ resource "aws_network_interface" "private-nat" {
   ]
 }
 
-resource "atlas_artifact" "nubis-nat" {
+data "atlas_artifact" "nubis-nat" {
   count = "${var.enabled * var.enable_nat}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
 
   name = "nubisproject/nubis-nat"
   type = "amazon.image"
@@ -831,11 +812,7 @@ resource "aws_launch_configuration" "nat" {
 
   name_prefix = "nubis-nat-${element(split(",",var.environments), count.index/2 )}-${lookup(var.nat_side, count.index % 2)}-"
 
-  # Somewhat nasty, since Atlas doesn't have an elegant way to access the id for a region
-  # the id is "region:ami,region:ami,region:ami"
-  # so we split it all and find the index of the region
-  # add on, and pick that element
-  image_id = "${ element(split(",",replace(atlas_artifact.nubis-nat.id,":",",")) ,1 + index(split(",",replace(atlas_artifact.nubis-nat.id,":",",")), var.aws_region)) }"
+  image_id = "${data.atlas_artifact.nubis-nat.metadata_full["region-${var.aws_region}"]}"
 
   instance_type               = "t2.small"
   associate_public_ip_address = true
@@ -920,6 +897,7 @@ resource "aws_iam_policy_attachment" "credstash" {
   name = "credstash-${var.aws_region}"
 
   #XXX: concat and compact should work here, but element() isn't a list, so BUG
+
   roles = [
     "${split(",",replace(replace(concat( element(split(",",module.monitoring.iam_roles), count.index), ",", element(split(",",module.consul.iam_roles), count.index), ",", element(split(",",module.fluent-collector.iam_roles), count.index), ",", element(aws_iam_role.nat.*.id, count.index), ",", element(aws_iam_role.user_management.*.id, count.index), ",", element(split(",",replace(module.ci.iam_role, "/$/",replace(var.environments, "/[^,]+/","") )), count.index) ), "/(,+)/",","),"/(^,+|,+$)/", ""))}",
   ]
@@ -1053,7 +1031,8 @@ module "consul" {
   aws_region     = "${var.aws_region}"
   aws_account_id = "${var.aws_account_id}"
 
-  my_ip           = "${var.my_ip},${element(aws_eip.nat.*.public_ip,0)}/32,${element(aws_eip.nat.*.public_ip,1)}/32"
+  my_ip           = "${var.my_ip},${element(concat(aws_eip.nat.*.public_ip, list("")),0)}/32,${element(concat(aws_eip.nat.*.public_ip, list("")),1)}/32"
+ 
   lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
 
   key_name           = "${var.ssh_key_name}"
@@ -1098,7 +1077,7 @@ module "ci-uuid" {
 module "ci" {
   source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.3.0"
 
-  enabled = "${var.enabled * var.enable_ci * ( ( 1 + signum(index(split(",",concat(var.aws_regions, ",", var.aws_region)), var.aws_region))) % 2 ) }"
+  enabled = "${var.enabled * var.enable_ci * ( 1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region)) % 2 )}"
 
   environment = "${element(split(",",var.environments), 0)}"
   aws_profile = "${var.aws_profile}"
@@ -1113,16 +1092,16 @@ module "ci" {
   nubis_domain = "${var.nubis_domain}"
   zone_id      = "${module.meta.HostedZoneId}"
 
-  vpc_id = "${element(aws_vpc.nubis.*.id, 0)}"
+  vpc_id = "${element(concat(aws_vpc.nubis.*.id, list("")), 0)}"
 
   # XXX: Only first 3
-  private_subnets = "${element(aws_subnet.private.*.id, 0)},${element(aws_subnet.private.*.id, 1)},${element(aws_subnet.private.*.id, 2)}"
-  public_subnets  = "${element(aws_subnet.public.*.id, 0)},${element(aws_subnet.public.*.id, 1)},${element(aws_subnet.public.*.id, 2)}"
+  private_subnets = "${element(concat(aws_subnet.private.*.id,list("")), 0)},${element(concat(aws_subnet.private.*.id, list("")), 1)},${element(concat(aws_subnet.private.*.id,list("")), 2)}"
+  public_subnets  = "${element(concat(aws_subnet.public.*.id,list("")), 0)},${element(concat(aws_subnet.public.*.id, list("")), 1)},${element(concat(aws_subnet.public.*.id,list("")), 2)}"
 
-  internet_security_group_id        = "${element(aws_security_group.internet_access.*.id, 0)}"
-  shared_services_security_group_id = "${element(aws_security_group.shared_services.*.id, 0)}"
-  ssh_security_group_id             = "${element(aws_security_group.ssh.*.id, 0)}"
-  monitoring_security_group_id      = "${element(aws_security_group.monitoring.*.id, 0)}"
+  internet_security_group_id        = "${element(concat(aws_security_group.internet_access.*.id, list("")), 0)}"
+  shared_services_security_group_id = "${element(concat(aws_security_group.shared_services.*.id, list("")), 0)}"
+  ssh_security_group_id             = "${element(concat(aws_security_group.ssh.*.id, list("")), 0)}"
+  monitoring_security_group_id      = "${element(concat(aws_security_group.monitoring.*.id, list("")), 0)}"
 
   domain = "${var.nubis_domain}"
 
@@ -1150,7 +1129,7 @@ module "user_management" {
   source = "user_management"
 
   # set enabled to '1' only if enabled and if we are in the first configured region, yeah, I know.
-  enabled = "${var.enabled * var.enable_user_management_iam * ( ( 1 + signum(index(split(",",concat(var.aws_regions, ",", var.aws_region)), var.aws_region))) % 2 ) }"
+  enabled = "${var.enabled * var.enable_user_management_iam * ( 1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region)) % 2 )}"
 
   region       = "${var.aws_region}"
   version      = "${var.nubis_version}"
@@ -1388,10 +1367,10 @@ resource "aws_security_group" "proxy" {
   }
 }
 
-#XXX: Can't make this conditional on enable_nat, because of how we feed it as input to the
-#XXX: Consul module, unfortunately
 resource "aws_eip" "nat" {
-  count = "${var.enabled * 2 * length(split(",", var.environments))}"
+  # We enable this if consul AND/OR nat is enabled
+  count = "${var.enabled * signum(var.enable_consul + var.enable_nat) * 2 * length(split(",", var.environments))}"
+
   vpc   = true
 
   lifecycle {
@@ -1441,7 +1420,7 @@ resource "aws_s3_bucket_object" "public_state" {
               "nubis_version": ${jsonencode(var.nubis_version)},
               "region": ${jsonencode(var.aws_region)},
               "regions": ${jsonencode(var.aws_regions)},
-              "availability_zones": ${jsonencode(aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones)},
+              "availability_zones": ${jsonencode(aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"])},
               "hosted_zone_name": ${jsonencode(module.meta.HostedZoneName)},
               "hosted_zone_id": ${jsonencode(module.meta.HostedZoneId)},
               "vpc_id": ${jsonencode(element(aws_vpc.nubis.*.id,count.index))},
@@ -1474,10 +1453,6 @@ resource "aws_iam_role" "user_management" {
 
   name = "user_management-${var.aws_region}-${element(split(",", var.environments), count.index)}"
 
-  provisioner "local-exec" {
-    command = "sleep 30"
-  }
-
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -1503,13 +1478,6 @@ resource "aws_iam_role_policy" "user_management" {
 
   lifecycle {
     create_before_destroy = true
-  }
-
-  # Sometimes when we create the lambda function it complains about
-  # not having ec2:CreateNetworkInterface permissions, this is here so that
-  # it can help with that problem
-  provisioner "local-exec" {
-    command = "sleep 10"
   }
 
   name = "user_management-${var.aws_region}-${element(split(",", var.environments), count.index)}"
@@ -1654,13 +1622,9 @@ resource "aws_cloudwatch_event_target" "user_management_consul" {
 EOF
 }
 
-resource template_file "user_management_config" {
+data template_file "user_management_config" {
   count    = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
   template = "${file("${path.module}/user_management.yml.tmpl")}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
 
   vars {
     region                  = "${var.aws_region}"
@@ -1693,11 +1657,11 @@ resource "null_resource" "user_management_unicreds" {
     region            = "${var.aws_region}"
     environment       = "${element(split(",", var.environments), count.index)}"
     context           = "-E region:${var.aws_region} -E environment:${element(split(",", var.environments), count.index)} -E service:nubis"
-    rendered_template = "${element(template_file.user_management_config.*.rendered, count.index)}"
+    rendered_template = "${element(data.template_file.user_management_config.*.rendered, count.index)}"
     unicreds          = "unicreds -k ${module.meta.CredstashKeyID} -r ${var.aws_region} put-file nubis/${element(split(",", var.environments), count.index)}"
   }
 
   provisioner "local-exec" {
-    command = "echo '${element(template_file.user_management_config.*.rendered, count.index)}' | ${self.triggers.unicreds}/user-sync/config /dev/stdin ${self.triggers.context}"
+    command = "echo '${element(data.template_file.user_management_config.*.rendered, count.index)}' | ${self.triggers.unicreds}/user-sync/config /dev/stdin ${self.triggers.context}"
   }
 }
