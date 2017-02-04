@@ -894,21 +894,18 @@ resource "aws_iam_instance_profile" "nat" {
 resource "aws_iam_policy_attachment" "credstash" {
   count = "${var.enabled * length(split(",", var.environments))}"
 
-  name = "credstash-${var.aws_region}"
+  name = "credstash-${var.aws_region}-${element(split(",", var.environments), count.index)}"
 
-  # XXX: Just missing CI
   roles = [ "${compact(list(
-    element(split(",",module.monitoring.iam_roles), count.index), 
+    element(concat(aws_iam_role.nat.*.id, list("")), count.index),
+    element(split(",",module.monitoring.iam_roles), count.index),
     element(split(",",module.consul.iam_roles), count.index),
     element(split(",",module.fluent-collector.iam_roles), count.index),
-    element(concat(aws_iam_role.nat.*.id, list("")), count.index),
     element(concat(aws_iam_role.user_management.*.id, list("")), count.index),
-  ))}"
-  ]
+    element(list(module.ci.iam_role, ""), signum(count.index)),
+  ))}",
+]
 
-  # "${split(",",replace(replace(concat( element(split(",",module.monitoring.iam_roles), count.index), ",", element(split(",",module.consul.iam_roles), count.index), ",", #element(split(",",module.fluent-collector.iam_roles), count.index), ",", element(aws_iam_role.nat.*.id, count.index), ",", element(aws_iam_role.user_management.*.id, #count.index), ",", element(split(",",replace(module.ci.iam_role, "/$/",replace(var.environments, "/[^,]+/","") )), count.index) ), "/(,+)/",","),"/(^,+|,+$)/", ""))}",
-
-  #XXX: Bug, puts the CI system in all environment roles
   policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
@@ -985,7 +982,7 @@ module "fluent-collector" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v1.3.0"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=feature%2Ftf-0.8"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
