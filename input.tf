@@ -113,7 +113,7 @@ variable ci {
     admins                     = "gozer"
     slack_domain               = "nubisproject"
     slack_channel              = "#changes"
-    slack_token                = ""
+    slack_token                = "unset"
     sudo_groups                = "nubis_global_admins"
     user_groups                = ""
   }
