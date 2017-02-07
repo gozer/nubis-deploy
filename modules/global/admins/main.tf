@@ -20,9 +20,7 @@ resource "aws_iam_user" "admin" {
   path  = "/nubis/admin/"
   name  = "${element(split(",",var.admin_users), count.index)}"
 
-  provisioner "local-exec" {
-    command = "sleep 10"
-  }
+  force_destroy = true
 }
 
 resource "aws_iam_user" "guest" {
@@ -30,9 +28,7 @@ resource "aws_iam_user" "guest" {
   path  = "/nubis/guest/"
   name  = "${element(split(",",var.guest_users), count.index)}"
 
-  provisioner "local-exec" {
-    command = "sleep 10"
-  }
+  force_destroy = true
 }
 
 resource "aws_iam_role_policy" "admin" {

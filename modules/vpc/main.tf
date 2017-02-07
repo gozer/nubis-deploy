@@ -183,21 +183,19 @@ resource "aws_cloudformation_stack" "dummy-vpc" {
     PrivateSubnetAZ3Env3 = "${element(aws_subnet.private.*.id, 8)}"
 
     # AZs
-    PrivateAvailabilityZone1 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), 0)}"
-    PrivateAvailabilityZone2 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), 1)}"
-    PrivateAvailabilityZone3 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs.AvailabilityZones), 2)}"
+    PrivateAvailabilityZone1 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), 0)}"
+    PrivateAvailabilityZone2 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), 1)}"
+    PrivateAvailabilityZone3 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), 2)}"
   }
 }
 
 #XXX: This is because it's fed to a module input, so it can't be undefined
 #XXX: even in regions where enabled=0, unfortunately
 resource "aws_lambda_function" "UUID" {
-  #    count = "${var.enabled}"
+  #count = "${var.enabled}"
+
   lifecycle {
     create_before_destroy = true
-    ignore_changes = [
-      "runtime"
-    ]
   }
 
   function_name = "UUID"
@@ -212,12 +210,6 @@ resource "aws_lambda_function" "UUID" {
 }
 
 resource "aws_lambda_function" "LookupStackOutputs" {
-  lifecycle {
-    ignore_changes = [
-      "runtime"
-    ]
-  }
-
   count         = "${var.enabled * var.enable_stack_compat}"
   function_name = "LookupStackOutputs"
   s3_bucket     = "nubis-stacks-${var.aws_region}"
@@ -231,11 +223,6 @@ resource "aws_lambda_function" "LookupStackOutputs" {
 }
 
 resource "aws_lambda_function" "LookupNestedStackOutputs" {
-  lifecycle {
-    ignore_changes = [
-      "runtime"
-    ]
-  }
 
   count         = "${var.enabled * var.enable_stack_compat}"
   function_name = "LookupNestedStackOutputs"
@@ -648,7 +635,6 @@ resource "aws_route" "public" {
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = "${element(aws_internet_gateway.nubis.*.id, count.index)}"
 
-  depends_on = ["aws_route_table.public"]
 }
 
 #resource "aws_route" "private" {
@@ -709,7 +695,7 @@ resource "aws_network_interface" "private-nat" {
 
   lifecycle {
     create_before_destroy = true
-    ignore_changes        = ["attachment"]
+    #ignore_changes        = ["attachment"]
   }
 
   subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
@@ -840,7 +826,12 @@ NUBIS_USER_GROUPS="${var.nat_user_groups}"
 USER_DATA
 }
 
-# XXX: This could be a global
+resource "aws_iam_role_policy_attachment" "nat" {
+    count = "${var.enabled * var.enable_nat * length(split(",", var.environments))}"
+    role = "${element(concat(aws_iam_role.nat.*.id, list("")), count.index)}"
+    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+}
+
 resource "aws_iam_role" "nat" {
   count = "${var.enabled * length(split(",", var.environments))}"
 
@@ -891,26 +882,8 @@ resource "aws_iam_instance_profile" "nat" {
   roles = ["${element(aws_iam_role.nat.*.name, count.index)}"]
 }
 
-resource "aws_iam_policy_attachment" "credstash" {
-  count = "${var.enabled * length(split(",", var.environments))}"
-
-  name = "credstash-${var.aws_region}-${element(split(",", var.environments), count.index)}"
-
-  roles = [ "${compact(list(
-    element(concat(aws_iam_role.nat.*.id, list("")), count.index),
-    element(split(",",module.monitoring.iam_roles), count.index),
-    element(split(",",module.consul.iam_roles), count.index),
-    element(split(",",module.fluent-collector.iam_roles), count.index),
-    element(concat(aws_iam_role.user_management.*.id, list("")), count.index),
-    element(list(module.ci.iam_role, ""), signum(count.index)),
-  ))}",
-]
-
-  policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
-}
-
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v1.3.0"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=feature%2Ftf-0.8"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -939,8 +912,14 @@ module "jumphost" {
   nubis_user_groups = "${var.jumphost_user_groups}"
 }
 
+resource "aws_iam_role_policy_attachment" "fluent" {
+    count = "${var.enabled * var.enable_fluent * length(split(",", var.environments))}"
+    role = "${element(split(",",module.fluent-collector.iam_roles), count.index)}"
+    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+}
+
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=v1.3.0"
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=feature%2Ftf-0.8"
 
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
@@ -979,6 +958,12 @@ module "fluent-collector" {
 
   nubis_sudo_groups = "${var.fluentd_sudo_groups}"
   nubis_user_groups = "${var.fluentd_user_groups}"
+}
+
+resource "aws_iam_role_policy_attachment" "monitoring" {
+    count = "${var.enabled * var.enable_monitoring * length(split(",", var.environments))}"
+    role = "${element(split(",",module.monitoring.iam_roles), count.index)}"
+    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
 module "monitoring" {
@@ -1021,6 +1006,12 @@ module "monitoring" {
   nubis_user_groups     = "${var.monitoring_user_groups}"
 
   password              = "${var.monitoring_password}"
+}
+
+resource "aws_iam_role_policy_attachment" "consul" {
+    count = "${var.enabled * var.enable_consul * length(split(",", var.environments))}"
+    role = "${element(split(",",module.consul.iam_roles), count.index)}"
+    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
 module "consul" {
@@ -1077,8 +1068,15 @@ module "ci-uuid" {
 }
 
 # XXX: This assumes it's going in the first environment, i.e. admin
+
+resource "aws_iam_role_policy_attachment" "ci" {
+    count = "${var.enabled * var.enable_ci}"
+    role = "${module.ci.iam_role}"
+    policy_arn = "${element(aws_iam_policy.credstash.*.arn, 0)}"
+}
+
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.3.0"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=feature%2Ftf-0.8"
 
   enabled = "${var.enabled * var.enable_ci * ( 1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region)) % 2 )}"
 
@@ -1238,7 +1236,6 @@ resource "aws_route" "vpn-public" {
   destination_cidr_block = "10.0.0.0/8"
   gateway_id             = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index)}"
 
-  #    depends_on = ["aws_route_table.public"]
 }
 
 resource "aws_route" "vpn-private" {
@@ -1253,7 +1250,6 @@ resource "aws_route" "vpn-private" {
   destination_cidr_block = "10.0.0.0/8"
   gateway_id             = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index/3)}"
 
-  #    depends_on = ["aws_route_table.private"]
 }
 
 # Create a proxy discovery VPC DNS zone
@@ -1412,7 +1408,7 @@ resource "aws_s3_bucket_object" "public_state" {
 
   content = <<EOF
 {
-    "version": 1,
+    "version": 3,
     "serial": 0,
     "modules": [
         {
@@ -1445,6 +1441,12 @@ resource "aws_s3_bucket_object" "public_state" {
     ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "user_managment" {
+    count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
+    role = "${element(concat(aws_iam_role.user_management.*.id, list("")), count.index)}"
+    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
 resource "aws_iam_role" "user_management" {
@@ -1517,12 +1519,6 @@ EOF
 
 resource "aws_lambda_function" "user_management" {
   count = "${var.enabled * var.enable_user_management_consul * length(split(",", var.environments))}"
-
-  lifecycle {
-    ignore_changes = [
-      "runtime"
-    ]
-  }
 
   depends_on = [
     "aws_iam_role_policy.user_management",
