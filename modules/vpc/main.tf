@@ -1408,7 +1408,7 @@ resource "aws_s3_bucket_object" "public_state" {
 
   content = <<EOF
 {
-    "version": 3,
+    "version": 1,
     "serial": 0,
     "modules": [
         {
