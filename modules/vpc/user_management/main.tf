@@ -190,15 +190,11 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
 
 # TODO: Test if we can run config file with less config options
 # that way we can don't have to generate the full config
-resource template_file "user_management_config_iam" {
+data "template_file" "user_management_config_iam" {
   count = "${var.enabled}"
 
   # We are just using the template in the previous directory for now
   template = "${file("${path.module}/../user_management.yml.tmpl")}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
 
   vars {
     region                  = "${var.region}"
@@ -230,11 +226,11 @@ resource "null_resource" "user_management_unicreds_iam" {
   triggers {
     region            = "${var.region}"
     context           = "-E region:${var.region} -E environment:global -E service:nubis"
-    rendered_template = "${template_file.user_management_config_iam.rendered}"
+    rendered_template = "${data.template_file.user_management_config_iam.rendered}"
     credstash         = "unicreds -k ${var.credstash_key} -r ${var.region} put-file nubis/global"
   }
 
   provisioner "local-exec" {
-    command = "echo \"${template_file.user_management_config_iam.rendered}\" | ${self.triggers.credstash}/user-sync/config /dev/stdin ${self.triggers.context}"
+    command = "echo \"${data.template_file.user_management_config_iam.rendered}\" | ${self.triggers.credstash}/user-sync/config /dev/stdin ${self.triggers.context}"
   }
 }
