@@ -718,15 +718,12 @@ resource "aws_network_interface" "private-nat" {
   ]
 }
 
-data "atlas_artifact" "nubis-nat" {
-  count = "${var.enabled * var.enable_nat}"
+module "nat-image" {
+  source = "../images"
 
-  name = "nubisproject/nubis-nat"
-  type = "amazon.image"
-
-  metadata {
-    project_version = "${var.nubis_version}"
-  }
+  region = "${var.aws_region}"
+  version = "${var.nubis_version}"
+  project = "nubis-nat"
 }
 
 variable nat_side {
@@ -798,7 +795,7 @@ resource "aws_launch_configuration" "nat" {
 
   name_prefix = "nubis-nat-${element(split(",",var.environments), count.index/2 )}-${lookup(var.nat_side, count.index % 2)}-"
 
-  image_id = "${data.atlas_artifact.nubis-nat.metadata_full["region-${var.aws_region}"]}"
+  image_id = "${module.nat-image.image_id}"
 
   instance_type               = "t2.small"
   associate_public_ip_address = true
