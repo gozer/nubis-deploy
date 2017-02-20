@@ -99,6 +99,7 @@ module "vpcs" {
   ci_slack_token                = "${lookup(var.ci, "slack_token")}"
   ci_sudo_groups                = "${lookup(var.ci, "sudo_groups")}"
   ci_user_groups                = "${lookup(var.ci, "user_groups")}"
+  ci_version                    = "${lookup(var.ci, "version")}"
 
   # nat
   nat_sudo_groups               = "${lookup(var.nat, "sudo_groups")}"

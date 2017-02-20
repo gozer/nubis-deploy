@@ -110,6 +110,8 @@ variable ci_sudo_groups {}
 
 variable ci_user_groups {}
 
+variable ci_version {}
+
 variable vpn_bgp_asn {}
 
 variable route53_delegation_set {}

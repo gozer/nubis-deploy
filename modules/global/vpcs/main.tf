@@ -68,6 +68,7 @@ module "us-east-1" {
   ci_slack_token                = "${var.ci_slack_token}"
   ci_sudo_groups                = "${var.ci_sudo_groups}"
   ci_user_groups                = "${var.ci_user_groups}"
+  ci_version                    = "${var.ci_version}"
 
   # nat
   nat_sudo_groups                 = "${var.nat_sudo_groups}"
@@ -182,6 +183,7 @@ module "us-west-2" {
   ci_slack_token                = "${var.ci_slack_token}"
   ci_sudo_groups                = "${var.ci_sudo_groups}"
   ci_user_groups                = "${var.ci_user_groups}"
+  ci_version                    = "${var.ci_version}"
 
   # nat
   nat_sudo_groups               = "${var.nat_sudo_groups}"

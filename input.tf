@@ -116,6 +116,7 @@ variable ci {
     slack_token                = "unset"
     sudo_groups                = "nubis_global_admins"
     user_groups                = ""
+    version                    = ""
   }
 }
 
