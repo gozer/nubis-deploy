@@ -31,29 +31,6 @@ resource "aws_iam_user" "guest" {
   force_destroy = true
 }
 
-resource "aws_iam_role_policy" "admin" {
-  count = "${length(split(",",var.admin_users))}"
-  name  = "${element(split(",",var.admin_users), count.index)}"
-
-  # TF 0.6.x bug somehow, using element(aws_iam_role.admin.*.id, count.index) causes
-  # useless resource update and churns, down into forcing policies to be deleted / created
-  role = "${element(split(",",var.admin_users), count.index)}"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "*",
-      "Effect": "Allow",
-      "Resource": "*",
-      "Sid": "admin"
-    }
-  ]
-}
-EOF
-}
-
 data "template_file" "mfa" {
   template = "${file("${path.module}/mfa-policy.json.tmpl")}"
 
@@ -143,7 +120,8 @@ resource "aws_iam_policy_attachment" "read_only" {
 
 resource "aws_iam_policy_attachment" "admins" {
   name       = "admins"
-  groups     = ["${aws_iam_group.admins.name}"]
+
+  roles      = [ "${aws_iam_role.admin.*.name}" ]
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
