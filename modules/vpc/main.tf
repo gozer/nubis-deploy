@@ -1067,7 +1067,7 @@ module "ci-uuid" {
 # XXX: This assumes it's going in the first environment, i.e. admin
 
 resource "aws_iam_role_policy_attachment" "ci" {
-    count = "${var.enabled * var.enable_ci}"
+    count = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
     role = "${module.ci.iam_role}"
     policy_arn = "${element(aws_iam_policy.credstash.*.arn, 0)}"
 }
