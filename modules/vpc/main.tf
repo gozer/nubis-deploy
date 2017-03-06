@@ -1075,7 +1075,7 @@ resource "aws_iam_role_policy_attachment" "ci" {
 module "ci" {
   source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=master"
 
-  enabled = "${var.enabled * var.enable_ci * ( 1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region)) % 2 )}"
+  enabled = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
 
   environment = "${element(split(",",var.environments), 0)}"
   aws_profile = "${var.aws_profile}"
