@@ -1,6 +1,41 @@
 # Change Log
 
-## [v1.3.0](https://github.com/nubisproject/nubis-deploy/tree/v1.3.0) (2016-12-20)
+## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-03-22)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.3.0-iam1...v1.4.0)
+
+**Closed issues:**
+
+- switch remote module branch to develop [\#210](https://github.com/nubisproject/nubis-deploy/issues/210)
+- \[ci\] Incorrect handling of multi-regions accounts [\#208](https://github.com/nubisproject/nubis-deploy/issues/208)
+- Simplify Admin IAM policies for MFA control [\#201](https://github.com/nubisproject/nubis-deploy/issues/201)
+
+**Merged pull requests:**
+
+- Fix operation precedence for multi-region CI deployments [\#211](https://github.com/nubisproject/nubis-deploy/pull/211) ([gozer](https://github.com/gozer))
+- \[ci\] Handle multi-region deployments [\#209](https://github.com/nubisproject/nubis-deploy/pull/209) ([gozer](https://github.com/gozer))
+- awspec based test suite [\#207](https://github.com/nubisproject/nubis-deploy/pull/207) ([gozer](https://github.com/gozer))
+- Update nubis-jd to terraform 0.8 and nubis v1.3.0 [\#205](https://github.com/nubisproject/nubis-deploy/pull/205) ([tinnightcap](https://github.com/tinnightcap))
+
+## [v1.3.0-iam1](https://github.com/nubisproject/nubis-deploy/tree/v1.3.0-iam1) (2017-03-02)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.3.0...v1.3.0-iam1)
+
+**Closed issues:**
+
+- \[meta\] Publish shared state even when VPC is disabled [\#199](https://github.com/nubisproject/nubis-deploy/issues/199)
+- Remove Atlas in favor of Terraform native aws\_ami searching [\#195](https://github.com/nubisproject/nubis-deploy/issues/195)
+- \[cloudtrail\] Enable logfile validation [\#193](https://github.com/nubisproject/nubis-deploy/issues/193)
+- Enable versionning on our state bucket [\#190](https://github.com/nubisproject/nubis-deploy/issues/190)
+
+**Merged pull requests:**
+
+- Simplify our IAM policy for Admins and MFA access [\#202](https://github.com/nubisproject/nubis-deploy/pull/202) ([gozer](https://github.com/gozer))
+- Making it terraform 0.8 compatible [\#197](https://github.com/nubisproject/nubis-deploy/pull/197) ([limed](https://github.com/limed))
+- Create an images/ TF module to search for Nubis AMIs [\#196](https://github.com/nubisproject/nubis-deploy/pull/196) ([gozer](https://github.com/gozer))
+- Enable Cloudtrail logfile validation [\#194](https://github.com/nubisproject/nubis-deploy/pull/194) ([gozer](https://github.com/gozer))
+- Convert to Terraform 0.8 [\#192](https://github.com/nubisproject/nubis-deploy/pull/192) ([gozer](https://github.com/gozer))
+- Enable versionning on our state S3 bucket [\#191](https://github.com/nubisproject/nubis-deploy/pull/191) ([gozer](https://github.com/gozer))
+
+## [v1.3.0](https://github.com/nubisproject/nubis-deploy/tree/v1.3.0) (2016-12-21)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.2.2...v1.3.0)
 
 **Implemented enhancements:**
@@ -30,15 +65,18 @@
 - \[monitoring\] Deploy nubis-prometheus [\#148](https://github.com/nubisproject/nubis-deploy/issues/148)
 - CI shouldn't be in the credstash policies for stage/prod [\#135](https://github.com/nubisproject/nubis-deploy/issues/135)
 - make sure user-managment can be deployed to a single-region account successfully [\#128](https://github.com/nubisproject/nubis-deploy/issues/128)
-- \[user-management\] Manage nubis-user-management secret config through terraform [\#122](https://github.com/nubisproject/nubis-deploy/issues/122)
 - Add a vpc feature flag [\#117](https://github.com/nubisproject/nubis-deploy/issues/117)
 - Enable features.stack\_compat for nubis-lab [\#114](https://github.com/nubisproject/nubis-deploy/issues/114)
 - \[MFA\] Deactivating a MFA device should require using a valid MFA device [\#108](https://github.com/nubisproject/nubis-deploy/issues/108)
 - Tag v1.2.3 release [\#106](https://github.com/nubisproject/nubis-deploy/issues/106)
 - Labnda function must be stored in a S3 bucket in the same region as its deployed [\#10](https://github.com/nubisproject/nubis-deploy/issues/10)
+- Tag v1.3.0 release [\#185](https://github.com/nubisproject/nubis-deploy/issues/185)
+- \[user-management\] Manage nubis-user-management secret config through terraform [\#122](https://github.com/nubisproject/nubis-deploy/issues/122)
+- \[datadog\] Update IAM permissions granted to DataDog [\#95](https://github.com/nubisproject/nubis-deploy/issues/95)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v1.3.0 release [\#187](https://github.com/nubisproject/nubis-deploy/pull/187) ([tinnightcap](https://github.com/tinnightcap))
 - Update pinned release version for v1.3.0 release [\#186](https://github.com/nubisproject/nubis-deploy/pull/186) ([tinnightcap](https://github.com/tinnightcap))
 - Update doc with resource tables [\#182](https://github.com/nubisproject/nubis-deploy/pull/182) ([tinnightcap](https://github.com/tinnightcap))
 - Expose nubis\_sudo\_groups and nubis\_user\_groups to ci module [\#181](https://github.com/nubisproject/nubis-deploy/pull/181) ([limed](https://github.com/limed))
@@ -103,7 +141,6 @@
 
 **Closed issues:**
 
-- \[datadog\] Update IAM permissions granted to DataDog [\#95](https://github.com/nubisproject/nubis-deploy/issues/95)
 - Tag v1.2.1 release [\#98](https://github.com/nubisproject/nubis-deploy/issues/98)
 
 **Merged pull requests:**

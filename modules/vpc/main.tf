@@ -880,7 +880,7 @@ resource "aws_iam_instance_profile" "nat" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=master"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=develop"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -916,7 +916,7 @@ resource "aws_iam_role_policy_attachment" "fluent" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=master"
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=develop"
 
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
@@ -964,7 +964,7 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=master"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=develop"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
@@ -1067,15 +1067,15 @@ module "ci-uuid" {
 # XXX: This assumes it's going in the first environment, i.e. admin
 
 resource "aws_iam_role_policy_attachment" "ci" {
-    count = "${var.enabled * var.enable_ci}"
+    count = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
     role = "${module.ci.iam_role}"
     policy_arn = "${element(aws_iam_policy.credstash.*.arn, 0)}"
 }
 
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=master"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=develop"
 
-  enabled = "${var.enabled * var.enable_ci * ( 1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region)) % 2 )}"
+  enabled = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
 
   environment = "${element(split(",",var.environments), 0)}"
   aws_profile = "${var.aws_profile}"
