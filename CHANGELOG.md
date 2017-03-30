@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-03-30)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.0...v1.4.0)
+
+**Merged pull requests:**
+
+- Remoing account config and moving to other repo [\#221](https://github.com/nubisproject/nubis-deploy/pull/221) ([tinnightcap](https://github.com/tinnightcap))
+- Don't ignore lambda runtime changes anymore [\#219](https://github.com/nubisproject/nubis-deploy/pull/219) ([gozer](https://github.com/gozer))
+- Small cleanups leftover [\#215](https://github.com/nubisproject/nubis-deploy/pull/215) ([gozer](https://github.com/gozer))
+- Remove nubis-limed account from deployment repo [\#213](https://github.com/nubisproject/nubis-deploy/pull/213) ([limed](https://github.com/limed))
+
 ## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-03-22)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.3.0-iam1...v1.4.0)
 
@@ -8,9 +18,12 @@
 - switch remote module branch to develop [\#210](https://github.com/nubisproject/nubis-deploy/issues/210)
 - \[ci\] Incorrect handling of multi-regions accounts [\#208](https://github.com/nubisproject/nubis-deploy/issues/208)
 - Simplify Admin IAM policies for MFA control [\#201](https://github.com/nubisproject/nubis-deploy/issues/201)
+- Tag v1.4.0 release [\#189](https://github.com/nubisproject/nubis-deploy/issues/189)
 
 **Merged pull requests:**
 
+- Merge v1.4.0 release into develop. \[skip ci\] [\#217](https://github.com/nubisproject/nubis-deploy/pull/217) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.4.0 release \[skip ci\] [\#216](https://github.com/nubisproject/nubis-deploy/pull/216) ([tinnightcap](https://github.com/tinnightcap))
 - Fix operation precedence for multi-region CI deployments [\#211](https://github.com/nubisproject/nubis-deploy/pull/211) ([gozer](https://github.com/gozer))
 - \[ci\] Handle multi-region deployments [\#209](https://github.com/nubisproject/nubis-deploy/pull/209) ([gozer](https://github.com/gozer))
 - awspec based test suite [\#207](https://github.com/nubisproject/nubis-deploy/pull/207) ([gozer](https://github.com/gozer))
