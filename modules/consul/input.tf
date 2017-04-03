@@ -45,3 +45,7 @@ variable datadog_api_key {}
 variable nubis_sudo_groups {}
 
 variable nubis_user_groups {}
+
+variable mig {
+  type = "map"
+}

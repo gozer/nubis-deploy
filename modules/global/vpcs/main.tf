@@ -110,6 +110,9 @@ module "us-east-1" {
   user_management_tls_key            = "${var.user_management_tls_key}"
   user_management_sudo_groups        = "${var.user_management_sudo_groups}"
   user_management_user_groups        = "${var.user_management_user_groups}"
+
+  # MiG
+  mig = "${var.mig}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -225,4 +228,7 @@ module "us-west-2" {
   user_management_tls_key            = "${var.user_management_tls_key}"
   user_management_sudo_groups        = "${var.user_management_sudo_groups}"
   user_management_user_groups        = "${var.user_management_user_groups}"
+
+  # MiG
+  mig = "${var.mig}"
 }
