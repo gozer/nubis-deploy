@@ -1048,6 +1048,8 @@ module "consul" {
 
   nubis_sudo_groups = "${var.consul_sudo_groups}"
   nubis_user_groups = "${var.consul_user_groups}"
+
+  mig = "${var.mig}"
 }
 
 module "ci-uuid" {

@@ -141,4 +141,7 @@ module "vpcs" {
   user_management_tls_key            = "${lookup(var.user_management, "tls_key")}"
   user_management_sudo_groups        = "${lookup(var.user_management, "sudo_groups")}"
   user_management_user_groups        = "${lookup(var.user_management, "user_groups")}"
+
+  # MiG
+  mig                                = "${var.mig}"
 }

@@ -32,4 +32,6 @@ module "consul" {
 
   nubis_sudo_groups = "${var.nubis_sudo_groups}"
   nubis_user_groups = "${var.nubis_user_groups}"
+
+  mig = "${var.mig}"
 }
