@@ -144,3 +144,7 @@ variable jumphost_user_groups {}
 
 variable nat_sudo_groups {}
 variable nat_user_groups {}
+
+variable mig {
+  type = "map"
+}
