@@ -1,16 +1,18 @@
 # Change Log
 
-## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-03-30)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.0...v1.4.0)
+## [v1.4.1](https://github.com/nubisproject/nubis-deploy/tree/v1.4.1) (2017-04-11)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.0...v1.4.1)
+
+**Closed issues:**
+
+- Tag v1.4.1 release [\#227](https://github.com/nubisproject/nubis-deploy/issues/227)
 
 **Merged pull requests:**
 
-- Remoing account config and moving to other repo [\#221](https://github.com/nubisproject/nubis-deploy/pull/221) ([tinnightcap](https://github.com/tinnightcap))
-- Don't ignore lambda runtime changes anymore [\#219](https://github.com/nubisproject/nubis-deploy/pull/219) ([gozer](https://github.com/gozer))
-- Small cleanups leftover [\#215](https://github.com/nubisproject/nubis-deploy/pull/215) ([gozer](https://github.com/gozer))
-- Remove nubis-limed account from deployment repo [\#213](https://github.com/nubisproject/nubis-deploy/pull/213) ([limed](https://github.com/limed))
+- Merge v1.4.1 release into develop. \[skip ci\] [\#229](https://github.com/nubisproject/nubis-deploy/pull/229) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.4.1 release \[skip ci\] [\#228](https://github.com/nubisproject/nubis-deploy/pull/228) ([tinnightcap](https://github.com/tinnightcap))
 
-## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-03-22)
+## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-04-03)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.3.0-iam1...v1.4.0)
 
 **Closed issues:**
@@ -18,12 +20,20 @@
 - switch remote module branch to develop [\#210](https://github.com/nubisproject/nubis-deploy/issues/210)
 - \[ci\] Incorrect handling of multi-regions accounts [\#208](https://github.com/nubisproject/nubis-deploy/issues/208)
 - Simplify Admin IAM policies for MFA control [\#201](https://github.com/nubisproject/nubis-deploy/issues/201)
+- Tag v1.4.0 release [\#222](https://github.com/nubisproject/nubis-deploy/issues/222)
 - Tag v1.4.0 release [\#189](https://github.com/nubisproject/nubis-deploy/issues/189)
 
 **Merged pull requests:**
 
+- fix MiG bootstrap [\#226](https://github.com/nubisproject/nubis-deploy/pull/226) ([gozer](https://github.com/gozer))
+- Merge v1.4.0 release into develop. \[skip ci\] [\#224](https://github.com/nubisproject/nubis-deploy/pull/224) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.4.0 release \[skip ci\] [\#223](https://github.com/nubisproject/nubis-deploy/pull/223) ([tinnightcap](https://github.com/tinnightcap))
+- Remoing account config and moving to other repo [\#221](https://github.com/nubisproject/nubis-deploy/pull/221) ([tinnightcap](https://github.com/tinnightcap))
+- Don't ignore lambda runtime changes anymore [\#219](https://github.com/nubisproject/nubis-deploy/pull/219) ([gozer](https://github.com/gozer))
 - Merge v1.4.0 release into develop. \[skip ci\] [\#217](https://github.com/nubisproject/nubis-deploy/pull/217) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v1.4.0 release \[skip ci\] [\#216](https://github.com/nubisproject/nubis-deploy/pull/216) ([tinnightcap](https://github.com/tinnightcap))
+- Small cleanups leftover [\#215](https://github.com/nubisproject/nubis-deploy/pull/215) ([gozer](https://github.com/gozer))
+- Remove nubis-limed account from deployment repo [\#213](https://github.com/nubisproject/nubis-deploy/pull/213) ([limed](https://github.com/limed))
 - Fix operation precedence for multi-region CI deployments [\#211](https://github.com/nubisproject/nubis-deploy/pull/211) ([gozer](https://github.com/gozer))
 - \[ci\] Handle multi-region deployments [\#209](https://github.com/nubisproject/nubis-deploy/pull/209) ([gozer](https://github.com/gozer))
 - awspec based test suite [\#207](https://github.com/nubisproject/nubis-deploy/pull/207) ([gozer](https://github.com/gozer))
@@ -125,13 +135,10 @@
 - Better names [\#130](https://github.com/nubisproject/nubis-deploy/pull/130) ([gozer](https://github.com/gozer))
 - \[Needs-review\] Create user management IAM [\#127](https://github.com/nubisproject/nubis-deploy/pull/127) ([limed](https://github.com/limed))
 - Add consul port parameter [\#126](https://github.com/nubisproject/nubis-deploy/pull/126) ([limed](https://github.com/limed))
-- \[do not merge\] User management [\#121](https://github.com/nubisproject/nubis-deploy/pull/121) ([limed](https://github.com/limed))
 - Enable stack compat [\#119](https://github.com/nubisproject/nubis-deploy/pull/119) ([limed](https://github.com/limed))
 - Create a vpc feature flag, disabling all VPCs in one go and everyhign in them [\#118](https://github.com/nubisproject/nubis-deploy/pull/118) ([gozer](https://github.com/gozer))
-- Add 2 more outputs to our state  - monitoring\_security\_group    - instance\_security\_group \(synthetic merge of ssh/internet/shared services SGs\) [\#116](https://github.com/nubisproject/nubis-deploy/pull/116) ([gozer](https://github.com/gozer))
 - upgrade lab to v1.3.0-dev [\#115](https://github.com/nubisproject/nubis-deploy/pull/115) ([gozer](https://github.com/gozer))
 - When nat=0, still create some IAM foo, as we have dependencies we can't avoid atm [\#113](https://github.com/nubisproject/nubis-deploy/pull/113) ([gozer](https://github.com/gozer))
-- \[complex\] Generate a discoverable and accessible fake TF output module with metadata [\#110](https://github.com/nubisproject/nubis-deploy/pull/110) ([gozer](https://github.com/gozer))
 - Require MFA device to deregister a MFA device [\#109](https://github.com/nubisproject/nubis-deploy/pull/109) ([gozer](https://github.com/gozer))
 - Upgrade to Nubis v1.2.3 [\#107](https://github.com/nubisproject/nubis-deploy/pull/107) ([gozer](https://github.com/gozer))
 - Upgrade bugzilla-aws and nubis-lab to v1.2.2 [\#105](https://github.com/nubisproject/nubis-deploy/pull/105) ([gozer](https://github.com/gozer))
@@ -234,7 +241,6 @@
 - terraform fmt [\#55](https://github.com/nubisproject/nubis-deploy/pull/55) ([gozer](https://github.com/gozer))
 - Add support for read-only guest accounts [\#53](https://github.com/nubisproject/nubis-deploy/pull/53) ([gozer](https://github.com/gozer))
 - Add admin roles as outputs [\#51](https://github.com/nubisproject/nubis-deploy/pull/51) ([gozer](https://github.com/gozer))
-- Move readonly role to the /nubis/ path, to avoid calshes with usernames [\#48](https://github.com/nubisproject/nubis-deploy/pull/48) ([gozer](https://github.com/gozer))
 - Add a readonly IAM role intended for Nubis Admins [\#47](https://github.com/nubisproject/nubis-deploy/pull/47) ([gozer](https://github.com/gozer))
 
 ## [v1.1.0](https://github.com/nubisproject/nubis-deploy/tree/v1.1.0) (2016-04-26)
@@ -270,7 +276,6 @@
 - Enable global cloudtrail as per opsec's request [\#35](https://github.com/nubisproject/nubis-deploy/pull/35) ([gozer](https://github.com/gozer))
 - Large PR with leftover bits. [\#33](https://github.com/nubisproject/nubis-deploy/pull/33) ([gozer](https://github.com/gozer))
 - Update CHANGELOG for v1.1.0 release [\#30](https://github.com/nubisproject/nubis-deploy/pull/30) ([tinnightcap](https://github.com/tinnightcap))
-- Issue/26/readme [\#28](https://github.com/nubisproject/nubis-deploy/pull/28) ([gozer](https://github.com/gozer))
 - EIPs are not needed for the NATs, and once released, we are done. [\#27](https://github.com/nubisproject/nubis-deploy/pull/27) ([gozer](https://github.com/gozer))
 - Issue/23/cloudhealth [\#24](https://github.com/nubisproject/nubis-deploy/pull/24) ([gozer](https://github.com/gozer))
 
