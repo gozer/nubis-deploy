@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.4.1](https://github.com/nubisproject/nubis-deploy/tree/v1.4.1) (2017-04-11)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.0...v1.4.1)
+
+**Closed issues:**
+
+- Tag v1.4.1 release [\#227](https://github.com/nubisproject/nubis-deploy/issues/227)
+
+**Merged pull requests:**
+
+- Merge v1.4.1 release into develop. \[skip ci\] [\#229](https://github.com/nubisproject/nubis-deploy/pull/229) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.4.1 release \[skip ci\] [\#228](https://github.com/nubisproject/nubis-deploy/pull/228) ([tinnightcap](https://github.com/tinnightcap))
+
 ## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-04-03)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.3.0-iam1...v1.4.0)
 
@@ -123,13 +135,11 @@
 - Better names [\#130](https://github.com/nubisproject/nubis-deploy/pull/130) ([gozer](https://github.com/gozer))
 - \[Needs-review\] Create user management IAM [\#127](https://github.com/nubisproject/nubis-deploy/pull/127) ([limed](https://github.com/limed))
 - Add consul port parameter [\#126](https://github.com/nubisproject/nubis-deploy/pull/126) ([limed](https://github.com/limed))
-- \[do not merge\] User management [\#121](https://github.com/nubisproject/nubis-deploy/pull/121) ([limed](https://github.com/limed))
 - Enable stack compat [\#119](https://github.com/nubisproject/nubis-deploy/pull/119) ([limed](https://github.com/limed))
 - Create a vpc feature flag, disabling all VPCs in one go and everyhign in them [\#118](https://github.com/nubisproject/nubis-deploy/pull/118) ([gozer](https://github.com/gozer))
-- Add 2 more outputs to our state  - monitoring\_security\_group    - instance\_security\_group \(synthetic merge of ssh/internet/shared services SGs\) [\#116](https://github.com/nubisproject/nubis-deploy/pull/116) ([gozer](https://github.com/gozer))
 - upgrade lab to v1.3.0-dev [\#115](https://github.com/nubisproject/nubis-deploy/pull/115) ([gozer](https://github.com/gozer))
 - When nat=0, still create some IAM foo, as we have dependencies we can't avoid atm [\#113](https://github.com/nubisproject/nubis-deploy/pull/113) ([gozer](https://github.com/gozer))
-- \[complex\] Generate a discoverable and accessible fake TF output module with metadata [\#110](https://github.com/nubisproject/nubis-deploy/pull/110) ([gozer](https://github.com/gozer))
+- Require MFA device to deregister a MFA device [\#109](https://github.com/nubisproject/nubis-deploy/pull/109) ([gozer](https://github.com/gozer))
 - Upgrade to Nubis v1.2.3 [\#107](https://github.com/nubisproject/nubis-deploy/pull/107) ([gozer](https://github.com/gozer))
 - Upgrade bugzilla-aws and nubis-lab to v1.2.2 [\#105](https://github.com/nubisproject/nubis-deploy/pull/105) ([gozer](https://github.com/gozer))
 
@@ -155,7 +165,9 @@
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v1.2.1 release [\#100](https://github.com/nubisproject/nubis-deploy/pull/100) ([tinnightcap](https://github.com/tinnightcap))
 - Update pinned release version for v1.2.1 release [\#99](https://github.com/nubisproject/nubis-deploy/pull/99) ([tinnightcap](https://github.com/tinnightcap))
+- Update DataDog permissions as per their docs [\#96](https://github.com/nubisproject/nubis-deploy/pull/96) ([gozer](https://github.com/gozer))
 
 ## [v1.2.0](https://github.com/nubisproject/nubis-deploy/tree/v1.2.0) (2016-07-11)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/bugzilla...v1.2.0)
@@ -196,7 +208,9 @@
 
 - Add config for nubis-market Upgrade to v1.2.0 \( and rotate datadog api key \) [\#94](https://github.com/nubisproject/nubis-deploy/pull/94) ([gozer](https://github.com/gozer))
 - Upgrade external TF module references to v1.2.0 [\#93](https://github.com/nubisproject/nubis-deploy/pull/93) ([gozer](https://github.com/gozer))
+- ipsec\_targets was renamed ipsec\_target [\#92](https://github.com/nubisproject/nubis-deploy/pull/92) ([gozer](https://github.com/gozer))
 - Update CHANGELOG for v1.2.0 release [\#88](https://github.com/nubisproject/nubis-deploy/pull/88) ([tinnightcap](https://github.com/tinnightcap))
+- We only need one IPSec target on the DC side [\#86](https://github.com/nubisproject/nubis-deploy/pull/86) ([gozer](https://github.com/gozer))
 - Fix default ipsec\_targets target [\#85](https://github.com/nubisproject/nubis-deploy/pull/85) ([gozer](https://github.com/gozer))
 - Use the first region for global resources instead of hard-coding an arbitrairy one [\#84](https://github.com/nubisproject/nubis-deploy/pull/84) ([gozer](https://github.com/gozer))
 - Provisions for HA NAT [\#70](https://github.com/nubisproject/nubis-deploy/pull/70) ([limed](https://github.com/limed))
@@ -227,7 +241,7 @@
 - terraform fmt [\#55](https://github.com/nubisproject/nubis-deploy/pull/55) ([gozer](https://github.com/gozer))
 - Add support for read-only guest accounts [\#53](https://github.com/nubisproject/nubis-deploy/pull/53) ([gozer](https://github.com/gozer))
 - Add admin roles as outputs [\#51](https://github.com/nubisproject/nubis-deploy/pull/51) ([gozer](https://github.com/gozer))
-- Move readonly role to the /nubis/ path, to avoid calshes with usernames [\#48](https://github.com/nubisproject/nubis-deploy/pull/48) ([gozer](https://github.com/gozer))
+- Add a readonly IAM role intended for Nubis Admins [\#47](https://github.com/nubisproject/nubis-deploy/pull/47) ([gozer](https://github.com/gozer))
 
 ## [v1.1.0](https://github.com/nubisproject/nubis-deploy/tree/v1.1.0) (2016-04-26)
 **Closed issues:**
@@ -262,7 +276,6 @@
 - Enable global cloudtrail as per opsec's request [\#35](https://github.com/nubisproject/nubis-deploy/pull/35) ([gozer](https://github.com/gozer))
 - Large PR with leftover bits. [\#33](https://github.com/nubisproject/nubis-deploy/pull/33) ([gozer](https://github.com/gozer))
 - Update CHANGELOG for v1.1.0 release [\#30](https://github.com/nubisproject/nubis-deploy/pull/30) ([tinnightcap](https://github.com/tinnightcap))
-- Issue/26/readme [\#28](https://github.com/nubisproject/nubis-deploy/pull/28) ([gozer](https://github.com/gozer))
 - EIPs are not needed for the NATs, and once released, we are done. [\#27](https://github.com/nubisproject/nubis-deploy/pull/27) ([gozer](https://github.com/gozer))
 - Issue/23/cloudhealth [\#24](https://github.com/nubisproject/nubis-deploy/pull/24) ([gozer](https://github.com/gozer))
 
