@@ -1,16 +1,6 @@
 # Change Log
 
-## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-03-30)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.0...v1.4.0)
-
-**Merged pull requests:**
-
-- Remoing account config and moving to other repo [\#221](https://github.com/nubisproject/nubis-deploy/pull/221) ([tinnightcap](https://github.com/tinnightcap))
-- Don't ignore lambda runtime changes anymore [\#219](https://github.com/nubisproject/nubis-deploy/pull/219) ([gozer](https://github.com/gozer))
-- Small cleanups leftover [\#215](https://github.com/nubisproject/nubis-deploy/pull/215) ([gozer](https://github.com/gozer))
-- Remove nubis-limed account from deployment repo [\#213](https://github.com/nubisproject/nubis-deploy/pull/213) ([limed](https://github.com/limed))
-
-## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-03-22)
+## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-04-03)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.3.0-iam1...v1.4.0)
 
 **Closed issues:**
@@ -18,12 +8,20 @@
 - switch remote module branch to develop [\#210](https://github.com/nubisproject/nubis-deploy/issues/210)
 - \[ci\] Incorrect handling of multi-regions accounts [\#208](https://github.com/nubisproject/nubis-deploy/issues/208)
 - Simplify Admin IAM policies for MFA control [\#201](https://github.com/nubisproject/nubis-deploy/issues/201)
+- Tag v1.4.0 release [\#222](https://github.com/nubisproject/nubis-deploy/issues/222)
 - Tag v1.4.0 release [\#189](https://github.com/nubisproject/nubis-deploy/issues/189)
 
 **Merged pull requests:**
 
+- fix MiG bootstrap [\#226](https://github.com/nubisproject/nubis-deploy/pull/226) ([gozer](https://github.com/gozer))
+- Merge v1.4.0 release into develop. \[skip ci\] [\#224](https://github.com/nubisproject/nubis-deploy/pull/224) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.4.0 release \[skip ci\] [\#223](https://github.com/nubisproject/nubis-deploy/pull/223) ([tinnightcap](https://github.com/tinnightcap))
+- Remoing account config and moving to other repo [\#221](https://github.com/nubisproject/nubis-deploy/pull/221) ([tinnightcap](https://github.com/tinnightcap))
+- Don't ignore lambda runtime changes anymore [\#219](https://github.com/nubisproject/nubis-deploy/pull/219) ([gozer](https://github.com/gozer))
 - Merge v1.4.0 release into develop. \[skip ci\] [\#217](https://github.com/nubisproject/nubis-deploy/pull/217) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v1.4.0 release \[skip ci\] [\#216](https://github.com/nubisproject/nubis-deploy/pull/216) ([tinnightcap](https://github.com/tinnightcap))
+- Small cleanups leftover [\#215](https://github.com/nubisproject/nubis-deploy/pull/215) ([gozer](https://github.com/gozer))
+- Remove nubis-limed account from deployment repo [\#213](https://github.com/nubisproject/nubis-deploy/pull/213) ([limed](https://github.com/limed))
 - Fix operation precedence for multi-region CI deployments [\#211](https://github.com/nubisproject/nubis-deploy/pull/211) ([gozer](https://github.com/gozer))
 - \[ci\] Handle multi-region deployments [\#209](https://github.com/nubisproject/nubis-deploy/pull/209) ([gozer](https://github.com/gozer))
 - awspec based test suite [\#207](https://github.com/nubisproject/nubis-deploy/pull/207) ([gozer](https://github.com/gozer))
@@ -132,7 +130,6 @@
 - upgrade lab to v1.3.0-dev [\#115](https://github.com/nubisproject/nubis-deploy/pull/115) ([gozer](https://github.com/gozer))
 - When nat=0, still create some IAM foo, as we have dependencies we can't avoid atm [\#113](https://github.com/nubisproject/nubis-deploy/pull/113) ([gozer](https://github.com/gozer))
 - \[complex\] Generate a discoverable and accessible fake TF output module with metadata [\#110](https://github.com/nubisproject/nubis-deploy/pull/110) ([gozer](https://github.com/gozer))
-- Require MFA device to deregister a MFA device [\#109](https://github.com/nubisproject/nubis-deploy/pull/109) ([gozer](https://github.com/gozer))
 - Upgrade to Nubis v1.2.3 [\#107](https://github.com/nubisproject/nubis-deploy/pull/107) ([gozer](https://github.com/gozer))
 - Upgrade bugzilla-aws and nubis-lab to v1.2.2 [\#105](https://github.com/nubisproject/nubis-deploy/pull/105) ([gozer](https://github.com/gozer))
 
@@ -158,9 +155,7 @@
 
 **Merged pull requests:**
 
-- Update CHANGELOG for v1.2.1 release [\#100](https://github.com/nubisproject/nubis-deploy/pull/100) ([tinnightcap](https://github.com/tinnightcap))
 - Update pinned release version for v1.2.1 release [\#99](https://github.com/nubisproject/nubis-deploy/pull/99) ([tinnightcap](https://github.com/tinnightcap))
-- Update DataDog permissions as per their docs [\#96](https://github.com/nubisproject/nubis-deploy/pull/96) ([gozer](https://github.com/gozer))
 
 ## [v1.2.0](https://github.com/nubisproject/nubis-deploy/tree/v1.2.0) (2016-07-11)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/bugzilla...v1.2.0)
@@ -201,9 +196,7 @@
 
 - Add config for nubis-market Upgrade to v1.2.0 \( and rotate datadog api key \) [\#94](https://github.com/nubisproject/nubis-deploy/pull/94) ([gozer](https://github.com/gozer))
 - Upgrade external TF module references to v1.2.0 [\#93](https://github.com/nubisproject/nubis-deploy/pull/93) ([gozer](https://github.com/gozer))
-- ipsec\_targets was renamed ipsec\_target [\#92](https://github.com/nubisproject/nubis-deploy/pull/92) ([gozer](https://github.com/gozer))
 - Update CHANGELOG for v1.2.0 release [\#88](https://github.com/nubisproject/nubis-deploy/pull/88) ([tinnightcap](https://github.com/tinnightcap))
-- We only need one IPSec target on the DC side [\#86](https://github.com/nubisproject/nubis-deploy/pull/86) ([gozer](https://github.com/gozer))
 - Fix default ipsec\_targets target [\#85](https://github.com/nubisproject/nubis-deploy/pull/85) ([gozer](https://github.com/gozer))
 - Use the first region for global resources instead of hard-coding an arbitrairy one [\#84](https://github.com/nubisproject/nubis-deploy/pull/84) ([gozer](https://github.com/gozer))
 - Provisions for HA NAT [\#70](https://github.com/nubisproject/nubis-deploy/pull/70) ([limed](https://github.com/limed))
@@ -235,7 +228,6 @@
 - Add support for read-only guest accounts [\#53](https://github.com/nubisproject/nubis-deploy/pull/53) ([gozer](https://github.com/gozer))
 - Add admin roles as outputs [\#51](https://github.com/nubisproject/nubis-deploy/pull/51) ([gozer](https://github.com/gozer))
 - Move readonly role to the /nubis/ path, to avoid calshes with usernames [\#48](https://github.com/nubisproject/nubis-deploy/pull/48) ([gozer](https://github.com/gozer))
-- Add a readonly IAM role intended for Nubis Admins [\#47](https://github.com/nubisproject/nubis-deploy/pull/47) ([gozer](https://github.com/gozer))
 
 ## [v1.1.0](https://github.com/nubisproject/nubis-deploy/tree/v1.1.0) (2016-04-26)
 **Closed issues:**
