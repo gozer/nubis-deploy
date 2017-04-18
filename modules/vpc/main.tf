@@ -200,7 +200,7 @@ resource "aws_lambda_function" "UUID" {
 
   function_name = "UUID"
   s3_bucket     = "nubis-stacks-${var.aws_region}"
-  s3_key        = "${var.nubis_version}/lambda/UUID.zip"
+  s3_key        = "${var.nubis_version}/lambda/nubis-lambda-uuid.zip"
   handler       = "index.handler"
   description   = "Generate UUIDs for use in Cloudformation stacks"
   memory_size   = 128
@@ -1524,7 +1524,7 @@ resource "aws_lambda_function" "user_management" {
 
   function_name = "user_management-${element(split(",",var.environments), count.index)}"
   s3_bucket     = "nubis-stacks-${var.aws_region}"
-  s3_key        = "${var.nubis_version}/lambda/UserManagement.zip"
+  s3_key        = "${var.nubis_version}/lambda/nubis-lambda-user-management.zip"
   role          = "${element(aws_iam_role.user_management.*.arn, count.index)}"
   handler       = "index.handler"
   description   = "Queries LDAP and inserts user into consul and create and delete IAM users"
