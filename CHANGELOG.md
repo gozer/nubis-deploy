@@ -1,16 +1,41 @@
 # Change Log
 
-## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-03-30)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.0...v1.4.0)
+## [v1.4.2](https://github.com/nubisproject/nubis-deploy/tree/v1.4.2) (2017-05-02)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.1...v1.4.2)
+
+**Closed issues:**
+
+- Move aws\_security\_group.nubis\_version to the global things [\#225](https://github.com/nubisproject/nubis-deploy/issues/225)
+- Don't ignore lambda runtime anymore [\#218](https://github.com/nubisproject/nubis-deploy/issues/218)
+- Move nubis-limed to accounts repo [\#214](https://github.com/nubisproject/nubis-deploy/issues/214)
+- \[iam\] The Administrators Group shouldn't have the Admin Access policy attached [\#144](https://github.com/nubisproject/nubis-deploy/issues/144)
+- Fix warnings [\#111](https://github.com/nubisproject/nubis-deploy/issues/111)
+- Standardize a depends\_on argument to modules for implicit/indirect dependencies [\#83](https://github.com/nubisproject/nubis-deploy/issues/83)
+- Ensure forward-compatiblilty with upcoming Terraform 0.7 [\#76](https://github.com/nubisproject/nubis-deploy/issues/76)
+- mig [\#8](https://github.com/nubisproject/nubis-deploy/issues/8)
+- Tag v1.4.2 release [\#236](https://github.com/nubisproject/nubis-deploy/issues/236)
 
 **Merged pull requests:**
 
-- Remoing account config and moving to other repo [\#221](https://github.com/nubisproject/nubis-deploy/pull/221) ([tinnightcap](https://github.com/tinnightcap))
-- Don't ignore lambda runtime changes anymore [\#219](https://github.com/nubisproject/nubis-deploy/pull/219) ([gozer](https://github.com/gozer))
-- Small cleanups leftover [\#215](https://github.com/nubisproject/nubis-deploy/pull/215) ([gozer](https://github.com/gozer))
-- Remove nubis-limed account from deployment repo [\#213](https://github.com/nubisproject/nubis-deploy/pull/213) ([limed](https://github.com/limed))
+- Update CHANGELOG for v1.4.2 release \[skip ci\] [\#237](https://github.com/nubisproject/nubis-deploy/pull/237) ([tinnightcap](https://github.com/tinnightcap))
+- Rename Lambda functions zips to their new names [\#233](https://github.com/nubisproject/nubis-deploy/pull/233) ([gozer](https://github.com/gozer))
 
-## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-03-22)
+## [v1.4.1](https://github.com/nubisproject/nubis-deploy/tree/v1.4.1) (2017-04-11)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.0...v1.4.1)
+
+**Closed issues:**
+
+- Tag v1.4.1 release [\#230](https://github.com/nubisproject/nubis-deploy/issues/230)
+- Tag v1.4.1 release [\#227](https://github.com/nubisproject/nubis-deploy/issues/227)
+
+**Merged pull requests:**
+
+- Merge v1.4.1 release into develop. \[skip ci\] [\#232](https://github.com/nubisproject/nubis-deploy/pull/232) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.4.1 release \[skip ci\] [\#231](https://github.com/nubisproject/nubis-deploy/pull/231) ([tinnightcap](https://github.com/tinnightcap))
+- Merge v1.4.1 release into develop. \[skip ci\] [\#229](https://github.com/nubisproject/nubis-deploy/pull/229) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.4.1 release \[skip ci\] [\#228](https://github.com/nubisproject/nubis-deploy/pull/228) ([tinnightcap](https://github.com/tinnightcap))
+
+## [v1.4.0](https://github.com/nubisproject/nubis-deploy/tree/v1.4.0) (2017-04-03)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.3.0-iam1...v1.4.0)
 
 **Closed issues:**
@@ -18,12 +43,20 @@
 - switch remote module branch to develop [\#210](https://github.com/nubisproject/nubis-deploy/issues/210)
 - \[ci\] Incorrect handling of multi-regions accounts [\#208](https://github.com/nubisproject/nubis-deploy/issues/208)
 - Simplify Admin IAM policies for MFA control [\#201](https://github.com/nubisproject/nubis-deploy/issues/201)
+- Tag v1.4.0 release [\#222](https://github.com/nubisproject/nubis-deploy/issues/222)
 - Tag v1.4.0 release [\#189](https://github.com/nubisproject/nubis-deploy/issues/189)
 
 **Merged pull requests:**
 
+- fix MiG bootstrap [\#226](https://github.com/nubisproject/nubis-deploy/pull/226) ([gozer](https://github.com/gozer))
+- Merge v1.4.0 release into develop. \[skip ci\] [\#224](https://github.com/nubisproject/nubis-deploy/pull/224) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.4.0 release \[skip ci\] [\#223](https://github.com/nubisproject/nubis-deploy/pull/223) ([tinnightcap](https://github.com/tinnightcap))
+- Remoing account config and moving to other repo [\#221](https://github.com/nubisproject/nubis-deploy/pull/221) ([tinnightcap](https://github.com/tinnightcap))
+- Don't ignore lambda runtime changes anymore [\#219](https://github.com/nubisproject/nubis-deploy/pull/219) ([gozer](https://github.com/gozer))
 - Merge v1.4.0 release into develop. \[skip ci\] [\#217](https://github.com/nubisproject/nubis-deploy/pull/217) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v1.4.0 release \[skip ci\] [\#216](https://github.com/nubisproject/nubis-deploy/pull/216) ([tinnightcap](https://github.com/tinnightcap))
+- Small cleanups leftover [\#215](https://github.com/nubisproject/nubis-deploy/pull/215) ([gozer](https://github.com/gozer))
+- Remove nubis-limed account from deployment repo [\#213](https://github.com/nubisproject/nubis-deploy/pull/213) ([limed](https://github.com/limed))
 - Fix operation precedence for multi-region CI deployments [\#211](https://github.com/nubisproject/nubis-deploy/pull/211) ([gozer](https://github.com/gozer))
 - \[ci\] Handle multi-region deployments [\#209](https://github.com/nubisproject/nubis-deploy/pull/209) ([gozer](https://github.com/gozer))
 - awspec based test suite [\#207](https://github.com/nubisproject/nubis-deploy/pull/207) ([gozer](https://github.com/gozer))
