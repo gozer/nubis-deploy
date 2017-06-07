@@ -282,8 +282,6 @@ Outputs:
   admins_access_keys = AKIAJ7XOZKEGA4KWMZRA,AKIAIZPEAYBJERLHM2GA,AKIAJQGMPHEAJGHKVSLA
   admins_secret_keys = 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,ucPG4BgympBFvrDnUrKV8WIktmcfmxCRKo4wbmCv,s3DU3CpboNhwY4bi//Oionf7Kthc4paVJLTqJq0N
   admins_users       = alice,bob,chris
-  datadog_access_key = AKIAIRTOUEJJF6GKJKOA
-  datadog_secret_key = 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
   nameservers        = ns-1349.awsdns-40.org,ns-2000.awsdns-58.co.uk,ns-408.awsdns-51.com,ns-828.awsdns-39.net
 ```
 
