@@ -66,6 +66,7 @@ variable features {
     user_management_iam    = 0
     user_management_consul = 1
     monitoring             = 0
+    sso                    = 1
   }
 }
 
@@ -108,8 +109,6 @@ variable ci {
   default = {
     project                    = "skel"
     git_repo                   = "https://github.com/nubisproject/nubis-skel.git"
-    github_oauth_client_secret = "AAA"
-    github_oauth_client_id     = "BBB"
     admins                     = "gozer"
     slack_domain               = "nubisproject"
     slack_channel              = "#changes"
@@ -160,6 +159,13 @@ variable user_management {
 }
 
 variable jumphost {
+  default = {
+    sudo_groups = "nubis_global_admins"
+    user_groups = ""
+  }
+}
+
+variable sso {
   default = {
     sudo_groups = "nubis_global_admins"
     user_groups = ""
