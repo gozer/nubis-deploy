@@ -356,6 +356,33 @@ resource "aws_security_group" "ssh" {
   }
 }
 
+resource "aws_security_group" "sso" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
+
+  name_prefix = "SSOSecurityGroup-${element(split(",",var.environments), count.index)}-"
+  description = "SSO Security Group"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name             = "SSOSecurityGroup"
+    ServiceName      = "${var.account_name}"
+    TechnicalContact = "${var.technical_contact}"
+    Environment      = "${element(split(",",var.environments), count.index)}"
+  }
+}
+
 resource "aws_security_group" "internet_access" {
   count = "${var.enabled * length(split(",", var.environments))}"
 
@@ -940,6 +967,7 @@ module "fluent-collector" {
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
   monitoring_security_groups      = "${join(",",aws_security_group.monitoring.*.id)}"
+  sso_security_groups             = "${join(",",aws_security_group.sso.*.id)}"
 
   nubis_domain = "${var.nubis_domain}"
 
@@ -985,6 +1013,7 @@ module "monitoring" {
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
   monitoring_security_groups      = "${join(",",aws_security_group.monitoring.*.id)}"
+  sso_security_groups             = "${join(",",aws_security_group.sso.*.id)}"
 
   credstash_key            = "${module.meta.CredstashKeyID}"
   credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
@@ -1002,6 +1031,49 @@ module "monitoring" {
   nubis_user_groups     = "${var.monitoring_user_groups}"
 
   password              = "${var.monitoring_password}"
+}
+
+resource "aws_iam_role_policy_attachment" "sso" {
+    count = "${var.enabled * var.enable_sso * length(split(",", var.environments))}"
+    role = "${element(split(",",module.sso.iam_roles), count.index)}"
+    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+}
+
+module "sso" {
+  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=develop"
+
+  enabled = "${var.enabled * var.enable_sso}"
+
+  environments = "${var.environments}"
+  aws_profile  = "${var.aws_profile}"
+  aws_region   = "${var.aws_region}"
+
+  key_name          = "${var.ssh_key_name}"
+  nubis_version     = "${var.nubis_version}"
+  technical_contact = "${var.technical_contact}"
+
+  vpc_ids    = "${join(",", aws_vpc.nubis.*.id)}"
+  subnet_ids = "${join(",", aws_subnet.private.*.id)}"
+  public_subnet_ids = "${join(",", aws_subnet.public.*.id)}"
+
+  internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
+  shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
+  ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
+  monitoring_security_groups      = "${join(",",aws_security_group.monitoring.*.id)}"
+  sso_security_groups             = "${join(",",aws_security_group.sso.*.id)}"
+
+  openid_client_id                = "${var.sso_openid_client_id}"
+  openid_client_secret            = "${var.sso_openid_client_secret}"
+
+  credstash_key            = "${module.meta.CredstashKeyID}"
+  credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
+
+  nubis_domain = "${var.nubis_domain}"
+  service_name = "${var.account_name}"
+  zone_id      = "${module.meta.HostedZoneId}"
+
+  nubis_sudo_groups     = "${var.sso_sudo_groups}"
+  nubis_user_groups     = "${var.sso_user_groups}"
 }
 
 resource "aws_iam_role_policy_attachment" "consul" {
@@ -1034,6 +1106,7 @@ module "consul" {
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   ssh_security_groups             = "${join(",",aws_security_group.ssh.*.id)}"
+  sso_security_groups             = "${join(",",aws_security_group.sso.*.id)}"
 
   consul_secret            = "${var.consul_secret}"
   consul_master_acl_token  = "${var.consul_master_acl_token}"
@@ -1101,6 +1174,7 @@ module "ci" {
   shared_services_security_group_id = "${element(concat(aws_security_group.shared_services.*.id, list("")), 0)}"
   ssh_security_group_id             = "${element(concat(aws_security_group.ssh.*.id, list("")), 0)}"
   monitoring_security_group_id      = "${element(concat(aws_security_group.monitoring.*.id, list("")), 0)}"
+  sso_security_group_id             = "${element(concat(aws_security_group.sso.*.id, list("")), 0)}"
 
   domain = "${var.nubis_domain}"
 
@@ -1108,8 +1182,6 @@ module "ci" {
 
   project                    = "${var.ci_project}"
   git_repo                   = "${var.ci_git_repo}"
-  github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
-  github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
   slack_domain               = "${var.ci_slack_domain}"
   slack_channel              = "${var.ci_slack_channel}"
   slack_token                = "${var.ci_slack_token}"
@@ -1427,6 +1499,7 @@ resource "aws_s3_bucket_object" "public_state" {
               "shared_services_security_group": ${jsonencode(element(aws_security_group.shared_services.*.id,count.index))},
               "internet_access_security_group": ${jsonencode(element(aws_security_group.internet_access.*.id,count.index))},
               "ssh_security_group": ${jsonencode(element(aws_security_group.ssh.*.id,count.index))},
+              "sso_security_group": ${jsonencode(element(aws_security_group.sso.*.id,count.index))},
               "instance_security_groups": "${element(aws_security_group.shared_services.*.id,count.index)},${element(aws_security_group.internet_access.*.id,count.index)},${element(aws_security_group.ssh.*.id,count.index)}",
               "private_subnets": "${element(aws_subnet.private.*.id, (3*count.index) + 0)},${element(aws_subnet.private.*.id, (3*count.index) + 1)},${element(aws_subnet.private.*.id, (3*count.index) + 2)}",
               "public_subnets": "${element(aws_subnet.public.*.id, (3*count.index) + 0)},${element(aws_subnet.public.*.id, (3*count.index) + 1)},${element(aws_subnet.public.*.id, (3*count.index) + 2)}",
