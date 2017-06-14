@@ -94,10 +94,6 @@ variable ci_project {}
 
 variable ci_git_repo {}
 
-variable ci_github_oauth_client_secret {}
-
-variable ci_github_oauth_client_id {}
-
 variable ci_admins {}
 
 variable ci_slack_domain {}

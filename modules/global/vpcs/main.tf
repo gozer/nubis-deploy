@@ -60,8 +60,6 @@ module "us-east-1" {
 
   ci_project                    = "${var.ci_project}"
   ci_git_repo                   = "${var.ci_git_repo}"
-  ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
-  ci_github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
   ci_admins                     = "${var.ci_admins}"
   ci_slack_domain               = "${var.ci_slack_domain}"
   ci_slack_channel              = "${var.ci_slack_channel}"
@@ -178,8 +176,6 @@ module "us-west-2" {
 
   ci_project                    = "${var.ci_project}"
   ci_git_repo                   = "${var.ci_git_repo}"
-  ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
-  ci_github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
   ci_admins                     = "${var.ci_admins}"
   ci_slack_domain               = "${var.ci_slack_domain}"
   ci_slack_channel              = "${var.ci_slack_channel}"
