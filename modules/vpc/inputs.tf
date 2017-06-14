@@ -68,6 +68,8 @@ variable enable_user_management_iam {}
 
 variable enable_user_management_consul {}
 
+variable enable_sso {}
+
 variable user_management_rate {
   default = "rate(15 minutes)"
 }
@@ -160,6 +162,11 @@ variable fluentd_user_groups {}
 
 variable jumphost_sudo_groups {}
 variable jumphost_user_groups {}
+
+variable sso_sudo_groups {}
+variable sso_user_groups {}
+variable sso_openid_client_id {}
+variable sso_openid_client_secret {}
 
 variable nat_sudo_groups {}
 variable nat_user_groups {}

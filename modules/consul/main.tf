@@ -22,6 +22,7 @@ module "consul" {
 
   shared_services_security_groups = "${var.shared_services_security_groups}"
   internet_access_security_groups = "${var.internet_access_security_groups}"
+  sso_security_groups             = "${var.sso_security_groups}"
 
   private_subnets = "${var.private_subnet_ids}"
   public_subnets  = "${var.public_subnet_ids}"

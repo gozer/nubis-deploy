@@ -57,6 +57,7 @@ module "vpcs" {
   enable_nat                    = "${lookup(var.features,"nat")}"
   enable_user_management_iam    = "${lookup(var.features, "user_management_iam")}"
   enable_user_management_consul = "${lookup(var.features,"user_management_consul")}"
+  enable_sso                    = "${lookup(var.features,"sso")}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -123,6 +124,12 @@ module "vpcs" {
   # jumphost groups
   jumphost_sudo_groups    = "${lookup(var.jumphost, "sudo_groups")}"
   jumphost_user_groups    = "${lookup(var.jumphost, "user_groups")}"
+
+  # sso
+  sso_openid_client_id     = "${lookup(var.sso, "openid_client_id")}"
+  sso_openid_client_secret = "${lookup(var.sso, "openid_client_secret")}"
+  sso_sudo_groups    = "${lookup(var.sso, "sudo_groups")}"
+  sso_user_groups    = "${lookup(var.sso, "user_groups")}"
 
   # user management
   user_management_smtp_from_address  = "${lookup(var.user_management, "smtp_from_address")}"

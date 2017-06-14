@@ -32,6 +32,10 @@ variable internet_access_security_groups {}
 
 variable shared_services_security_groups {}
 
+variable sso_security_groups {
+  default = ""
+}
+
 variable environments {}
 
 variable enabled {}

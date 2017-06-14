@@ -66,6 +66,7 @@ variable features {
     user_management_iam    = 0
     user_management_consul = 1
     monitoring             = 0
+    sso                    = 1
   }
 }
 
@@ -158,6 +159,13 @@ variable user_management {
 }
 
 variable jumphost {
+  default = {
+    sudo_groups = "nubis_global_admins"
+    user_groups = ""
+  }
+}
+
+variable sso {
   default = {
     sudo_groups = "nubis_global_admins"
     user_groups = ""
