@@ -149,4 +149,7 @@ module "vpcs" {
 
   # MiG
   mig                                = "${var.mig}"
+
+  # Instance MFA (DUO)
+  instance_mfa = "${var.instance_mfa}"
 }
