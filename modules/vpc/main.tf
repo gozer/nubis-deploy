@@ -1094,7 +1094,7 @@ module "consul" {
   aws_account_id = "${var.aws_account_id}"
 
   my_ip           = "${var.my_ip},${element(concat(aws_eip.nat.*.public_ip, list("")),0)}/32,${element(concat(aws_eip.nat.*.public_ip, list("")),1)}/32"
- 
+
   lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
 
   key_name           = "${var.ssh_key_name}"
@@ -1122,6 +1122,9 @@ module "consul" {
   nubis_user_groups = "${var.consul_user_groups}"
 
   mig = "${var.mig}"
+
+  # Instance MFA (DUO)
+  instance_mfa = "${var.instance_mfa}"
 }
 
 module "ci-uuid" {

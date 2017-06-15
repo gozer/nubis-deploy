@@ -53,3 +53,7 @@ variable nubis_user_groups {}
 variable mig {
   type = "map"
 }
+
+variable instance_mfa {
+  type = "map"
+}

@@ -182,3 +182,12 @@ variable fluentd {
     user_groups     = ""
   }
 }
+
+variable instance_mfa {
+  default = {
+    ikey     = ""
+    skey     = ""
+    host     = ""
+    failmode = "secure"
+  }
+}

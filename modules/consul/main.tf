@@ -35,4 +35,7 @@ module "consul" {
   nubis_user_groups = "${var.nubis_user_groups}"
 
   mig = "${var.mig}"
+
+  # Instance MFA (DUO)
+  instance_mfa = "${var.instance_mfa}"
 }
