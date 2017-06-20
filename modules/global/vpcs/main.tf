@@ -130,6 +130,9 @@ module "us-east-1" {
 
   # MiG
   mig = "${var.mig}"
+
+  # Instance MFA (DUO)
+  instance_mfa = "${var.instance_mfa}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -253,4 +256,7 @@ module "us-west-2" {
 
   # MiG
   mig = "${var.mig}"
+
+  # Instance MFA (DUO)
+  instance_mfa = "${var.instance_mfa}"
 }
