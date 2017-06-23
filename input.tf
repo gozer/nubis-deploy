@@ -167,6 +167,8 @@ variable jumphost {
 
 variable sso {
   default = {
+    openid_client_id     = ""
+    openid_client_secret = ""
     sudo_groups = "nubis_global_admins"
     user_groups = ""
   }
