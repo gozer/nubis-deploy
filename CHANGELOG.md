@@ -1,6 +1,21 @@
 # Change Log
 
-## [v1.4.2](https://github.com/nubisproject/nubis-deploy/tree/v1.4.2) (2017-05-02)
+## [v1.5.0](https://github.com/nubisproject/nubis-deploy/tree/v1.5.0) (2017-06-24)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.2...v1.5.0)
+
+**Closed issues:**
+
+- sso option [\#248](https://github.com/nubisproject/nubis-deploy/issues/248)
+- Cleanup GitHub OAuth tokens [\#245](https://github.com/nubisproject/nubis-deploy/issues/245)
+
+**Merged pull requests:**
+
+- SSO options [\#249](https://github.com/nubisproject/nubis-deploy/pull/249) ([limed](https://github.com/limed))
+- Add instance mfa \(DUO\) account variables [\#247](https://github.com/nubisproject/nubis-deploy/pull/247) ([tinnightcap](https://github.com/tinnightcap))
+- We don't need GitHub OAuth anymore [\#246](https://github.com/nubisproject/nubis-deploy/pull/246) ([gozer](https://github.com/gozer))
+- SSO Deployment support [\#243](https://github.com/nubisproject/nubis-deploy/pull/243) ([gozer](https://github.com/gozer))
+
+## [v1.4.2](https://github.com/nubisproject/nubis-deploy/tree/v1.4.2) (2017-05-03)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.1...v1.4.2)
 
 **Closed issues:**
@@ -13,10 +28,13 @@
 - Standardize a depends\_on argument to modules for implicit/indirect dependencies [\#83](https://github.com/nubisproject/nubis-deploy/issues/83)
 - Ensure forward-compatiblilty with upcoming Terraform 0.7 [\#76](https://github.com/nubisproject/nubis-deploy/issues/76)
 - mig [\#8](https://github.com/nubisproject/nubis-deploy/issues/8)
+- Tag v1.4.2 release [\#239](https://github.com/nubisproject/nubis-deploy/issues/239)
 - Tag v1.4.2 release [\#236](https://github.com/nubisproject/nubis-deploy/issues/236)
 
 **Merged pull requests:**
 
+- Merge v1.4.2 release into develop. \[skip ci\] [\#242](https://github.com/nubisproject/nubis-deploy/pull/242) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.4.2 release \[skip ci\] [\#241](https://github.com/nubisproject/nubis-deploy/pull/241) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v1.4.2 release \[skip ci\] [\#237](https://github.com/nubisproject/nubis-deploy/pull/237) ([tinnightcap](https://github.com/tinnightcap))
 - Rename Lambda functions zips to their new names [\#233](https://github.com/nubisproject/nubis-deploy/pull/233) ([gozer](https://github.com/gozer))
 
