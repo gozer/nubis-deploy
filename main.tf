@@ -57,6 +57,7 @@ module "vpcs" {
   enable_nat                    = "${lookup(var.features,"nat")}"
   enable_user_management_iam    = "${lookup(var.features, "user_management_iam")}"
   enable_user_management_consul = "${lookup(var.features,"user_management_consul")}"
+  enable_sso                    = "${lookup(var.features,"sso")}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -91,8 +92,6 @@ module "vpcs" {
 
   ci_project                    = "${lookup(var.ci, "project")}"
   ci_git_repo                   = "${lookup(var.ci, "git_repo")}"
-  ci_github_oauth_client_secret = "${lookup(var.ci, "github_oauth_client_secret")}"
-  ci_github_oauth_client_id     = "${lookup(var.ci, "github_oauth_client_id")}"
   ci_admins                     = "${lookup(var.ci, "admins")}"
   ci_slack_domain               = "${lookup(var.ci, "slack_domain")}"
   ci_slack_channel              = "${lookup(var.ci, "slack_channel")}"
@@ -126,6 +125,12 @@ module "vpcs" {
   jumphost_sudo_groups    = "${lookup(var.jumphost, "sudo_groups")}"
   jumphost_user_groups    = "${lookup(var.jumphost, "user_groups")}"
 
+  # sso
+  sso_openid_client_id     = "${lookup(var.sso, "openid_client_id")}"
+  sso_openid_client_secret = "${lookup(var.sso, "openid_client_secret")}"
+  sso_sudo_groups    = "${lookup(var.sso, "sudo_groups")}"
+  sso_user_groups    = "${lookup(var.sso, "user_groups")}"
+
   # user management
   user_management_smtp_from_address  = "${lookup(var.user_management, "smtp_from_address")}"
   user_management_smtp_username      = "${lookup(var.user_management, "smtp_username")}"
@@ -144,4 +149,7 @@ module "vpcs" {
 
   # MiG
   mig                                = "${var.mig}"
+
+  # Instance MFA (DUO)
+  instance_mfa = "${var.instance_mfa}"
 }

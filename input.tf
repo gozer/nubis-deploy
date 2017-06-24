@@ -66,6 +66,7 @@ variable features {
     user_management_iam    = 0
     user_management_consul = 1
     monitoring             = 0
+    sso                    = 1
   }
 }
 
@@ -108,8 +109,6 @@ variable ci {
   default = {
     project                    = "skel"
     git_repo                   = "https://github.com/nubisproject/nubis-skel.git"
-    github_oauth_client_secret = "AAA"
-    github_oauth_client_id     = "BBB"
     admins                     = "gozer"
     slack_domain               = "nubisproject"
     slack_channel              = "#changes"
@@ -166,6 +165,15 @@ variable jumphost {
   }
 }
 
+variable sso {
+  default = {
+    openid_client_id     = ""
+    openid_client_secret = ""
+    sudo_groups = "nubis_global_admins"
+    user_groups = ""
+  }
+}
+
 variable fluentd {
   default = {
     sqs_queues      = ""
@@ -174,5 +182,14 @@ variable fluentd {
     sqs_regions     = ""
     sudo_groups     = "nubis_global_admins"
     user_groups     = ""
+  }
+}
+
+variable instance_mfa {
+  default = {
+    ikey     = ""
+    skey     = ""
+    host     = ""
+    failmode = "secure"
   }
 }

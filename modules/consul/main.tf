@@ -1,5 +1,5 @@
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform/multi?ref=v1.4.2"
+  source = "github.com/nubisproject/nubis-consul//nubis/terraform/multi?ref=v1.5.0"
 
   enabled = "${var.enabled}"
 
@@ -22,6 +22,7 @@ module "consul" {
 
   shared_services_security_groups = "${var.shared_services_security_groups}"
   internet_access_security_groups = "${var.internet_access_security_groups}"
+  sso_security_groups             = "${var.sso_security_groups}"
 
   private_subnets = "${var.private_subnet_ids}"
   public_subnets  = "${var.public_subnet_ids}"
@@ -34,4 +35,7 @@ module "consul" {
   nubis_user_groups = "${var.nubis_user_groups}"
 
   mig = "${var.mig}"
+
+  # Instance MFA (DUO)
+  instance_mfa = "${var.instance_mfa}"
 }

@@ -32,6 +32,10 @@ variable internet_access_security_groups {}
 
 variable shared_services_security_groups {}
 
+variable sso_security_groups {
+  default = ""
+}
+
 variable environments {}
 
 variable enabled {}
@@ -47,5 +51,9 @@ variable nubis_sudo_groups {}
 variable nubis_user_groups {}
 
 variable mig {
+  type = "map"
+}
+
+variable instance_mfa {
   type = "map"
 }

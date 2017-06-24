@@ -26,6 +26,7 @@ module "us-east-1" {
   enable_nat                    = "${var.enable_nat}"
   enable_user_management_consul = "${var.enable_user_management_consul}"
   enable_user_management_iam    = "${var.enable_user_management_iam}"
+  enable_sso                    = "${var.enable_sso}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -60,8 +61,6 @@ module "us-east-1" {
 
   ci_project                    = "${var.ci_project}"
   ci_git_repo                   = "${var.ci_git_repo}"
-  ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
-  ci_github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
   ci_admins                     = "${var.ci_admins}"
   ci_slack_domain               = "${var.ci_slack_domain}"
   ci_slack_channel              = "${var.ci_slack_channel}"
@@ -95,6 +94,24 @@ module "us-east-1" {
   jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"
   jumphost_user_groups    = "${var.jumphost_user_groups}"
 
+  # SSO
+  sso_sudo_groups          = "${var.sso_sudo_groups}"
+  sso_user_groups          = "${var.sso_user_groups}"
+  sso_openid_client_id     = "${var.sso_openid_client_id}"
+  sso_openid_client_secret = "${var.sso_openid_client_secret}"
+
+  # user management
+  user_management_smtp_from_address  = "${var.user_management_smtp_from_address}"
+  user_management_smtp_username      = "${var.user_management_smtp_username}"
+  user_management_smtp_password      = "${var.user_management_smtp_password}"
+  user_management_smtp_host          = "${var.user_management_smtp_host}"
+  user_management_smtp_port          = "${var.user_management_smtp_port}"
+  user_management_ldap_server        = "${var.user_management_ldap_server}"
+  user_management_ldap_port          = "${var.user_management_ldap_port}"
+  user_management_ldap_base_dn       = "${var.user_management_ldap_base_dn}"
+  user_management_ldap_bind_user     = "${var.user_management_ldap_bind_user}"
+  user_management_ldap_bind_password = "${var.user_management_ldap_bind_password}"
+
   # user management
   user_management_smtp_from_address  = "${var.user_management_smtp_from_address}"
   user_management_smtp_username      = "${var.user_management_smtp_username}"
@@ -113,6 +130,9 @@ module "us-east-1" {
 
   # MiG
   mig = "${var.mig}"
+
+  # Instance MFA (DUO)
+  instance_mfa = "${var.instance_mfa}"
 }
 
 # XXX: Yes, cut-n-paste, can't be helped at the moment
@@ -144,6 +164,7 @@ module "us-west-2" {
   enable_nat                    = "${var.enable_nat}"
   enable_user_management_consul = "${var.enable_user_management_consul}"
   enable_user_management_iam    = "${var.enable_user_management_iam}"
+  enable_sso                    = "${var.enable_sso}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -178,8 +199,6 @@ module "us-west-2" {
 
   ci_project                    = "${var.ci_project}"
   ci_git_repo                   = "${var.ci_git_repo}"
-  ci_github_oauth_client_secret = "${var.ci_github_oauth_client_secret}"
-  ci_github_oauth_client_id     = "${var.ci_github_oauth_client_id}"
   ci_admins                     = "${var.ci_admins}"
   ci_slack_domain               = "${var.ci_slack_domain}"
   ci_slack_channel              = "${var.ci_slack_channel}"
@@ -213,6 +232,12 @@ module "us-west-2" {
   jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"
   jumphost_user_groups    = "${var.jumphost_user_groups}"
 
+  # SSO
+  sso_sudo_groups    = "${var.sso_sudo_groups}"
+  sso_user_groups    = "${var.sso_user_groups}"
+  sso_openid_client_id     = "${var.sso_openid_client_id}"
+  sso_openid_client_secret = "${var.sso_openid_client_secret}"
+
   # user management
   user_management_smtp_from_address  = "${var.user_management_smtp_from_address}"
   user_management_smtp_username      = "${var.user_management_smtp_username}"
@@ -231,4 +256,7 @@ module "us-west-2" {
 
   # MiG
   mig = "${var.mig}"
+
+  # Instance MFA (DUO)
+  instance_mfa = "${var.instance_mfa}"
 }
