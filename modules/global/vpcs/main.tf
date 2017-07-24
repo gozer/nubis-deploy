@@ -83,12 +83,7 @@ module "us-east-1" {
   monitoring_password              = "${var.monitoring_password}"
 
   # fluentd
-  fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"
-  fluentd_sqs_access_keys = "${var.fluentd_sqs_access_keys}"
-  fluentd_sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
-  fluentd_sqs_regions     = "${var.fluentd_sqs_regions}"
-  fluentd_sudo_groups     = "${var.fluentd_sudo_groups}"
-  fluentd_user_groups     = "${var.fluentd_user_groups}"
+  fluentd                 = "${var.fluentd}"
 
   # jumphost user groups
   jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"
@@ -221,12 +216,7 @@ module "us-west-2" {
   monitoring_password              = "${var.monitoring_password}"
 
   # fluentd
-  fluentd_sqs_queues      = "${var.fluentd_sqs_queues}"
-  fluentd_sqs_access_keys = "${var.fluentd_sqs_access_keys}"
-  fluentd_sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
-  fluentd_sqs_regions     = "${var.fluentd_sqs_regions}"
-  fluentd_sudo_groups     = "${var.fluentd_sudo_groups}"
-  fluentd_user_groups     = "${var.fluentd_user_groups}"
+  fluentd                 = "${var.fluentd}"
 
   # Jumphost user groups
   jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"

@@ -975,13 +975,15 @@ module "fluent-collector" {
 
   credstash_key = "${module.meta.CredstashKeyID}"
 
-  sqs_queues      = "${var.fluentd_sqs_queues}"
-  sqs_access_keys = "${var.fluentd_sqs_access_keys}"
-  sqs_secret_keys = "${var.fluentd_sqs_secret_keys}"
-  sqs_regions     = "${var.fluentd_sqs_regions}"
+  sqs_queues      = "${lookup(var.fluentd, "sqs_queues")}"
+  sqs_access_keys = "${lookup(var.fluentd, "sqs_access_keys")}"
+  sqs_secret_keys = "${lookup(var.fluentd, "sqs_secret_keys")}"
+  sqs_regions     = "${lookup(var.fluentd, "sqs_regions")}"
 
-  nubis_sudo_groups = "${var.fluentd_sudo_groups}"
-  nubis_user_groups = "${var.fluentd_user_groups}"
+  nubis_sudo_groups = "${lookup(var.fluentd, "sudo_groups")}"
+  nubis_user_groups = "${lookup(var.fluentd, "user_groups")}"
+
+  instance_type     = "${lookup(var.fluentd, "instance_type", "")}"
 }
 
 resource "aws_iam_role_policy_attachment" "monitoring" {
