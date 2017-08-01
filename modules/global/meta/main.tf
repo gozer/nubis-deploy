@@ -77,6 +77,7 @@ resource "aws_route53_zone" "master_zone" {
   tags {
     ServiceName      = "${var.account_name}"
     TechnicalContact = "${var.technical_contact}"
+    NubisVersion     = "${var.nubis_version}"
   }
 }
 

@@ -1452,22 +1452,6 @@ resource "aws_eip" "nat" {
   }
 }
 
-# Only needed by cloudwatch
-resource "aws_security_group" "nubis_version" {
-  count = "${var.enabled}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  name_prefix = "NubisVersion-"
-  description = "Placeholder for current Nubis version (${var.nubis_version})"
-
-  tags = {
-    NubisVersion = "${var.nubis_version}"
-  }
-}
-
 provider "aws" {
   profile = "${var.aws_profile}"
   region  = "${var.aws_state_region}"
