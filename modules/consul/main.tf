@@ -1,5 +1,5 @@
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform/multi?ref=v1.5.0"
+  source = "github.com/nubisproject/nubis-consul//nubis/terraform/multi?ref=develop"
 
   enabled = "${var.enabled}"
 
