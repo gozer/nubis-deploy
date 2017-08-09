@@ -125,6 +125,7 @@ module "vpcs" {
   sso_openid_client_secret = "${lookup(var.sso, "openid_client_secret")}"
   sso_sudo_groups    = "${lookup(var.sso, "sudo_groups")}"
   sso_user_groups    = "${lookup(var.sso, "user_groups")}"
+  sso_version        = "${lookup(var.sso, "version")}"
 
   # user management
   user_management_smtp_from_address  = "${lookup(var.user_management, "smtp_from_address")}"
