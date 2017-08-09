@@ -277,6 +277,28 @@ resource "aws_vpc" "nubis" {
   }
 }
 
+resource "aws_default_security_group" "default" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  vpc_id         = "${element(aws_vpc.nubis.*.id, count.index)}"
+
+  # Clear default ingress rules
+  #ingress {
+  #  protocol  = -1
+  #  self      = true
+  #  from_port = 0
+  #  to_port   = 0
+  #}
+
+  # Clear default egress rules
+  #egress {
+  #  from_port   = 0
+  #  to_port     = 0
+  #  protocol    = "-1"
+  #  cidr_blocks = ["0.0.0.0/0"]
+  #}
+}
+
 resource "aws_main_route_table_association" "public" {
   count = "${var.enabled * length(split(",", var.environments))}"
 
