@@ -114,12 +114,7 @@ module "vpcs" {
   monitoring_password              = "${lookup(var.monitoring, "password")}"
 
   # fluentd
-  fluentd_sqs_queues      = "${lookup(var.fluentd, "sqs_queues")}"
-  fluentd_sqs_access_keys = "${lookup(var.fluentd, "sqs_access_keys")}"
-  fluentd_sqs_secret_keys = "${lookup(var.fluentd, "sqs_secret_keys")}"
-  fluentd_sqs_regions     = "${lookup(var.fluentd, "sqs_regions")}"
-  fluentd_sudo_groups     = "${lookup(var.fluentd, "sudo_groups")}"
-  fluentd_user_groups     = "${lookup(var.fluentd, "user_groups")}"
+  fluentd                 = "${var.fluentd}"
 
   # jumphost groups
   jumphost_sudo_groups    = "${lookup(var.jumphost, "sudo_groups")}"

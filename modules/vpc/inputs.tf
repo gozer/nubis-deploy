@@ -148,17 +148,9 @@ variable user_management_sudo_groups {}
 
 variable user_management_user_groups {}
 
-variable fluentd_sqs_queues {}
-
-variable fluentd_sqs_access_keys {}
-
-variable fluentd_sqs_secret_keys {}
-
-variable fluentd_sqs_regions {}
-
-variable fluentd_sudo_groups {}
-
-variable fluentd_user_groups {}
+variable fluentd {
+  type = "map"
+}
 
 variable jumphost_sudo_groups {}
 variable jumphost_user_groups {}
