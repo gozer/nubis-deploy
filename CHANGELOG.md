@@ -1,15 +1,37 @@
 # Change Log
 
-## [v1.5.0](https://github.com/nubisproject/nubis-deploy/tree/v1.5.0) (2017-06-24)
+## [v1.5.1](https://github.com/nubisproject/nubis-deploy/tree/v1.5.1) (2017-08-10)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.0...v1.5.1)
+
+**Closed issues:**
+
+- \[security\] Clear default security-group rules [\#262](https://github.com/nubisproject/nubis-deploy/issues/262)
+- \[route53\] Tag our zones with Version [\#258](https://github.com/nubisproject/nubis-deploy/issues/258)
+- \[fluentd\] Allow configuration of instance\_type [\#256](https://github.com/nubisproject/nubis-deploy/issues/256)
+
+**Merged pull requests:**
+
+- Clear default security group rules [\#263](https://github.com/nubisproject/nubis-deploy/pull/263) ([gozer](https://github.com/gozer))
+- Switch over to develop [\#260](https://github.com/nubisproject/nubis-deploy/pull/260) ([gozer](https://github.com/gozer))
+- Remove Dummy security group in favor of NubisVersion tagging our route53 zones [\#259](https://github.com/nubisproject/nubis-deploy/pull/259) ([gozer](https://github.com/gozer))
+- Allow configuration of fluentd instance size [\#257](https://github.com/nubisproject/nubis-deploy/pull/257) ([gozer](https://github.com/gozer))
+
+## [v1.5.0](https://github.com/nubisproject/nubis-deploy/tree/v1.5.0) (2017-06-27)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.4.2...v1.5.0)
 
 **Closed issues:**
 
 - sso option [\#248](https://github.com/nubisproject/nubis-deploy/issues/248)
 - Cleanup GitHub OAuth tokens [\#245](https://github.com/nubisproject/nubis-deploy/issues/245)
+- Tag v1.5.0 release [\#253](https://github.com/nubisproject/nubis-deploy/issues/253)
+- Tag v1.5.0 release [\#250](https://github.com/nubisproject/nubis-deploy/issues/250)
 
 **Merged pull requests:**
 
+- Merge v1.5.0 release into develop. \[skip ci\] [\#255](https://github.com/nubisproject/nubis-deploy/pull/255) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.5.0 release \[skip ci\] [\#254](https://github.com/nubisproject/nubis-deploy/pull/254) ([tinnightcap](https://github.com/tinnightcap))
+- Merge v1.5.0 release into develop. \[skip ci\] [\#252](https://github.com/nubisproject/nubis-deploy/pull/252) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.5.0 release \[skip ci\] [\#251](https://github.com/nubisproject/nubis-deploy/pull/251) ([tinnightcap](https://github.com/tinnightcap))
 - SSO options [\#249](https://github.com/nubisproject/nubis-deploy/pull/249) ([limed](https://github.com/limed))
 - Add instance mfa \(DUO\) account variables [\#247](https://github.com/nubisproject/nubis-deploy/pull/247) ([tinnightcap](https://github.com/tinnightcap))
 - We don't need GitHub OAuth anymore [\#246](https://github.com/nubisproject/nubis-deploy/pull/246) ([gozer](https://github.com/gozer))
