@@ -94,6 +94,7 @@ module "us-east-1" {
   sso_user_groups          = "${var.sso_user_groups}"
   sso_openid_client_id     = "${var.sso_openid_client_id}"
   sso_openid_client_secret = "${var.sso_openid_client_secret}"
+  sso_version              = "${var.sso_version}"
 
   # user management
   user_management_smtp_from_address  = "${var.user_management_smtp_from_address}"
@@ -227,6 +228,7 @@ module "us-west-2" {
   sso_user_groups    = "${var.sso_user_groups}"
   sso_openid_client_id     = "${var.sso_openid_client_id}"
   sso_openid_client_secret = "${var.sso_openid_client_secret}"
+  sso_version              = "${var.sso_version}"
 
   # user management
   user_management_smtp_from_address  = "${var.user_management_smtp_from_address}"

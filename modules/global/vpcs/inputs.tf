@@ -136,6 +136,7 @@ variable sso_sudo_groups {}
 variable sso_user_groups {}
 variable sso_openid_client_id {}
 variable sso_openid_client_secret {}
+variable sso_version {}
 
 variable nat_sudo_groups {}
 variable nat_user_groups {}
