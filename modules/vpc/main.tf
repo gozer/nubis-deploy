@@ -277,6 +277,28 @@ resource "aws_vpc" "nubis" {
   }
 }
 
+resource "aws_default_security_group" "default" {
+  count = "${var.enabled * length(split(",", var.environments))}"
+
+  vpc_id         = "${element(aws_vpc.nubis.*.id, count.index)}"
+
+  # Clear default ingress rules
+  #ingress {
+  #  protocol  = -1
+  #  self      = true
+  #  from_port = 0
+  #  to_port   = 0
+  #}
+
+  # Clear default egress rules
+  #egress {
+  #  from_port   = 0
+  #  to_port     = 0
+  #  protocol    = "-1"
+  #  cidr_blocks = ["0.0.0.0/0"]
+  #}
+}
+
 resource "aws_main_route_table_association" "public" {
   count = "${var.enabled * length(split(",", var.environments))}"
 
@@ -906,7 +928,7 @@ resource "aws_iam_instance_profile" "nat" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=develop"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v1.5.1"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -942,7 +964,7 @@ resource "aws_iam_role_policy_attachment" "fluent" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=develop"
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=v1.5.1"
 
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
@@ -993,7 +1015,7 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=develop"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v1.5.1"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
@@ -1152,7 +1174,7 @@ resource "aws_iam_role_policy_attachment" "ci" {
 }
 
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=develop"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v1.5.1"
 
   enabled = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
 
@@ -1449,22 +1471,6 @@ resource "aws_eip" "nat" {
 
   lifecycle {
     create_before_destroy = true
-  }
-}
-
-# Only needed by cloudwatch
-resource "aws_security_group" "nubis_version" {
-  count = "${var.enabled}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  name_prefix = "NubisVersion-"
-  description = "Placeholder for current Nubis version (${var.nubis_version})"
-
-  tags = {
-    NubisVersion = "${var.nubis_version}"
   }
 }
 
