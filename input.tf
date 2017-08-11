@@ -171,6 +171,7 @@ variable sso {
     openid_client_secret = ""
     sudo_groups = "nubis_global_admins"
     user_groups = ""
+    version     = ""
   }
 }
 

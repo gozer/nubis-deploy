@@ -1,14 +1,6 @@
 # Change Log
 
 ## [v1.5.1](https://github.com/nubisproject/nubis-deploy/tree/v1.5.1) (2017-08-11)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.1...v1.5.1)
-
-**Merged pull requests:**
-
-- Update CHANGELOG for v1.5.1 release \[skip ci\] [\#269](https://github.com/nubisproject/nubis-deploy/pull/269) ([tinnightcap](https://github.com/tinnightcap))
-- Enable sso module versioning [\#264](https://github.com/nubisproject/nubis-deploy/pull/264) ([limed](https://github.com/limed))
-
-## [v1.5.1](https://github.com/nubisproject/nubis-deploy/tree/v1.5.1) (2017-08-10)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.0...v1.5.1)
 
 **Closed issues:**
@@ -16,12 +8,17 @@
 - \[security\] Clear default security-group rules [\#262](https://github.com/nubisproject/nubis-deploy/issues/262)
 - \[route53\] Tag our zones with Version [\#258](https://github.com/nubisproject/nubis-deploy/issues/258)
 - \[fluentd\] Allow configuration of instance\_type [\#256](https://github.com/nubisproject/nubis-deploy/issues/256)
+- Tag v1.5.1 release [\#268](https://github.com/nubisproject/nubis-deploy/issues/268)
 - Tag v1.5.1 release [\#265](https://github.com/nubisproject/nubis-deploy/issues/265)
 
 **Merged pull requests:**
 
+- Merge v1.5.1 release into develop. \[skip ci\] [\#271](https://github.com/nubisproject/nubis-deploy/pull/271) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.5.1 release \[skip ci\] [\#270](https://github.com/nubisproject/nubis-deploy/pull/270) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.5.1 release \[skip ci\] [\#269](https://github.com/nubisproject/nubis-deploy/pull/269) ([tinnightcap](https://github.com/tinnightcap))
 - Merge v1.5.1 release into develop. \[skip ci\] [\#267](https://github.com/nubisproject/nubis-deploy/pull/267) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v1.5.1 release \[skip ci\] [\#266](https://github.com/nubisproject/nubis-deploy/pull/266) ([tinnightcap](https://github.com/tinnightcap))
+- Enable sso module versioning [\#264](https://github.com/nubisproject/nubis-deploy/pull/264) ([limed](https://github.com/limed))
 - Clear default security group rules [\#263](https://github.com/nubisproject/nubis-deploy/pull/263) ([gozer](https://github.com/gozer))
 - Switch over to develop [\#260](https://github.com/nubisproject/nubis-deploy/pull/260) ([gozer](https://github.com/gozer))
 - Remove Dummy security group in favor of NubisVersion tagging our route53 zones [\#259](https://github.com/nubisproject/nubis-deploy/pull/259) ([gozer](https://github.com/gozer))
