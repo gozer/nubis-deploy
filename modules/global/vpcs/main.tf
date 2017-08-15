@@ -33,6 +33,7 @@ module "us-east-1" {
   route53_delegation_set = "${var.route53_delegation_set}"
   route53_master_zone_id = "${var.route53_master_zone_id}"
   public_state_bucket    = "${var.public_state_bucket}"
+  apps_state_bucket      = "${var.apps_state_bucket}"
   aws_state_region       = "${var.aws_state_region}"
 
   my_ip = "${var.my_ip}"
@@ -167,6 +168,7 @@ module "us-west-2" {
   route53_delegation_set = "${var.route53_delegation_set}"
   route53_master_zone_id = "${var.route53_master_zone_id}"
   public_state_bucket    = "${var.public_state_bucket}"
+  apps_state_bucket      = "${var.apps_state_bucket}"
   aws_state_region       = "${var.aws_state_region}"
 
   my_ip = "${var.my_ip}"

@@ -1524,6 +1524,7 @@ resource "aws_s3_bucket_object" "public_state" {
               "public_subnets": "${element(aws_subnet.public.*.id, (3*count.index) + 0)},${element(aws_subnet.public.*.id, (3*count.index) + 1)},${element(aws_subnet.public.*.id, (3*count.index) + 2)}",
               "access_logging_bucket": ${jsonencode(element(split(",", module.fluent-collector.logging_buckets),count.index))},
               "default_ssl_certificate": "${module.meta.DefaultServerCertificate}",
+              "apps_state_bucket": "${var.apps_state_bucket}",
               "dummy": "dummy"
             },
             "resources": {}

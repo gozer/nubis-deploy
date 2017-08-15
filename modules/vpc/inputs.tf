@@ -118,6 +118,8 @@ variable route53_master_zone_id {}
 
 variable public_state_bucket {}
 
+variable apps_state_bucket {}
+
 variable aws_state_region {}
 
 variable user_management_smtp_from_address {}
