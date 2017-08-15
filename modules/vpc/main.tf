@@ -1,6 +1,14 @@
 provider "aws" {
-  profile = "${var.aws_profile}"
+  version = "~> 0.1"
   region  = "${var.aws_region}"
+}
+
+provider "null" {
+  version = "~> 0.1"
+}
+
+provider "template" {
+  version = "~> 0.1"
 }
 
 resource "aws_key_pair" "nubis" {
@@ -1475,7 +1483,7 @@ resource "aws_eip" "nat" {
 }
 
 provider "aws" {
-  profile = "${var.aws_profile}"
+  version = "~> 0.1"
   region  = "${var.aws_state_region}"
   alias   = "public-state"
 }

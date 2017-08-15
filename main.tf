@@ -1,4 +1,10 @@
+terraform {
+  backend "s3" {
+  }
+}
+
 provider "atlas" {
+  version = "~> 0.1"
   token = "${var.atlas_token}"
 }
 
