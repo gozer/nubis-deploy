@@ -70,6 +70,7 @@ module "vpcs" {
   route53_delegation_set = "${module.global_meta.route53_delegation_set}"
   route53_master_zone_id = "${module.global_meta.route53_master_zone_id}"
   public_state_bucket    = "${module.global_meta.public_state_bucket}"
+  apps_state_bucket      = "${module.global_meta.apps_state_bucket}"
 
   my_ip = "${var.my_ip}"
 

@@ -245,3 +245,12 @@ resource "aws_route53_delegation_set" "meta" {
 
   reference_name = "Meta"
 }
+
+resource "aws_s3_bucket" "apps-state" {
+  bucket_prefix = "nubis-apps-state-"
+  acl    = "private"
+
+  versioning {
+    enabled = true
+  }
+}
