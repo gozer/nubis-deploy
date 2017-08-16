@@ -66,60 +66,6 @@ resource "aws_iam_policy" "credstash" {
 POLICY
 }
 
-resource "aws_iam_role_policy" "lambda" {
-  count = "${var.enabled}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  name = "lambda_policy-${var.aws_region}"
-  role = "${aws_iam_role.lambda.id}"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-     {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:*"
-                  ],
-                  "Resource": "arn:aws:logs:*:*:*"
-                }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role" "lambda" {
-  #  count = "${var.enabled}"
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  name = "lambda-${var.aws_region}"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-}
-EOF
-}
-
 module "meta" {
   source = "../meta"
 
@@ -803,7 +749,7 @@ resource "aws_iam_instance_profile" "nat" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=develop"
+  source = "github.com/gozer/nubis-jumphost//nubis/terraform?ref=feature%2Farena"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 

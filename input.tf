@@ -16,6 +16,11 @@ variable environments {
   default = "admin,stage,prod"
 }
 
+variable arenas {
+  type = "list"
+  default = [ "core" ]
+}
+
 variable arenas_networks {
   type = "list"
   default = [ "192.168.0.0/16" ]
