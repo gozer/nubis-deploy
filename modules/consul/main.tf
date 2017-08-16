@@ -1,5 +1,5 @@
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform/multi?ref=develop"
+  source = "github.com/gozer/nubis-consul//nubis/terraform/multi?ref=feature%2Farena"
 
   enabled = "${var.enabled}"
 
