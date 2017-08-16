@@ -484,16 +484,7 @@ resource "aws_security_group" "shared_services" {
   }
 }
 
-resource "aws_cloudformation_stack" "availability_zones" {
-  count = "${var.enabled}"
-  name  = "availability-zones"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  template_body = "${file("${path.module}/availability-zones.json")}"
-}
+data "aws_availability_zones" "available" {}
 
 # ATM, we just create public subnets for each environment in the first 3 AZs
 resource "aws_subnet" "public" {
@@ -505,7 +496,7 @@ resource "aws_subnet" "public" {
 
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
 
-  availability_zone = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), count.index % 3 )}"
+  availability_zone = "${data.aws_availability_zones.available.names[count.index % 3]}"
 
   cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, count.index % 3 )}"
 
@@ -527,7 +518,7 @@ resource "aws_subnet" "private" {
 
   vpc_id = "${element(aws_vpc.nubis.*.id, count.index / 3)}"
 
-  availability_zone = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), count.index % 3 )}"
+  availability_zone = "${data.aws_availability_zones.available.names[count.index % 3]}"
 
   cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, (count.index % 3) + 3 )}"
 
@@ -1412,7 +1403,7 @@ resource "aws_s3_bucket_object" "public_state" {
               "nubis_version": ${jsonencode(var.nubis_version)},
               "region": ${jsonencode(var.aws_region)},
               "regions": ${jsonencode(var.aws_regions)},
-              "availability_zones": ${jsonencode(aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"])},
+              "availability_zones": "${join(",",data.aws_availability_zones.available.names)}",
               "hosted_zone_name": ${jsonencode(module.meta.HostedZoneName)},
               "hosted_zone_id": ${jsonencode(module.meta.HostedZoneId)},
               "vpc_id": ${jsonencode(element(aws_vpc.nubis.*.id,count.index))},
