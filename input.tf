@@ -61,7 +61,6 @@ variable features {
     consul                 = 1
     jumphost               = 0
     fluent                 = 0
-    stack_compat           = 0
     mig                    = 0
     ci                     = 0
     vpn                    = 0

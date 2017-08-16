@@ -58,7 +58,6 @@ module "vpcs" {
   enable_monitoring             = "${lookup(var.features,"monitoring")}"
   enable_ci                     = "${lookup(var.features,"ci")}"
   enable_opsec                  = "${lookup(var.features,"opsec")}"
-  enable_stack_compat           = "${lookup(var.features,"stack_compat")}"
   enable_vpn                    = "${lookup(var.features,"vpn")}"
   enable_nat                    = "${lookup(var.features,"nat")}"
   enable_user_management_iam    = "${lookup(var.features, "user_management_iam")}"

@@ -44,8 +44,6 @@ variable enable_consul {}
 
 variable enable_opsec {}
 
-variable enable_stack_compat {}
-
 variable enable_vpn {}
 
 variable enable_nat {}

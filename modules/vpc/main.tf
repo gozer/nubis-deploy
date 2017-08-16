@@ -128,75 +128,6 @@ resource "aws_iam_role" "lambda" {
 EOF
 }
 
-resource "aws_cloudformation_stack" "dummy-vpc" {
-  count = "${var.enabled * var.enable_stack_compat}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  name = "${var.aws_region}-vpc"
-
-  template_url = "http://nubis-stacks-${var.aws_region}.s3.amazonaws.com/${var.nubis_version}/vpc/dummy.template"
-
-  parameters = {
-    StacksVersion = "${var.nubis_version}"
-    ServiceName   = "${var.account_name}"
-
-    HostedZoneId               = "${module.meta.HostedZoneId}"
-    HostedZoneName             = "${module.meta.HostedZoneName}"
-    DefaultServerCertificate   = "${module.meta.DefaultServerCertificate}"
-    NubisMySQL56ParameterGroup = "${module.meta.NubisMySQL56ParameterGroup}"
-
-    VpcIdEnv1 = "${element(aws_vpc.nubis.*.id,0)}"
-    VpcIdEnv2 = "${element(aws_vpc.nubis.*.id,1)}"
-    VpcIdEnv3 = "${element(aws_vpc.nubis.*.id,2)}"
-
-    SharedServicesSecurityGroupIdEnv1 = "${element(aws_security_group.shared_services.*.id,0)}"
-    SharedServicesSecurityGroupIdEnv2 = "${element(aws_security_group.shared_services.*.id,1)}"
-    SharedServicesSecurityGroupIdEnv3 = "${element(aws_security_group.shared_services.*.id,2)}"
-    InternetAccessSecurityGroupIdEnv1 = "${element(aws_security_group.internet_access.*.id,0)}"
-    InternetAccessSecurityGroupIdEnv2 = "${element(aws_security_group.internet_access.*.id,1)}"
-    InternetAccessSecurityGroupIdEnv3 = "${element(aws_security_group.internet_access.*.id,2)}"
-    SshSecurityGroupIdEnv1            = "${element(aws_security_group.ssh.*.id,0)}"
-    SshSecurityGroupIdEnv2            = "${element(aws_security_group.ssh.*.id,1)}"
-    SshSecurityGroupIdEnv3            = "${element(aws_security_group.ssh.*.id,2)}"
-
-    AccessLoggingBucketEnv1 = "${element(split(",", module.fluent-collector.logging_buckets), 0)}"
-    AccessLoggingBucketEnv2 = "${element(split(",", module.fluent-collector.logging_buckets), 1)}"
-    AccessLoggingBucketEnv3 = "${element(split(",", module.fluent-collector.logging_buckets), 2)}"
-
-    PublicSubnetAZ1Env1 = "${element(aws_subnet.public.*.id, 0)}"
-    PublicSubnetAZ2Env1 = "${element(aws_subnet.public.*.id, 1)}"
-    PublicSubnetAZ3Env1 = "${element(aws_subnet.public.*.id, 2)}"
-
-    PublicSubnetAZ1Env2 = "${element(aws_subnet.public.*.id, 3)}"
-    PublicSubnetAZ2Env2 = "${element(aws_subnet.public.*.id, 4)}"
-    PublicSubnetAZ3Env2 = "${element(aws_subnet.public.*.id, 5)}"
-
-    PublicSubnetAZ1Env3 = "${element(aws_subnet.public.*.id, 6)}"
-    PublicSubnetAZ2Env3 = "${element(aws_subnet.public.*.id, 7)}"
-    PublicSubnetAZ3Env3 = "${element(aws_subnet.public.*.id, 8)}"
-
-    PrivateSubnetAZ1Env1 = "${element(aws_subnet.private.*.id, 0)}"
-    PrivateSubnetAZ2Env1 = "${element(aws_subnet.private.*.id, 1)}"
-    PrivateSubnetAZ3Env1 = "${element(aws_subnet.private.*.id, 2)}"
-
-    PrivateSubnetAZ1Env2 = "${element(aws_subnet.private.*.id, 3)}"
-    PrivateSubnetAZ2Env2 = "${element(aws_subnet.private.*.id, 4)}"
-    PrivateSubnetAZ3Env2 = "${element(aws_subnet.private.*.id, 5)}"
-
-    PrivateSubnetAZ1Env3 = "${element(aws_subnet.private.*.id, 6)}"
-    PrivateSubnetAZ2Env3 = "${element(aws_subnet.private.*.id, 7)}"
-    PrivateSubnetAZ3Env3 = "${element(aws_subnet.private.*.id, 8)}"
-
-    # AZs
-    PrivateAvailabilityZone1 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), 0)}"
-    PrivateAvailabilityZone2 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), 1)}"
-    PrivateAvailabilityZone3 = "${element(split(",",aws_cloudformation_stack.availability_zones.outputs["AvailabilityZones"]), 2)}"
-  }
-}
-
 #XXX: This is because it's fed to a module input, so it can't be undefined
 #XXX: even in regions where enabled=0, unfortunately
 resource "aws_lambda_function" "UUID" {
@@ -211,33 +142,6 @@ resource "aws_lambda_function" "UUID" {
   s3_key        = "${var.nubis_version}/lambda/nubis-lambda-uuid.zip"
   handler       = "index.handler"
   description   = "Generate UUIDs for use in Cloudformation stacks"
-  memory_size   = 128
-  runtime       = "nodejs4.3"
-  timeout       = "10"
-  role          = "${aws_iam_role.lambda.arn}"
-}
-
-resource "aws_lambda_function" "LookupStackOutputs" {
-  count         = "${var.enabled * var.enable_stack_compat}"
-  function_name = "LookupStackOutputs"
-  s3_bucket     = "nubis-stacks-${var.aws_region}"
-  s3_key        = "${var.nubis_version}/lambda/LookupStackOutputs.zip"
-  handler       = "index.handler"
-  description   = "Gather outputs from Cloudformation stacks to be used in other Cloudformation stacks"
-  memory_size   = 128
-  runtime       = "nodejs4.3"
-  timeout       = "10"
-  role          = "${aws_iam_role.lambda.arn}"
-}
-
-resource "aws_lambda_function" "LookupNestedStackOutputs" {
-
-  count         = "${var.enabled * var.enable_stack_compat}"
-  function_name = "LookupNestedStackOutputs"
-  s3_bucket     = "nubis-stacks-${var.aws_region}"
-  s3_key        = "${var.nubis_version}/lambda/LookupNestedStackOutputs.zip"
-  handler       = "index.handler"
-  description   = "Gather outputs from Cloudformation enviroment specific nested stacks to be used in other Cloudformation stacks"
   memory_size   = 128
   runtime       = "nodejs4.3"
   timeout       = "10"
