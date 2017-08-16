@@ -1014,8 +1014,6 @@ module "consul" {
 
   my_ip           = "${var.my_ip},${element(concat(aws_eip.nat.*.public_ip, list("")),0)}/32,${element(concat(aws_eip.nat.*.public_ip, list("")),1)}/32"
 
-  lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
-
   key_name           = "${var.ssh_key_name}"
   nubis_version      = "${coalesce(var.consul_version, var.nubis_version)}"
   vpc_ids            = "${join(",", aws_vpc.nubis.*.id)}"
