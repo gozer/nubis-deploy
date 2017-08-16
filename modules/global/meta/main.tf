@@ -134,40 +134,19 @@ resource "aws_iam_role" "global_lambda" {
 EOF
 }
 
-# XXX: Duplicated here to avoid chicken-and-egg with VPCs
-resource "aws_lambda_function" "GlobalUUID" {
-  function_name = "GlobalUUID"
-  s3_bucket     = "nubis-stacks-${var.aws_region}"
-  s3_key        = "${var.nubis_version}/lambda/nubis-lambda-uuid.zip"
-  handler       = "index.handler"
-  description   = "Generate UUIDs for use in Nubis Meta"
-  memory_size   = 128
-  runtime       = "nodejs4.3"
-  timeout       = "10"
-  role          = "${aws_iam_role.global_lambda.arn}"
-}
-
-module "public-state-uuid" {
-  source  = "../../uuid"
-  enabled = "1"
-
-  aws_profile = "${var.aws_profile}"
-  aws_region  = "${var.aws_region}"
-
-  name = "public-state"
-
-  environments = "global"
-
-  lambda_uuid_arn = "${aws_lambda_function.GlobalUUID.arn}"
-}
-
 resource "aws_s3_bucket" "public-state" {
-  bucket = "public-state-${module.public-state-uuid.uuids}"
-  acl    = "private"
+  bucket_prefix = "public-state-"
+  acl           = "private"
+
+  force_destroy = true
 
   versioning {
     enabled = true
   }
+}
+
+resource "aws_s3_bucket_policy" "public-state" {
+  bucket = "${aws_s3_bucket.public-state.id}"
 
   policy = <<EOF
 {
@@ -178,10 +157,10 @@ resource "aws_s3_bucket" "public-state" {
 			"Sid": "1",
 			"Effect": "Allow",
 			"Principal": {
-				"AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.public-state.id}"
+				"AWS": "${aws_cloudfront_origin_access_identity.public-state.iam_arn}"
 			},
 			"Action": "s3:GetObject",
-			"Resource": "arn:aws:s3:::public-state-${module.public-state-uuid.uuids}/*"
+			"Resource": "${aws_s3_bucket.public-state.arn}/*"
 		}
 	]
 }
