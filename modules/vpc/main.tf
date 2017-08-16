@@ -1046,20 +1046,6 @@ module "consul" {
   instance_mfa = "${var.instance_mfa}"
 }
 
-module "ci-uuid" {
-  source  = "../uuid"
-  enabled = "${var.enabled}"
-
-  aws_profile = "${var.aws_profile}"
-  aws_region  = "${var.aws_region}"
-
-  name = "ci"
-
-  environments = "${element(split(",",var.environments), 0)}"
-
-  lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
-}
-
 # XXX: This assumes it's going in the first environment, i.e. admin
 
 resource "aws_iam_role_policy_attachment" "ci" {
@@ -1069,7 +1055,7 @@ resource "aws_iam_role_policy_attachment" "ci" {
 }
 
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=develop"
+  source = "github.com/gozer/nubis-ci//nubis/terraform?ref=feature%2Farena"
 
   enabled = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
 
@@ -1109,8 +1095,6 @@ module "ci" {
   slack_token                = "${var.ci_slack_token}"
 
   admins                     = "${var.ci_admins}"
-
-  s3_bucket_name = "ci-${var.ci_project}-${module.ci-uuid.uuids}"
 
   email = "${var.technical_contact}"
 
