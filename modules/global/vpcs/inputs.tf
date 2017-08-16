@@ -14,7 +14,9 @@ variable nubis_version {}
 
 variable nubis_domain {}
 
-variable environments_networks {}
+variable arenas_networks {
+  type = "list"
+}
 
 variable environments_ipsec_target {}
 

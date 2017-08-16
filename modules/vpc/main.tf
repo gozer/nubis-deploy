@@ -272,7 +272,7 @@ resource "aws_vpc" "nubis" {
   # index(split(",",var.aws_regions), var.aws_region)
   # is the index of the current region, starting at 0
   # So the correct grouping of subnets is count.index + ( 3 * region-index )
-  cidr_block = "${element(split(",",var.environments_networks), count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) )}"
+  cidr_block = "${element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) )}"
 
   enable_dns_support   = true
   enable_dns_hostnames = true

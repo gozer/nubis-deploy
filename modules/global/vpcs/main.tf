@@ -43,12 +43,7 @@ module "us-east-1" {
   nubis_version         = "${var.nubis_version}"
   nubis_domain          = "${var.nubis_domain}"
   environments          = "${var.environments}"
-  environments_networks = "${var.environments_networks}"
-
-  # should convert over to just passing in environments_networks
-  admin_network = "${element(split(",",var.environments_networks), 0)}"
-  prod_network  = "${element(split(",",var.environments_networks), 1)}"
-  stage_network = "${element(split(",",var.environments_networks), 2)}"
+  arenas_networks       = "${var.arenas_networks}"
 
   ipsec_target = "${var.environments_ipsec_target}"
   vpn_bgp_asn  = "${var.vpn_bgp_asn}"
@@ -180,12 +175,7 @@ module "us-west-2" {
   nubis_version         = "${var.nubis_version}"
   nubis_domain          = "${var.nubis_domain}"
   environments          = "${var.environments}"
-  environments_networks = "${var.environments_networks}"
-
-  # should convert over to just passing in environments_networks
-  admin_network = "${element(split(",",var.environments_networks), 0)}"
-  prod_network  = "${element(split(",",var.environments_networks), 1)}"
-  stage_network = "${element(split(",",var.environments_networks), 2)}"
+  arenas_networks       = "${var.arenas_networks}"
 
   ipsec_target = "${var.environments_ipsec_target}"
   vpn_bgp_asn  = "${var.vpn_bgp_asn}"

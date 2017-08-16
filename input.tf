@@ -16,7 +16,10 @@ variable environments {
   default = "admin,stage,prod"
 }
 
-variable environments_networks {}
+variable arenas_networks {
+  type = "list"
+  default = [ "192.168.0.0/16" ]
+}
 
 variable admin_users {
   default = "gozer,limed,jcrowe"
