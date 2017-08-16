@@ -753,7 +753,7 @@ module "jumphost" {
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
-  environments = "${var.environments}"
+  arenas       = "${split(",",var.environments)}"
   aws_profile  = "${var.aws_profile}"
   aws_region   = "${var.aws_region}"
 
