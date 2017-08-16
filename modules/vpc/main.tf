@@ -120,26 +120,6 @@ resource "aws_iam_role" "lambda" {
 EOF
 }
 
-#XXX: This is because it's fed to a module input, so it can't be undefined
-#XXX: even in regions where enabled=0, unfortunately
-resource "aws_lambda_function" "UUID" {
-  #count = "${var.enabled}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  function_name = "UUID"
-  s3_bucket     = "nubis-stacks-${var.aws_region}"
-  s3_key        = "${var.nubis_version}/lambda/nubis-lambda-uuid.zip"
-  handler       = "index.handler"
-  description   = "Generate UUIDs for use in Cloudformation stacks"
-  memory_size   = 128
-  runtime       = "nodejs4.3"
-  timeout       = "10"
-  role          = "${aws_iam_role.lambda.arn}"
-}
-
 module "meta" {
   source = "../meta"
 
@@ -859,7 +839,7 @@ resource "aws_iam_role_policy_attachment" "fluent" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform/multi?ref=develop"
+  source = "github.com/gozer/nubis-fluent-collector//nubis/terraform?ref=feature%2Farena"
 
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
@@ -868,8 +848,6 @@ module "fluent-collector" {
   aws_profile    = "${var.aws_profile}"
   aws_region     = "${var.aws_region}"
   aws_account_id = "${var.aws_account_id}"
-
-  lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
 
   key_name          = "${var.ssh_key_name}"
   nubis_version     = "${var.nubis_version}"
@@ -910,15 +888,15 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=develop"
+  #source = "github.com/gozer/nubis-prometheus//nubis/terraform?ref=feature%2Farena"
+  
+  source = "/home/gozer/opt/src/mozilla.org/gozer/nubis/prometheus/nubis/terraform"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
   environments = "${var.environments}"
   aws_profile  = "${var.aws_profile}"
   aws_region   = "${var.aws_region}"
-
-  lambda_uuid_arn = "${aws_lambda_function.UUID.arn}"
 
   key_name          = "${var.ssh_key_name}"
   nubis_version     = "${coalesce(var.monitoring_version, var.nubis_version)}"
