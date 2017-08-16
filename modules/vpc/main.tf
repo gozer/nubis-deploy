@@ -86,14 +86,6 @@ resource "aws_iam_role_policy" "lambda" {
                     "logs:*"
                   ],
                   "Resource": "arn:aws:logs:*:*:*"
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "cloudformation:DescribeStacks",
-                    "cloudformation:DescribeStackResources"
-                  ],
-                  "Resource": "*"
                 }
   ]
 }
