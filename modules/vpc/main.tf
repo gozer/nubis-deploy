@@ -819,7 +819,7 @@ resource "aws_iam_instance_profile" "nat" {
   }
 
   name  = "nubis-nat-profile-${element(split(",",var.environments), count.index)}-${var.aws_region}"
-  roles = ["${element(aws_iam_role.nat.*.name, count.index)}"]
+  role = "${element(aws_iam_role.nat.*.name, count.index)}"
 }
 
 module "jumphost" {
