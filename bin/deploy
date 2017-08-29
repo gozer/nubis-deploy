@@ -11,21 +11,21 @@ fi
 
 prep () {
   ACCOUNT_DIR="$ACCOUNTS_DIR/$ACCOUNT"
-  
+
   if [ ! -d "$ACCOUNT_DIR" ]; then
     echo "No such account $ACCOUNT"
     exit 1
   fi
-  
+
   TF_DIR="$ACCOUNT_DIR/.terraform"
-  
+
   TF_VERSION=$(cd $ACCOUNT_DIR && terraform --version | perl -lne'print $1 if /^Terraform v(\d+\.\d+\.\d+)/')
 
   STATE_BUCKET=$(aws-vault exec "${ACCOUNT}-$USER_PREFIX" -- aws --region $STATE_REGION s3 ls | awk {'print $3'}  | grep nubis-deploy | head)
 
   if [ -z "$STATE_BUCKET" ]; then
     STATE_BUCKET="nubis-deploy-$(openssl rand -hex 16)"
-    
+
     echo "Creating remote state bucket $STATE_BUCKET"
 
     aws-vault exec "${ACCOUNT}-$USER_PREFIX" -- \
@@ -41,7 +41,7 @@ prep () {
         aws --region $STATE_REGION s3api put-bucket-versioning --bucket ${STATE_BUCKET} --versioning-configuration Status=Enabled
     fi
   fi
-  
+
   TF_BACKEND_BUCKET=$(cat "$ACCOUNT_DIR/.terraform/terraform.tfstate" 2>/dev/null | jq -r .backend.config.bucket 2>/dev/null )
 
   if [ ! -d "$TF_DIR/modules" ] || [ ! -d "$TF_DIR/plugins" ] || [ "$TF_BACKEND_BUCKET" == "null" ] || [ "$TF_BACKEND_BUCKET" == "" ]; then
@@ -54,7 +54,7 @@ prep () {
       -backend-config="key=terraform/nubis-deploy" \
       -backend-config="bucket=$STATE_BUCKET" \
       deploy
-    
+
     if [ "$?" != "0" ]; then
       echo "TF Init failed"
       exit $?
@@ -65,27 +65,27 @@ prep () {
 
 update () {
   echo "Running update for $ACCOUNT in $ACCOUNT_DIR"
-  
+
   git submodule update --remote --recursive "$ACCOUNT_DIR/deploy"
-  
+
   cd $ACCOUNT_DIR && aws-vault exec "${ACCOUNT}-$USER_PREFIX" -- terraform init -backend=false -input=false -upgrade=true deploy
 }
 
 plan () {
   echo "Running plan for $ACCOUNT in $ACCOUNT_DIR"
-  
+
   cd $ACCOUNT_DIR && aws-vault exec "${ACCOUNT}-$USER_PREFIX" -- terraform plan -input=false -var-file=../../globals/terraform.tfvars -var-file=terraform.tfvars deploy
 }
 
 apply () {
   echo "Running apply for $ACCOUNT in $ACCOUNT_DIR"
-  
+
   cd $ACCOUNT_DIR && aws-vault exec "${ACCOUNT}-$USER_PREFIX" -- terraform apply -input=false -var-file=../../globals/terraform.tfvars -var-file=terraform.tfvars deploy
 }
 
 status () {
   echo "Running outputs for $ACCOUNT in $ACCOUNT_DIR"
-  
+
   cd $ACCOUNT_DIR && aws-vault exec "${ACCOUNT}-$USER_PREFIX" -- terraform output | sed -e's/^/  /g'
 }
 
@@ -108,14 +108,14 @@ cleanup () {
 
 admins () {
   echo "Showing admins for $ACCOUNT in $ACCOUNT_DIR"
-  
+
   cd $ACCOUNT_DIR && aws-vault exec "${ACCOUNT}-$USER_PREFIX" -- terraform output | grep admins_ | perl -MJSON -MData::Dumper -ne'/(\S*)\s+=\s+(\S*)/; $i=0 ; foreach my $foo (split(",",$2)) { $info[$i++]{$1} = $foo }; END { print to_json(\@info)}' | jq .
 
 }
 
 taint_admins () {
   echo "Tainting admins for $ACCOUNT in $ACCOUNT_DIR"
-  
+
   for admin in $(cd $ACCOUNT_DIR && aws-vault exec "${ACCOUNT}-$USER_PREFIX" -- terraform  show | grep module.global_admins.aws_iam_access_key | cut -d: -f1 | cut -d. -f3- ); do
     cd $ACCOUNT_DIR && aws-vault exec "${ACCOUNT}-$USER_PREFIX" -- terraform taint -module=global_admins $admin
   done
@@ -143,6 +143,7 @@ help () {
 
 hash aws 2>/dev/null || message_print CRITICAL "Please install the AWS CLI API to use this build tool. https://aws.amazon.com/cli/"
 hash terraform 2>/dev/null || message_print CRITICAL "Please install packer to use this build tool. https://terraform.io/"
+hash aws-vault 2>/dev/null || message_print CRITICAL "Please install aws-vault to use this build tool. https://github.com/99designs/aws-vault"
 
 case "$1" in
    accounts)

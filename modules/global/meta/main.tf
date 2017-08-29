@@ -249,6 +249,7 @@ resource "aws_route53_delegation_set" "meta" {
 resource "aws_s3_bucket" "apps-state" {
   bucket_prefix = "nubis-apps-state-"
   acl    = "private"
+  region = "${var.aws_region}"
 
   versioning {
     enabled = true
