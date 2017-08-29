@@ -33,3 +33,7 @@ output "cloudhealth_assume_role_external_id" {
 output "public_state_bucket" {
   value = "${aws_s3_bucket.public-state.bucket}"
 }
+
+output "apps_state_bucket" {
+  value = "${aws_s3_bucket.apps-state.bucket}"
+}

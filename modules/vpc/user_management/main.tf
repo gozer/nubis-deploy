@@ -1,5 +1,14 @@
 provider "aws" {
+  version = "~> 0.1"
   region = "${var.region}"
+}
+
+provider "null" {
+  version = "~> 0.1"
+}
+
+provider "template" {
+  version = "~> 0.1"
 }
 
 resource "aws_iam_role" "lambda" {
