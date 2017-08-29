@@ -1,32 +1,33 @@
 # Change Log
 
-## [v1.5.1](https://github.com/nubisproject/nubis-deploy/tree/v1.5.1) (2017-08-18)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.1...v1.5.1)
-
-**Closed issues:**
-
-- Create a S3 bucket for storing deployed app state [\#277](https://github.com/nubisproject/nubis-deploy/issues/277)
-- Upgrade to Terraform 0.10.x [\#275](https://github.com/nubisproject/nubis-deploy/issues/275)
-
-**Merged pull requests:**
-
-- Create an app state S3 bucket and expose it in our account state [\#278](https://github.com/nubisproject/nubis-deploy/pull/278) ([gozer](https://github.com/gozer))
-- Upgrade to Terraform 0.10 [\#276](https://github.com/nubisproject/nubis-deploy/pull/276) ([gozer](https://github.com/gozer))
-
-## [v1.5.1](https://github.com/nubisproject/nubis-deploy/tree/v1.5.1) (2017-08-11)
+## [v1.5.1](https://github.com/nubisproject/nubis-deploy/tree/v1.5.1) (2017-08-29)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.0...v1.5.1)
 
 **Closed issues:**
 
+- Deploy script tweaks [\#284](https://github.com/nubisproject/nubis-deploy/issues/284)
+- Create a S3 bucket for storing deployed app state [\#277](https://github.com/nubisproject/nubis-deploy/issues/277)
+- Upgrade to Terraform 0.10.x [\#275](https://github.com/nubisproject/nubis-deploy/issues/275)
 - \[security\] Clear default security-group rules [\#262](https://github.com/nubisproject/nubis-deploy/issues/262)
+- \[sso\] Allow versioning of sso module [\#261](https://github.com/nubisproject/nubis-deploy/issues/261)
 - \[route53\] Tag our zones with Version [\#258](https://github.com/nubisproject/nubis-deploy/issues/258)
 - \[fluentd\] Allow configuration of instance\_type [\#256](https://github.com/nubisproject/nubis-deploy/issues/256)
+- Upgrade to Terraform 0.9 [\#234](https://github.com/nubisproject/nubis-deploy/issues/234)
+- Tag v1.5.1 release [\#288](https://github.com/nubisproject/nubis-deploy/issues/288)
+- Tag v1.5.1 release [\#281](https://github.com/nubisproject/nubis-deploy/issues/281)
 - Tag v1.5.1 release [\#272](https://github.com/nubisproject/nubis-deploy/issues/272)
 - Tag v1.5.1 release [\#268](https://github.com/nubisproject/nubis-deploy/issues/268)
 - Tag v1.5.1 release [\#265](https://github.com/nubisproject/nubis-deploy/issues/265)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v1.5.1 release \[skip ci\] [\#289](https://github.com/nubisproject/nubis-deploy/pull/289) ([tinnightcap](https://github.com/tinnightcap))
+- Pin app state bucket to a region [\#287](https://github.com/nubisproject/nubis-deploy/pull/287) ([tinnightcap](https://github.com/tinnightcap))
+- Whitespace fixes together with addition pre-req check [\#285](https://github.com/nubisproject/nubis-deploy/pull/285) ([limed](https://github.com/limed))
+- Merge v1.5.1 release into develop. \[skip ci\] [\#283](https://github.com/nubisproject/nubis-deploy/pull/283) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.5.1 release \[skip ci\] [\#282](https://github.com/nubisproject/nubis-deploy/pull/282) ([tinnightcap](https://github.com/tinnightcap))
+- Create an app state S3 bucket and expose it in our account state [\#278](https://github.com/nubisproject/nubis-deploy/pull/278) ([gozer](https://github.com/gozer))
+- Upgrade to Terraform 0.10 [\#276](https://github.com/nubisproject/nubis-deploy/pull/276) ([gozer](https://github.com/gozer))
 - Merge v1.5.1 release into develop. \[skip ci\] [\#274](https://github.com/nubisproject/nubis-deploy/pull/274) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v1.5.1 release \[skip ci\] [\#273](https://github.com/nubisproject/nubis-deploy/pull/273) ([tinnightcap](https://github.com/tinnightcap))
 - Merge v1.5.1 release into develop. \[skip ci\] [\#271](https://github.com/nubisproject/nubis-deploy/pull/271) ([tinnightcap](https://github.com/tinnightcap))
