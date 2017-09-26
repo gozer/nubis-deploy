@@ -6,69 +6,8 @@ provider "aws" {
 module "cloudhealth" {
   source = "github.com/nubisproject/nubis-terraform-cloudhealth?ref=master"
 
-  aws_profile = "${var.aws_profile}"
+  aws_profile = "default"
   aws_region  = "${var.aws_region}"
-}
-
-resource "aws_iam_user" "datadog" {
-  path = "/nubis/datadog/"
-  name = "datadog"
-}
-
-resource "aws_iam_access_key" "datadog" {
-  user = "${aws_iam_user.datadog.name}"
-}
-
-resource "aws_iam_user_policy" "datadog" {
-  name = "datadog-readonly"
-  user = "${aws_iam_user.datadog.name}"
-
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-"Action": [
-                    "autoscaling:Describe*",
-                    "cloudtrail:DescribeTrails",
-                    "cloudtrail:GetTrailStatus",
-                    "cloudwatch:Describe*",
-                    "cloudwatch:Get*",
-                    "cloudwatch:List*",
-                    "dynamodb:list*",
-                    "dynamodb:describe*",
-                    "ec2:Describe*",
-                    "ec2:Get*",
-                    "ecs:Describe*",
-                    "ecs:List*",
-                    "elasticache:Describe*",
-                    "elasticache:List*",
-                    "elasticloadbalancing:Describe*",
-                    "elasticmapreduce:List*",
-                    "elasticmapreduce:Describe*",
-                    "kinesis:List*",
-                    "kinesis:Describe*",
-                    "logs:Get*",
-                    "logs:Describe*",
-                    "logs:FilterLogEvents",
-                    "logs:TestMetricFilter",
-                    "rds:Describe*",
-                    "rds:List*",
-                    "route53:List*",
-                    "ses:Get*",
-                    "sns:List*",
-                    "sns:Publish",
-                    "sqs:GetQueueAttributes",
-                    "sqs:ListQueues",
-                    "sqs:ReceiveMessage",
-                    "support:*"
-                  ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-POLICY
 }
 
 resource "aws_route53_zone" "master_zone" {
@@ -214,7 +153,10 @@ resource "aws_cloudfront_distribution" "public-state" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
+    minimum_protocol_version       = "TLSv1"
   }
+  
+  
 }
 
 resource "aws_route53_delegation_set" "meta" {
@@ -227,10 +169,21 @@ resource "aws_route53_delegation_set" "meta" {
 
 resource "aws_s3_bucket" "apps-state" {
   bucket_prefix = "nubis-apps-state-"
-  acl    = "private"
-  region = "${var.aws_region}"
+  acl           = "private"
+  region        = "${var.aws_region}"
 
   versioning {
     enabled = true
   }
 }
+
+module "autospotting" {
+  source = "github.com/cristim/autospotting/terraform"
+
+#  autospotting_min_on_demand_number = "0"
+#  autospotting_min_on_demand_percentage = "50.0"
+#  autospotting_regions_enabled = "eu*,us*"
+  lambda_zipname = "${path.module}/lambda_build_425.zip"
+}
+
+#spot-enabled

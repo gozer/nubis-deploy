@@ -1,7 +1,7 @@
 ---
 Consul:
   Server: 127.0.0.1:8500
-  Namespace: "environments/${environment}/global/nubis-users"
+  Namespace: "arenas/${arena}/global/nubis-users"
 
 AWS:
   Region: "${region}"
@@ -12,13 +12,11 @@ AWS:
   SMTPPort:     "${smtp_port}"
   AWSIgnoreUserList:
     - nubis-bootstrap
-    - datadog
     - gozer
     - limed
   AWSIgnorePathList:
     - /
     - /nubis/guest/
-    - /nubis/datadog/
 
 LdapServer:
   LDAPHost: "ldaps://${ldap_server}:${ldap_port}/${ldap_base_dn}"

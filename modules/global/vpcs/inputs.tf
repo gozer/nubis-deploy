@@ -1,12 +1,6 @@
-variable aws_profile {}
-
-variable aws_account_id {}
-
 variable technical_contact {}
 
 variable aws_regions {}
-
-variable environments {}
 
 variable account_name {}
 
@@ -14,11 +8,15 @@ variable nubis_version {}
 
 variable nubis_domain {}
 
+variable arenas {
+  type = "list"
+}
+
 variable arenas_networks {
   type = "list"
 }
 
-variable environments_ipsec_target {}
+variable arenas_ipsec_target {}
 
 variable consul_secret {}
 
@@ -55,8 +53,6 @@ variable enable_user_management_consul {}
 variable enable_sso {}
 
 variable my_ip {}
-
-variable datadog_api_key {}
 
 variable vpn_bgp_asn {}
 

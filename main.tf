@@ -11,7 +11,6 @@ provider "atlas" {
 module "global_admins" {
   source = "modules/global/admins"
 
-  aws_profile = "${var.aws_profile}"
   aws_region  = "${element(split(",",var.aws_regions),0)}"
 
   admin_users = "${var.admin_users}"
@@ -26,7 +25,6 @@ module "global_admins" {
 module "global_meta" {
   source = "modules/global/meta"
 
-  aws_profile = "${var.aws_profile}"
   aws_region  = "${var.global_region}"
 
   account_name  = "${var.account_name}"
@@ -41,7 +39,6 @@ module "global_opsec" {
 
   enabled = "${lookup(var.features,"opsec")}"
 
-  aws_profile = "${var.aws_profile}"
   aws_region  = "${element(split(",",var.aws_regions),0)}"
 
   cloudtrail_bucket    = "${lookup(var.cloudtrail, "bucket")}"
@@ -74,9 +71,6 @@ module "vpcs" {
   my_ip = "${var.my_ip}"
 
   aws_regions    = "${var.aws_regions}"
-  aws_profile    = "${var.aws_profile}"
-  aws_account_id = "${module.global_admins.account_id}"
-
   aws_state_region = "${var.global_region}"
 
   # This exists to force a dependency on the global admins module
@@ -84,9 +78,9 @@ module "vpcs" {
 
   nubis_version             = "${var.nubis_version}"
   nubis_domain              = "${var.nubis_domain}"
-  environments              = "${var.environments}"
+  arenas                    = "${var.arenas}"
   arenas_networks     = "${var.arenas_networks}"
-  environments_ipsec_target = "${lookup(var.vpn, "ipsec_target")}"
+  arenas_ipsec_target = "${lookup(var.vpn, "ipsec_target")}"
   vpn_bgp_asn               = "${lookup(var.vpn, "bgp_asn")}"
 
   consul_secret           = "${lookup(var.consul, "secret")}"
@@ -94,8 +88,6 @@ module "vpcs" {
   consul_sudo_groups      = "${lookup(var.consul, "sudo_groups")}"
   consul_user_groups      = "${lookup(var.consul, "user_groups")}"
   consul_version          = "${lookup(var.consul, "version")}"
-
-  datadog_api_key = "${lookup(var.datadog, "api_key")}"
 
   ci_project                    = "${lookup(var.ci, "project")}"
   ci_git_repo                   = "${lookup(var.ci, "git_repo")}"

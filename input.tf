@@ -1,19 +1,11 @@
 variable account_name {}
 
-variable aws_profile {
-  default = "default"
-}
-
 variable atlas_token {
   default = "anonymous"
 }
 
 variable nubis_version {
   default = "v1.0.1-sec1"
-}
-
-variable environments {
-  default = "admin,stage,prod"
 }
 
 variable arenas {
@@ -23,7 +15,7 @@ variable arenas {
 
 variable arenas_networks {
   type = "list"
-  default = [ "192.168.0.0/16" ]
+  default = [ "172.16.0.0/16" ]
 }
 
 variable admin_users {
@@ -75,13 +67,6 @@ variable features {
     user_management_consul = 1
     monitoring             = 0
     sso                    = 1
-  }
-}
-
-# Turn into features ?
-variable datadog {
-  default = {
-    api_key = "XXXDISABLEDXXX"
   }
 }
 

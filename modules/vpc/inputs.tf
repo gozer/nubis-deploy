@@ -1,16 +1,14 @@
-variable aws_profile {}
-
 variable aws_region {}
 
 variable aws_regions {}
-
-variable aws_account_id {}
 
 variable ipsec_target {}
 
 variable account_name {}
 
-variable environments {}
+variable arenas {
+  type = "list"
+}
 
 variable arenas_networks {
   type = "list"
@@ -71,8 +69,6 @@ variable user_management_rate {
 }
 
 variable my_ip {}
-
-variable datadog_api_key {}
 
 variable monitoring_slack_url {}
 
