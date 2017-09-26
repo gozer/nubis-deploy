@@ -879,7 +879,7 @@ resource "aws_iam_role_policy_attachment" "sso" {
 }
 
 module "sso" {
-  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=develop"
+  source = "github.com/gozer/nubis-sso//nubis/terraform?ref=feature%2Farena"
   
   enabled = "${var.enabled * var.enable_sso}"
 
@@ -921,7 +921,7 @@ resource "aws_iam_role_policy_attachment" "consul" {
 }
 
 module "consul" {
-  source = "github.com/gozer/nubis-consul//nubis/terraform/multi?ref=feature%2Farena"
+  source = "github.com/gozer/nubis-consul//nubis/terraform?ref=feature%2Farena"
 
   enabled = "${var.enabled * var.enable_consul}"
 
