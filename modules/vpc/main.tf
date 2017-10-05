@@ -593,7 +593,6 @@ module "nat-image" {
 
   region = "${var.aws_region}"
   version = "${var.nubis_version}"
-  version = "v1.6.0-arena"
   
   project = "nubis-nat"
 }
