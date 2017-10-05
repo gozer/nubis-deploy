@@ -6,69 +6,8 @@ provider "aws" {
 module "cloudhealth" {
   source = "github.com/nubisproject/nubis-terraform-cloudhealth?ref=master"
 
-  aws_profile = "${var.aws_profile}"
+  aws_profile = "default"
   aws_region  = "${var.aws_region}"
-}
-
-resource "aws_iam_user" "datadog" {
-  path = "/nubis/datadog/"
-  name = "datadog"
-}
-
-resource "aws_iam_access_key" "datadog" {
-  user = "${aws_iam_user.datadog.name}"
-}
-
-resource "aws_iam_user_policy" "datadog" {
-  name = "datadog-readonly"
-  user = "${aws_iam_user.datadog.name}"
-
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-"Action": [
-                    "autoscaling:Describe*",
-                    "cloudtrail:DescribeTrails",
-                    "cloudtrail:GetTrailStatus",
-                    "cloudwatch:Describe*",
-                    "cloudwatch:Get*",
-                    "cloudwatch:List*",
-                    "dynamodb:list*",
-                    "dynamodb:describe*",
-                    "ec2:Describe*",
-                    "ec2:Get*",
-                    "ecs:Describe*",
-                    "ecs:List*",
-                    "elasticache:Describe*",
-                    "elasticache:List*",
-                    "elasticloadbalancing:Describe*",
-                    "elasticmapreduce:List*",
-                    "elasticmapreduce:Describe*",
-                    "kinesis:List*",
-                    "kinesis:Describe*",
-                    "logs:Get*",
-                    "logs:Describe*",
-                    "logs:FilterLogEvents",
-                    "logs:TestMetricFilter",
-                    "rds:Describe*",
-                    "rds:List*",
-                    "route53:List*",
-                    "ses:Get*",
-                    "sns:List*",
-                    "sns:Publish",
-                    "sqs:GetQueueAttributes",
-                    "sqs:ListQueues",
-                    "sqs:ReceiveMessage",
-                    "support:*"
-                  ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-POLICY
 }
 
 resource "aws_route53_zone" "master_zone" {
@@ -134,40 +73,19 @@ resource "aws_iam_role" "global_lambda" {
 EOF
 }
 
-# XXX: Duplicated here to avoid chicken-and-egg with VPCs
-resource "aws_lambda_function" "GlobalUUID" {
-  function_name = "GlobalUUID"
-  s3_bucket     = "nubis-stacks-${var.aws_region}"
-  s3_key        = "${var.nubis_version}/lambda/nubis-lambda-uuid.zip"
-  handler       = "index.handler"
-  description   = "Generate UUIDs for use in Nubis Meta"
-  memory_size   = 128
-  runtime       = "nodejs4.3"
-  timeout       = "10"
-  role          = "${aws_iam_role.global_lambda.arn}"
-}
-
-module "public-state-uuid" {
-  source  = "../../uuid"
-  enabled = "1"
-
-  aws_profile = "${var.aws_profile}"
-  aws_region  = "${var.aws_region}"
-
-  name = "public-state"
-
-  environments = "global"
-
-  lambda_uuid_arn = "${aws_lambda_function.GlobalUUID.arn}"
-}
-
 resource "aws_s3_bucket" "public-state" {
-  bucket = "public-state-${module.public-state-uuid.uuids}"
-  acl    = "private"
+  bucket_prefix = "public-state-"
+  acl           = "private"
+
+  force_destroy = true
 
   versioning {
     enabled = true
   }
+}
+
+resource "aws_s3_bucket_policy" "public-state" {
+  bucket = "${aws_s3_bucket.public-state.id}"
 
   policy = <<EOF
 {
@@ -178,10 +96,10 @@ resource "aws_s3_bucket" "public-state" {
 			"Sid": "1",
 			"Effect": "Allow",
 			"Principal": {
-				"AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.public-state.id}"
+				"AWS": "${aws_cloudfront_origin_access_identity.public-state.iam_arn}"
 			},
 			"Action": "s3:GetObject",
-			"Resource": "arn:aws:s3:::public-state-${module.public-state-uuid.uuids}/*"
+			"Resource": "${aws_s3_bucket.public-state.arn}/*"
 		}
 	]
 }
@@ -235,7 +153,10 @@ resource "aws_cloudfront_distribution" "public-state" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
+    minimum_protocol_version       = "TLSv1"
   }
+  
+  
 }
 
 resource "aws_route53_delegation_set" "meta" {
@@ -248,10 +169,21 @@ resource "aws_route53_delegation_set" "meta" {
 
 resource "aws_s3_bucket" "apps-state" {
   bucket_prefix = "nubis-apps-state-"
-  acl    = "private"
-  region = "${var.aws_region}"
+  acl           = "private"
+  region        = "${var.aws_region}"
 
   versioning {
     enabled = true
   }
 }
+
+module "autospotting" {
+  source = "github.com/cristim/autospotting/terraform"
+
+#  autospotting_min_on_demand_number = "0"
+#  autospotting_min_on_demand_percentage = "50.0"
+#  autospotting_regions_enabled = "eu*,us*"
+  lambda_zipname = "${path.module}/lambda_build_425.zip"
+}
+
+#spot-enabled

@@ -3,8 +3,6 @@ module "us-east-1" {
 
   aws_region     = "us-east-1"
   aws_regions    = "${var.aws_regions}"
-  aws_profile    = "${var.aws_profile}"
-  aws_account_id = "${var.aws_account_id}"
 
   # Okay, somewhat nasty
   #  - take the list of regions, look for the one we care about and make it XXX
@@ -21,7 +19,6 @@ module "us-east-1" {
   enable_monitoring             = "${var.enable_monitoring}"
   enable_ci                     = "${var.enable_ci}"
   enable_opsec                  = "${var.enable_opsec}"
-  enable_stack_compat           = "${var.enable_stack_compat}"
   enable_vpn                    = "${var.enable_vpn}"
   enable_nat                    = "${var.enable_nat}"
   enable_user_management_consul = "${var.enable_user_management_consul}"
@@ -42,15 +39,10 @@ module "us-east-1" {
   account_name          = "${var.account_name}"
   nubis_version         = "${var.nubis_version}"
   nubis_domain          = "${var.nubis_domain}"
-  environments          = "${var.environments}"
-  environments_networks = "${var.environments_networks}"
+  arenas                = "${var.arenas}"
+  arenas_networks       = "${var.arenas_networks}"
 
-  # should convert over to just passing in environments_networks
-  admin_network = "${element(split(",",var.environments_networks), 0)}"
-  prod_network  = "${element(split(",",var.environments_networks), 1)}"
-  stage_network = "${element(split(",",var.environments_networks), 2)}"
-
-  ipsec_target = "${var.environments_ipsec_target}"
+  ipsec_target = "${var.arenas_ipsec_target}"
   vpn_bgp_asn  = "${var.vpn_bgp_asn}"
 
   consul_secret           = "${var.consul_secret}"
@@ -58,8 +50,6 @@ module "us-east-1" {
   consul_sudo_groups      = "${var.consul_sudo_groups}"
   consul_user_groups      = "${var.consul_user_groups}"
   consul_version          = "${var.consul_version}"
-
-  datadog_api_key = "${var.datadog_api_key}"
 
   ci_project                    = "${var.ci_project}"
   ci_git_repo                   = "${var.ci_git_repo}"
@@ -140,8 +130,6 @@ module "us-west-2" {
 
   aws_region     = "us-west-2"
   aws_regions    = "${var.aws_regions}"
-  aws_profile    = "${var.aws_profile}"
-  aws_account_id = "${var.aws_account_id}"
 
   # Okay, somewhat nasty
   #  - take the list of regions, look for the one we care about and make it XXX
@@ -158,7 +146,6 @@ module "us-west-2" {
   enable_monitoring             = "${var.enable_monitoring}"
   enable_ci                     = "${var.enable_ci}"
   enable_opsec                  = "${var.enable_opsec}"
-  enable_stack_compat           = "${var.enable_stack_compat}"
   enable_vpn                    = "${var.enable_vpn}"
   enable_nat                    = "${var.enable_nat}"
   enable_user_management_consul = "${var.enable_user_management_consul}"
@@ -179,15 +166,10 @@ module "us-west-2" {
   account_name          = "${var.account_name}"
   nubis_version         = "${var.nubis_version}"
   nubis_domain          = "${var.nubis_domain}"
-  environments          = "${var.environments}"
-  environments_networks = "${var.environments_networks}"
+  arenas                = "${var.arenas}"
+  arenas_networks       = "${var.arenas_networks}"
 
-  # should convert over to just passing in environments_networks
-  admin_network = "${element(split(",",var.environments_networks), 0)}"
-  prod_network  = "${element(split(",",var.environments_networks), 1)}"
-  stage_network = "${element(split(",",var.environments_networks), 2)}"
-
-  ipsec_target = "${var.environments_ipsec_target}"
+  ipsec_target = "${var.arenas_ipsec_target}"
   vpn_bgp_asn  = "${var.vpn_bgp_asn}"
 
   consul_secret           = "${var.consul_secret}"
@@ -195,8 +177,6 @@ module "us-west-2" {
   consul_sudo_groups      = "${var.consul_sudo_groups}"
   consul_user_groups      = "${var.consul_user_groups}"
   consul_version          = "${var.consul_version}"
-
-  datadog_api_key = "${var.datadog_api_key}"
 
   ci_project                    = "${var.ci_project}"
   ci_git_repo                   = "${var.ci_git_repo}"
