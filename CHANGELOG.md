@@ -1,5 +1,20 @@
 # Change Log
 
+## [v2.0.0](https://github.com/nubisproject/nubis-deploy/tree/v2.0.0) (2017-10-05)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.1...v2.0.0)
+
+**Closed issues:**
+
+- \[consul\] Allow versioning for nubis-consul [\#297](https://github.com/nubisproject/nubis-deploy/issues/297)
+- \[monitoring\] Expose versioning for monitoring module [\#286](https://github.com/nubisproject/nubis-deploy/issues/286)
+
+**Merged pull requests:**
+
+- Arena Support [\#301](https://github.com/nubisproject/nubis-deploy/pull/301) ([gozer](https://github.com/gozer))
+- Allow consul versioning [\#299](https://github.com/nubisproject/nubis-deploy/pull/299) ([limed](https://github.com/limed))
+- Allow versioning of monitoring module [\#296](https://github.com/nubisproject/nubis-deploy/pull/296) ([limed](https://github.com/limed))
+- Migrate to mozilla slack [\#294](https://github.com/nubisproject/nubis-deploy/pull/294) ([tinnightcap](https://github.com/tinnightcap))
+
 ## [v1.5.1](https://github.com/nubisproject/nubis-deploy/tree/v1.5.1) (2017-08-29)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.0...v1.5.1)
 
@@ -13,6 +28,7 @@
 - \[route53\] Tag our zones with Version [\#258](https://github.com/nubisproject/nubis-deploy/issues/258)
 - \[fluentd\] Allow configuration of instance\_type [\#256](https://github.com/nubisproject/nubis-deploy/issues/256)
 - Upgrade to Terraform 0.9 [\#234](https://github.com/nubisproject/nubis-deploy/issues/234)
+- Tag v1.5.1 release [\#290](https://github.com/nubisproject/nubis-deploy/issues/290)
 - Tag v1.5.1 release [\#288](https://github.com/nubisproject/nubis-deploy/issues/288)
 - Tag v1.5.1 release [\#281](https://github.com/nubisproject/nubis-deploy/issues/281)
 - Tag v1.5.1 release [\#272](https://github.com/nubisproject/nubis-deploy/issues/272)
@@ -21,6 +37,8 @@
 
 **Merged pull requests:**
 
+- Merge v1.5.1 release into develop. \[skip ci\] [\#292](https://github.com/nubisproject/nubis-deploy/pull/292) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v1.5.1 release \[skip ci\] [\#291](https://github.com/nubisproject/nubis-deploy/pull/291) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v1.5.1 release \[skip ci\] [\#289](https://github.com/nubisproject/nubis-deploy/pull/289) ([tinnightcap](https://github.com/tinnightcap))
 - Pin app state bucket to a region [\#287](https://github.com/nubisproject/nubis-deploy/pull/287) ([tinnightcap](https://github.com/tinnightcap))
 - Whitespace fixes together with addition pre-req check [\#285](https://github.com/nubisproject/nubis-deploy/pull/285) ([limed](https://github.com/limed))

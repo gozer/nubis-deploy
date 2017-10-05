@@ -77,7 +77,7 @@ resource "aws_iam_role_policy" "credstash" {
             "Resource": "${var.credstash_key}",
             "Condition": {
                 "StringEquals": {
-                    "kms:EncryptionContext:environment": "global",
+                    "kms:EncryptionContext:arena": "global",
                     "kms:EncryptionContext:region": "${var.region}",
                     "kms:EncryptionContext:service": "nubis"
                 }
@@ -173,7 +173,7 @@ resource "aws_cloudwatch_event_target" "lambda" {
             "-execType=IAM",
             "-useDynamo=true",
             "-region=${var.region}",
-            "-environment=global",
+            "-arena=global",
             "-service=nubis",
             "-accountName=${var.account_name}",
             "-key=nubis/global/user-sync/config"
@@ -201,7 +201,7 @@ data "template_file" "user_management_config_iam" {
 
   vars {
     region                  = "${var.region}"
-    environment             = "global"
+    arena                   = "global"
     smtp_from_address       = "${var.user_management_smtp_from_address}"
     smtp_username           = "${var.user_management_smtp_username}"
     smtp_password           = "${var.user_management_smtp_password}"
@@ -228,7 +228,7 @@ resource "null_resource" "user_management_unicreds_iam" {
 
   triggers {
     region            = "${var.region}"
-    context           = "-E region:${var.region} -E environment:global -E service:nubis"
+    context           = "-E region:${var.region} -E arena:global -E service:nubis"
     rendered_template = "${data.template_file.user_management_config_iam.rendered}"
     credstash         = "unicreds -k ${var.credstash_key} -r ${var.region} put-file nubis/global"
   }

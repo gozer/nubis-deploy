@@ -1,12 +1,6 @@
-variable aws_profile {}
-
-variable aws_account_id {}
-
 variable technical_contact {}
 
 variable aws_regions {}
-
-variable environments {}
 
 variable account_name {}
 
@@ -14,9 +8,15 @@ variable nubis_version {}
 
 variable nubis_domain {}
 
-variable environments_networks {}
+variable arenas {
+  type = "list"
+}
 
-variable environments_ipsec_target {}
+variable arenas_networks {
+  type = "list"
+}
+
+variable arenas_ipsec_target {}
 
 variable consul_secret {}
 
@@ -25,6 +25,8 @@ variable consul_master_acl_token {}
 variable consul_sudo_groups {}
 
 variable consul_user_groups {}
+
+variable consul_version {}
 
 variable enable_vpc {}
 
@@ -40,8 +42,6 @@ variable enable_consul {}
 
 variable enable_opsec {}
 
-variable enable_stack_compat {}
-
 variable enable_vpn {}
 
 variable enable_nat {}
@@ -53,8 +53,6 @@ variable enable_user_management_consul {}
 variable enable_sso {}
 
 variable my_ip {}
-
-variable datadog_api_key {}
 
 variable vpn_bgp_asn {}
 
@@ -70,6 +68,8 @@ variable monitoring_sudo_groups {}
 
 variable monitoring_user_groups {}
 variable monitoring_password {}
+
+variable monitoring_version {}
 
 variable ci_project {}
 

@@ -1,9 +1,5 @@
 variable account_name {}
 
-variable aws_profile {
-  default = "default"
-}
-
 variable atlas_token {
   default = "anonymous"
 }
@@ -12,11 +8,15 @@ variable nubis_version {
   default = "v1.0.1-sec1"
 }
 
-variable environments {
-  default = "admin,stage,prod"
+variable arenas {
+  type = "list"
+  default = [ "core" ]
 }
 
-variable environments_networks {}
+variable arenas_networks {
+  type = "list"
+  default = [ "172.16.0.0/16" ]
+}
 
 variable admin_users {
   default = "gozer,limed,jcrowe"
@@ -40,6 +40,7 @@ variable consul {
     secret           = "AAAAAAAAAAAAAAAAAAAAAA=="
     sudo_groups      = "nubis_global_admins"
     user_groups      = ""
+    version          = ""
   }
 }
 
@@ -57,7 +58,6 @@ variable features {
     consul                 = 1
     jumphost               = 0
     fluent                 = 0
-    stack_compat           = 0
     mig                    = 0
     ci                     = 0
     vpn                    = 0
@@ -67,13 +67,6 @@ variable features {
     user_management_consul = 1
     monitoring             = 0
     sso                    = 1
-  }
-}
-
-# Turn into features ?
-variable datadog {
-  default = {
-    api_key = "XXXDISABLEDXXX"
   }
 }
 
@@ -128,6 +121,7 @@ variable monitoring {
     sudo_groups           = "nubis_global_admins"
     user_groups           = ""
     password              = ""
+    version               = ""
   }
 }
 
