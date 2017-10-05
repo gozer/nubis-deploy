@@ -7,9 +7,12 @@
 
 - \[consul\] Allow versioning for nubis-consul [\#297](https://github.com/nubisproject/nubis-deploy/issues/297)
 - \[monitoring\] Expose versioning for monitoring module [\#286](https://github.com/nubisproject/nubis-deploy/issues/286)
+- Tag v2.0.0 release [\#302](https://github.com/nubisproject/nubis-deploy/issues/302)
 
 **Merged pull requests:**
 
+- Merge v2.0.0 release into develop. \[skip ci\] [\#304](https://github.com/nubisproject/nubis-deploy/pull/304) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v2.0.0 release \[skip ci\] [\#303](https://github.com/nubisproject/nubis-deploy/pull/303) ([tinnightcap](https://github.com/tinnightcap))
 - Arena Support [\#301](https://github.com/nubisproject/nubis-deploy/pull/301) ([gozer](https://github.com/gozer))
 - Allow consul versioning [\#299](https://github.com/nubisproject/nubis-deploy/pull/299) ([limed](https://github.com/limed))
 - Allow versioning of monitoring module [\#296](https://github.com/nubisproject/nubis-deploy/pull/296) ([limed](https://github.com/limed))
