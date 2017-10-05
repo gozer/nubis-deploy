@@ -593,7 +593,7 @@ module "nat-image" {
 
   region = "${var.aws_region}"
   version = "${var.nubis_version}"
-  
+
   project = "nubis-nat"
 }
 
@@ -795,8 +795,8 @@ resource "aws_iam_role_policy_attachment" "fluent" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v1.6.0-dev"
-  
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.0.0"
+
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
 
@@ -889,8 +889,8 @@ resource "aws_iam_role_policy_attachment" "sso" {
 }
 
 module "sso" {
-  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v1.6.0-dev"
-  
+  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.0.0"
+
   enabled = "${var.enabled * var.enable_sso}"
 
   arenas       = "${var.arenas}"
@@ -931,7 +931,7 @@ resource "aws_iam_role_policy_attachment" "consul" {
 }
 
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v1.6.0-dev"
+  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.0.0"
 
   enabled = "${var.enabled * var.enable_consul}"
 
