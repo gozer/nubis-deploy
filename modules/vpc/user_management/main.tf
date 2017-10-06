@@ -222,18 +222,20 @@ data "template_file" "user_management_config_iam" {
 resource "null_resource" "user_management_unicreds_iam" {
   count = "${var.enabled}"
 
-  lifecycle {
-    create_before_destroy = true
-  }
-
   triggers {
     region            = "${var.region}"
     context           = "-E region:${var.region} -E arena:global -E service:nubis"
     rendered_template = "${data.template_file.user_management_config_iam.rendered}"
     credstash         = "unicreds -k ${var.credstash_key} -r ${var.region} put-file nubis/global"
+    credstash_rm      = "unicreds -k ${var.credstash_key} -r ${var.region} delete nubis/global"
   }
 
   provisioner "local-exec" {
     command = "echo \"${data.template_file.user_management_config_iam.rendered}\" | ${self.triggers.credstash}/user-sync/config /dev/stdin ${self.triggers.context}"
+  }
+
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "${self.triggers.credstash_rm}/user-sync/config"
   }
 }
