@@ -593,7 +593,7 @@ module "nat-image" {
 
   region = "${var.aws_region}"
   version = "${var.nubis_version}"
-  
+
   project = "nubis-nat"
 }
 
@@ -795,8 +795,8 @@ resource "aws_iam_role_policy_attachment" "fluent" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v1.6.0-dev"
-  
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.0.0"
+
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
 
@@ -889,8 +889,8 @@ resource "aws_iam_role_policy_attachment" "sso" {
 }
 
 module "sso" {
-  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v1.6.0-dev"
-  
+  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.0.0"
+
   enabled = "${var.enabled * var.enable_sso}"
 
   arenas       = "${var.arenas}"
@@ -931,7 +931,7 @@ resource "aws_iam_role_policy_attachment" "consul" {
 }
 
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v1.6.0-dev"
+  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.0.0"
 
   enabled = "${var.enabled * var.enable_consul}"
 
@@ -1534,19 +1534,21 @@ data template_file "user_management_config" {
 resource "null_resource" "user_management_unicreds" {
   count = "${var.enabled * var.enable_user_management_consul * length(var.arenas)}"
 
-  lifecycle {
-    create_before_destroy = true
-  }
-
   triggers {
     region            = "${var.aws_region}"
     arena             = "${element(var.arenas, count.index)}"
     context           = "-E region:${var.aws_region} -E arena:${element(var.arenas, count.index)} -E service:nubis"
     rendered_template = "${element(data.template_file.user_management_config.*.rendered, count.index)}"
     unicreds          = "unicreds -k ${module.meta.CredstashKeyID} -r ${var.aws_region} put-file nubis/${element(var.arenas, count.index)}"
+    unicreds_rm       = "unicreds -k ${module.meta.CredstashKeyID} -r ${var.aws_region} delete nubis/${element(var.arenas, count.index)}"
   }
 
   provisioner "local-exec" {
     command = "echo '${element(data.template_file.user_management_config.*.rendered, count.index)}' | ${self.triggers.unicreds}/user-sync/config /dev/stdin ${self.triggers.context}"
+  }
+
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "${self.triggers.unicreds_rm}/user-sync/config"
   }
 }
