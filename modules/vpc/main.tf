@@ -946,6 +946,8 @@ module "consul" {
   credstash_key            = "${module.meta.CredstashKeyID}"
   credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
 
+  secret           = "${var.consul_secret}"
+
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   sso_security_groups             = "${join(",",aws_security_group.sso.*.id)}"
