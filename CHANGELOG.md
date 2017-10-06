@@ -1,30 +1,24 @@
 # Change Log
 
 ## [v2.0.0](https://github.com/nubisproject/nubis-deploy/tree/v2.0.0) (2017-10-06)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.0.0...v2.0.0)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.1...v2.0.0)
 
 **Closed issues:**
 
 - \[unicreds\] Cleanup resources on destruction [\#310](https://github.com/nubisproject/nubis-deploy/issues/310)
 - Updating module versions [\#308](https://github.com/nubisproject/nubis-deploy/issues/308)
-
-**Merged pull requests:**
-
-- Remove unicreds secrets on destruction [\#311](https://github.com/nubisproject/nubis-deploy/pull/311) ([gozer](https://github.com/gozer))
-- Bumping modules to proper version [\#309](https://github.com/nubisproject/nubis-deploy/pull/309) ([limed](https://github.com/limed))
-
-## [v2.0.0](https://github.com/nubisproject/nubis-deploy/tree/v2.0.0) (2017-10-05)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.1...v2.0.0)
-
-**Closed issues:**
-
 - \[consul\] Allow versioning for nubis-consul [\#297](https://github.com/nubisproject/nubis-deploy/issues/297)
 - \[monitoring\] Expose versioning for monitoring module [\#286](https://github.com/nubisproject/nubis-deploy/issues/286)
+- Tag v2.0.0 release [\#312](https://github.com/nubisproject/nubis-deploy/issues/312)
 - Tag v2.0.0 release [\#305](https://github.com/nubisproject/nubis-deploy/issues/305)
 - Tag v2.0.0 release [\#302](https://github.com/nubisproject/nubis-deploy/issues/302)
 
 **Merged pull requests:**
 
+- Merge v2.0.0 release into develop. \[skip ci\] [\#314](https://github.com/nubisproject/nubis-deploy/pull/314) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v2.0.0 release \[skip ci\] [\#313](https://github.com/nubisproject/nubis-deploy/pull/313) ([tinnightcap](https://github.com/tinnightcap))
+- Remove unicreds secrets on destruction [\#311](https://github.com/nubisproject/nubis-deploy/pull/311) ([gozer](https://github.com/gozer))
+- Bumping modules to proper version [\#309](https://github.com/nubisproject/nubis-deploy/pull/309) ([limed](https://github.com/limed))
 - Merge v2.0.0 release into develop. \[skip ci\] [\#307](https://github.com/nubisproject/nubis-deploy/pull/307) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v2.0.0 release \[skip ci\] [\#306](https://github.com/nubisproject/nubis-deploy/pull/306) ([tinnightcap](https://github.com/tinnightcap))
 - Merge v2.0.0 release into develop. \[skip ci\] [\#304](https://github.com/nubisproject/nubis-deploy/pull/304) ([tinnightcap](https://github.com/tinnightcap))
