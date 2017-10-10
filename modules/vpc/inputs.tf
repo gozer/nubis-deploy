@@ -104,6 +104,10 @@ variable ci_user_groups {}
 
 variable ci_version {}
 
+variable ci_instance_type {}
+
+variable ci_root_storage_size {}
+
 variable vpn_bgp_asn {}
 
 variable route53_delegation_set {}

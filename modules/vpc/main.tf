@@ -1021,6 +1021,9 @@ module "ci" {
   nubis_sudo_groups = "${var.ci_sudo_groups}"
   nubis_user_groups = "${var.ci_user_groups}"
 
+  instance_type              = "${var.ci_instance_type}"
+  root_storage_size          = "${var.ci_root_storage_size}"
+
   consul_acl_token  = "${module.consul.master_acl_token}"
 }
 
