@@ -60,6 +60,9 @@ module "us-east-1" {
   ci_sudo_groups                = "${var.ci_sudo_groups}"
   ci_user_groups                = "${var.ci_user_groups}"
   ci_version                    = "${var.ci_version}"
+  ci_instance_type              = "${var.ci_instance_type}"
+  ci_root_storage_size          = "${var.ci_root_storage_size}"
+
 
   # nat
   nat_sudo_groups                 = "${var.nat_sudo_groups}"
@@ -187,6 +190,8 @@ module "us-west-2" {
   ci_sudo_groups                = "${var.ci_sudo_groups}"
   ci_user_groups                = "${var.ci_user_groups}"
   ci_version                    = "${var.ci_version}"
+  ci_instance_type              = "${var.ci_instance_type}"
+  ci_root_storage_size          = "${var.ci_root_storage_size}"
 
   # nat
   nat_sudo_groups               = "${var.nat_sudo_groups}"

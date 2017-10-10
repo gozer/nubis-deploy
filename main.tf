@@ -98,6 +98,8 @@ module "vpcs" {
   ci_sudo_groups                = "${lookup(var.ci, "sudo_groups")}"
   ci_user_groups                = "${lookup(var.ci, "user_groups")}"
   ci_version                    = "${lookup(var.ci, "version")}"
+  ci_instance_type              = "${lookup(var.ci, "instance_type")}"
+  ci_root_storage_size          = "${lookup(var.ci, "root_storage_size")}"
 
   # nat
   nat_sudo_groups               = "${lookup(var.nat, "sudo_groups")}"

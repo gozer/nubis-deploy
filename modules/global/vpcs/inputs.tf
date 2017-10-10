@@ -89,6 +89,10 @@ variable ci_user_groups {}
 
 variable ci_version {}
 
+variable ci_instance_type {}
+
+variable ci_root_storage_size {}
+
 variable route53_delegation_set {}
 
 variable route53_master_zone_id {}
