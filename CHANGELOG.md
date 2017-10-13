@@ -1,11 +1,28 @@
 # Change Log
 
-## [v2.0.0](https://github.com/nubisproject/nubis-deploy/tree/v2.0.0) (2017-10-06)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.0.0...v2.0.0)
+## [v2.0.1](https://github.com/nubisproject/nubis-deploy/tree/v2.0.1) (2017-10-13)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.0.0...v2.0.1)
+
+**Implemented enhancements:**
+
+- Extend monitoring port range [\#300](https://github.com/nubisproject/nubis-deploy/issues/300)
+
+**Closed issues:**
+
+- \[ci\] Make instance\_type and root volume size configurable [\#322](https://github.com/nubisproject/nubis-deploy/issues/322)
+- aws\_iam\_instance\_profile supports a single role only [\#280](https://github.com/nubisproject/nubis-deploy/issues/280)
+- Replace environments with arenas for account deployment [\#279](https://github.com/nubisproject/nubis-deploy/issues/279)
+- \[datadog\] Get rid of it [\#244](https://github.com/nubisproject/nubis-deploy/issues/244)
+- Remove all instances of CloudFormation left [\#200](https://github.com/nubisproject/nubis-deploy/issues/200)
+- Output Jumphost EIPs [\#188](https://github.com/nubisproject/nubis-deploy/issues/188)
+- Remove jumphosts from the platform Consul ACLs [\#97](https://github.com/nubisproject/nubis-deploy/issues/97)
+- \[datadog\] Use Role delegation for setting up AWS integration [\#89](https://github.com/nubisproject/nubis-deploy/issues/89)
+- Create a module framework to make Atlas optionnal [\#21](https://github.com/nubisproject/nubis-deploy/issues/21)
+- Move JSON policy payloads into separate files [\#9](https://github.com/nubisproject/nubis-deploy/issues/9)
 
 **Merged pull requests:**
 
-- Allow specifying Consul gossip secret still [\#318](https://github.com/nubisproject/nubis-deploy/pull/318) ([gozer](https://github.com/gozer))
+- Expose ci instance\_type and root\_storage\_size [\#323](https://github.com/nubisproject/nubis-deploy/pull/323) ([gozer](https://github.com/gozer))
 
 ## [v2.0.0](https://github.com/nubisproject/nubis-deploy/tree/v2.0.0) (2017-10-06)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.5.1...v2.0.0)
@@ -16,6 +33,7 @@
 - Updating module versions [\#308](https://github.com/nubisproject/nubis-deploy/issues/308)
 - \[consul\] Allow versioning for nubis-consul [\#297](https://github.com/nubisproject/nubis-deploy/issues/297)
 - \[monitoring\] Expose versioning for monitoring module [\#286](https://github.com/nubisproject/nubis-deploy/issues/286)
+- Tag v2.0.0 release [\#319](https://github.com/nubisproject/nubis-deploy/issues/319)
 - Tag v2.0.0 release [\#315](https://github.com/nubisproject/nubis-deploy/issues/315)
 - Tag v2.0.0 release [\#312](https://github.com/nubisproject/nubis-deploy/issues/312)
 - Tag v2.0.0 release [\#305](https://github.com/nubisproject/nubis-deploy/issues/305)
@@ -23,6 +41,9 @@
 
 **Merged pull requests:**
 
+- Merge v2.0.0 release into develop. \[skip ci\] [\#321](https://github.com/nubisproject/nubis-deploy/pull/321) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v2.0.0 release \[skip ci\] [\#320](https://github.com/nubisproject/nubis-deploy/pull/320) ([tinnightcap](https://github.com/tinnightcap))
+- Allow specifying Consul gossip secret still [\#318](https://github.com/nubisproject/nubis-deploy/pull/318) ([gozer](https://github.com/gozer))
 - Merge v2.0.0 release into develop. \[skip ci\] [\#317](https://github.com/nubisproject/nubis-deploy/pull/317) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v2.0.0 release \[skip ci\] [\#316](https://github.com/nubisproject/nubis-deploy/pull/316) ([tinnightcap](https://github.com/tinnightcap))
 - Merge v2.0.0 release into develop. \[skip ci\] [\#314](https://github.com/nubisproject/nubis-deploy/pull/314) ([tinnightcap](https://github.com/tinnightcap))

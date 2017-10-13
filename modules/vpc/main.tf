@@ -760,7 +760,7 @@ resource "aws_iam_instance_profile" "nat" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.0.0"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.0.1"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -842,7 +842,7 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.0.0"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.0.1"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
@@ -976,7 +976,7 @@ resource "aws_iam_role_policy_attachment" "ci" {
 
 # XXX: This assumes it's going in the first arena of the first region
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.0.0"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.0.1"
 
   enabled = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
 
@@ -1020,6 +1020,9 @@ module "ci" {
 
   nubis_sudo_groups = "${var.ci_sudo_groups}"
   nubis_user_groups = "${var.ci_user_groups}"
+
+  instance_type              = "${var.ci_instance_type}"
+  root_storage_size          = "${var.ci_root_storage_size}"
 
   consul_acl_token  = "${module.consul.master_acl_token}"
 }

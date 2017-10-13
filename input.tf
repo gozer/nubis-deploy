@@ -108,6 +108,8 @@ variable ci {
     sudo_groups                = "nubis_global_admins"
     user_groups                = ""
     version                    = ""
+    instance_type              = "t2.micro"
+    root_storage_size          = "0"
   }
 }
 
