@@ -1,5 +1,20 @@
 # Change Log
 
+## [v2.0.2](https://github.com/nubisproject/nubis-deploy/tree/v2.0.2) (2017-10-24)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.0.1...v2.0.2)
+
+**Implemented enhancements:**
+
+- \[nat\] Enable versioning [\#337](https://github.com/nubisproject/nubis-deploy/issues/337)
+
+**Fixed bugs:**
+
+- Update fluent-collector/sso/consul modules to v2.0.1 [\#328](https://github.com/nubisproject/nubis-deploy/issues/328)
+
+**Merged pull requests:**
+
+- Add support for versioning [\#339](https://github.com/nubisproject/nubis-deploy/pull/339) ([limed](https://github.com/limed))
+
 ## [v2.0.1](https://github.com/nubisproject/nubis-deploy/tree/v2.0.1) (2017-10-17)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.0.0...v2.0.1)
 
@@ -19,6 +34,7 @@
 - \[datadog\] Use Role delegation for setting up AWS integration [\#89](https://github.com/nubisproject/nubis-deploy/issues/89)
 - Create a module framework to make Atlas optionnal [\#21](https://github.com/nubisproject/nubis-deploy/issues/21)
 - Move JSON policy payloads into separate files [\#9](https://github.com/nubisproject/nubis-deploy/issues/9)
+- Tag v2.0.1 release [\#334](https://github.com/nubisproject/nubis-deploy/issues/334)
 - Tag v2.0.1 release [\#331](https://github.com/nubisproject/nubis-deploy/issues/331)
 - Tag v2.0.1 release [\#325](https://github.com/nubisproject/nubis-deploy/issues/325)
 
