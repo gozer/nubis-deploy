@@ -124,6 +124,8 @@ variable monitoring {
     user_groups           = ""
     password              = ""
     version               = ""
+    instance_type         = ""
+    swap_size_meg         = ""
   }
 }
 
