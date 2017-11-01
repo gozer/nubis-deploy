@@ -115,6 +115,8 @@ module "vpcs" {
   monitoring_user_groups           = "${lookup(var.monitoring, "user_groups")}"
   monitoring_password              = "${lookup(var.monitoring, "password")}"
   monitoring_version               = "${lookup(var.monitoring, "version")}"
+  monitoring_instance_type         = "${lookup(var.monitoring, "instance_type")}"
+  monitoring_swap_size_meg         = "${lookup(var.monitoring, "swap_size_meg")}"
 
   # fluentd
   fluentd                 = "${var.fluentd}"
@@ -122,6 +124,7 @@ module "vpcs" {
   # jumphost groups
   jumphost_sudo_groups    = "${lookup(var.jumphost, "sudo_groups")}"
   jumphost_user_groups    = "${lookup(var.jumphost, "user_groups")}"
+  jumphost_version        = "${lookup(var.jumphost, "version")}"
 
   # sso
   sso_openid_client_id     = "${lookup(var.sso, "openid_client_id")}"
