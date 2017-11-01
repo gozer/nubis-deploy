@@ -124,8 +124,8 @@ variable monitoring {
     user_groups           = ""
     password              = ""
     version               = ""
-    instance_type         = ""
-    swap_size_meg         = ""
+    instance_type         = "t2.small"
+    swap_size_meg         = "2048"
   }
 }
 
