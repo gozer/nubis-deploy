@@ -768,7 +768,7 @@ module "jumphost" {
   aws_region   = "${var.aws_region}"
 
   key_name          = "${var.ssh_key_name}"
-  nubis_version     = "${var.nubis_version}"
+  nubis_version     = "${coalesce(var.jumphost_version, var.nubis_version)}"
   technical_contact = "${var.technical_contact}"
 
   zone_id = "${module.meta.HostedZoneId}"
@@ -804,7 +804,7 @@ module "fluent-collector" {
   aws_region     = "${var.aws_region}"
 
   key_name          = "${var.ssh_key_name}"
-  nubis_version     = "${var.nubis_version}"
+  nubis_version     = "${coalesce(lookup(var.fluentd, "version"), var.nubis_version)}"
   technical_contact = "${var.technical_contact}"
 
   zone_id = "${module.meta.HostedZoneId}"
@@ -851,6 +851,8 @@ module "monitoring" {
 
   key_name          = "${var.ssh_key_name}"
   nubis_version     = "${coalesce(var.monitoring_version, var.nubis_version)}"
+  instance_type     = "${var.monitoring_instance_type}"
+  swap_size_meg     = "${var.monitoring_swap_size_meg}"
 
   technical_contact = "${var.technical_contact}"
 
