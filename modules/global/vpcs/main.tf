@@ -67,6 +67,7 @@ module "us-east-1" {
   # nat
   nat_sudo_groups                 = "${var.nat_sudo_groups}"
   nat_user_groups                 = "${var.nat_user_groups}"
+  nat_version                     = "${var.nat_version}"
 
   # monitoring
   monitoring_slack_url             = "${var.monitoring_slack_url}"
@@ -77,6 +78,8 @@ module "us-east-1" {
   monitoring_user_groups           = "${var.monitoring_user_groups}"
   monitoring_password              = "${var.monitoring_password}"
   monitoring_version               = "${var.monitoring_version}"
+  monitoring_instance_type         = "${var.monitoring_instance_type}"
+  monitoring_swap_size_meg         = "${var.monitoring_swap_size_meg}"
 
   # fluentd
   fluentd                 = "${var.fluentd}"
@@ -84,6 +87,7 @@ module "us-east-1" {
   # jumphost user groups
   jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"
   jumphost_user_groups    = "${var.jumphost_user_groups}"
+  jumphost_version        = "${var.jumphost_version}"
 
   # SSO
   sso_sudo_groups          = "${var.sso_sudo_groups}"
@@ -196,6 +200,7 @@ module "us-west-2" {
   # nat
   nat_sudo_groups               = "${var.nat_sudo_groups}"
   nat_user_groups               = "${var.nat_user_groups}"
+  nat_version                   = "${var.nat_version}"
 
   # monitoring
   monitoring_slack_url             = "${var.monitoring_slack_url}"
@@ -206,6 +211,8 @@ module "us-west-2" {
   monitoring_user_groups           = "${var.monitoring_user_groups}"
   monitoring_password              = "${var.monitoring_password}"
   monitoring_version               = "${var.monitoring_version}"
+  monitoring_instance_type         = "${var.monitoring_instance_type}"
+  monitoring_swap_size_meg         = "${var.monitoring_swap_size_meg}"
 
   # fluentd
   fluentd                 = "${var.fluentd}"
@@ -213,6 +220,7 @@ module "us-west-2" {
   # Jumphost user groups
   jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"
   jumphost_user_groups    = "${var.jumphost_user_groups}"
+  jumphost_version        = "${var.jumphost_version}"
 
   # SSO
   sso_sudo_groups    = "${var.sso_sudo_groups}"

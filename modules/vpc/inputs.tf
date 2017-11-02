@@ -86,6 +86,10 @@ variable monitoring_password {}
 
 variable monitoring_version {}
 
+variable monitoring_instance_type {}
+
+variable monitoring_swap_size_meg {}
+
 variable ci_project {}
 
 variable ci_git_repo {}
@@ -154,6 +158,7 @@ variable fluentd {
 
 variable jumphost_sudo_groups {}
 variable jumphost_user_groups {}
+variable jumphost_version {}
 
 variable sso_sudo_groups {}
 variable sso_user_groups {}
@@ -163,6 +168,7 @@ variable sso_version {}
 
 variable nat_sudo_groups {}
 variable nat_user_groups {}
+variable nat_version {}
 
 variable mig {
   type = "map"

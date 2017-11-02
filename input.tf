@@ -94,6 +94,7 @@ variable nat {
   default = {
     sudo_groups = "nubis_global_admins"
     user_groups = ""
+    version     = ""
   }
 }
 
@@ -123,6 +124,8 @@ variable monitoring {
     user_groups           = ""
     password              = ""
     version               = ""
+    instance_type         = "t2.small"
+    swap_size_meg         = "2048"
   }
 }
 

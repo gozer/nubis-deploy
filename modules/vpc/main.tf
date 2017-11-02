@@ -592,7 +592,7 @@ module "nat-image" {
   source = "../images"
 
   region = "${var.aws_region}"
-  version = "${var.nubis_version}"
+  version = "${coalesce(var.nat_version, var.nubis_version)}"
 
   project = "nubis-nat"
 }
@@ -645,7 +645,7 @@ resource "aws_autoscaling_group" "nat" {
 
   tag {
     key                 = "Name"
-    value               = "NAT (${var.nubis_version}) for ${var.account_name} in ${element(var.arenas, count.index/2)}/${lookup(var.nat_side,count.index%2)}"
+    value               = "NAT (${coalesce(var.nat_version, var.nubis_version)}) for ${var.account_name} in ${element(var.arenas, count.index/2)}/${lookup(var.nat_side,count.index%2)}"
     propagate_at_launch = true
   }
 
@@ -760,7 +760,7 @@ resource "aws_iam_instance_profile" "nat" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.0.2"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.0.3"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -768,7 +768,7 @@ module "jumphost" {
   aws_region   = "${var.aws_region}"
 
   key_name          = "${var.ssh_key_name}"
-  nubis_version     = "${var.nubis_version}"
+  nubis_version     = "${coalesce(var.jumphost_version, var.nubis_version)}"
   technical_contact = "${var.technical_contact}"
 
   zone_id = "${module.meta.HostedZoneId}"
@@ -795,7 +795,7 @@ resource "aws_iam_role_policy_attachment" "fluent" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.0.2"
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.0.3"
 
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
@@ -804,7 +804,7 @@ module "fluent-collector" {
   aws_region     = "${var.aws_region}"
 
   key_name          = "${var.ssh_key_name}"
-  nubis_version     = "${var.nubis_version}"
+  nubis_version     = "${coalesce(lookup(var.fluentd, "version"), var.nubis_version)}"
   technical_contact = "${var.technical_contact}"
 
   zone_id = "${module.meta.HostedZoneId}"
@@ -842,7 +842,7 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.0.2"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.0.3"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
@@ -851,6 +851,8 @@ module "monitoring" {
 
   key_name          = "${var.ssh_key_name}"
   nubis_version     = "${coalesce(var.monitoring_version, var.nubis_version)}"
+  instance_type     = "${var.monitoring_instance_type}"
+  swap_size_meg     = "${var.monitoring_swap_size_meg}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -889,7 +891,7 @@ resource "aws_iam_role_policy_attachment" "sso" {
 }
 
 module "sso" {
-  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.0.2"
+  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.0.3"
 
   enabled = "${var.enabled * var.enable_sso}"
 
@@ -931,7 +933,7 @@ resource "aws_iam_role_policy_attachment" "consul" {
 }
 
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.0.2"
+  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.0.3"
 
   enabled = "${var.enabled * var.enable_consul}"
 
@@ -976,7 +978,7 @@ resource "aws_iam_role_policy_attachment" "ci" {
 
 # XXX: This assumes it's going in the first arena of the first region
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.0.2"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.0.3"
 
   enabled = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
 
