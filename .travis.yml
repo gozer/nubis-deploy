@@ -1,6 +1,6 @@
 language: generic
 before_install:
-- wget --debug --no-check-certificate -v -O terraform.zip "https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip"
+- wget -v -O terraform.zip "https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip"
 - unzip -o terraform.zip -d $HOME/bin
 - rm -f terraform.zip
 script:
