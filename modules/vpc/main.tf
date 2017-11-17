@@ -316,6 +316,15 @@ resource "aws_security_group" "nat" {
     ]
   }
 
+  # conntrackd
+  ingress {
+    from_port = 3780
+    to_port   = 3780
+    protocol  = "udp"
+
+    self = true
+  }
+
   #XXX
   ingress {
     from_port = 22
@@ -508,30 +517,6 @@ resource "aws_route" "public" {
 
 }
 
-#resource "aws_route" "private" {
-
-#  count = "${3 * var.enabled * length(var.arenas)}"
-
-#
-
-#  lifecycle {
-
-#    create_before_destroy = true
-
-#  }
-
-#
-
-#  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
-
-#
-
-#  destination_cidr_block = "0.0.0.0/0"
-
-##  network_interface_id   = "${element(aws_network_interface.private-nat.*.id, count.index)}"
-
-#}
-
 resource "aws_route_table" "private" {
   count = "${3 * var.enabled * length(var.arenas)}"
 
@@ -698,6 +683,8 @@ NUBIS_ARENA='${element(var.arenas, count.index/2)}'
 NUBIS_DOMAIN='${var.nubis_domain}'
 NUBIS_ACCOUNT='${var.account_name}'
 NUBIS_NAT_EIP='${element(aws_eip.nat.*.id, count.index)}'
+NUBIS_NAT_SIDE='${lookup(var.nat_side,count.index%2)}'
+NUBIS_NAT_PEER_SIDE='${lookup(var.nat_side,(1+count.index)%2)}'
 NUBIS_SUDO_GROUPS="${var.nat_sudo_groups}"
 NUBIS_USER_GROUPS="${var.nat_user_groups}"
 USER_DATA
