@@ -747,7 +747,7 @@ resource "aws_iam_instance_profile" "nat" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=develop"
+  source = "github.com/gozer/nubis-jumphost//nubis/terraform?ref=feature%2Fcentennial"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -829,7 +829,7 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=develop"
+  source = "github.com/gozer/nubis-prometheus//nubis/terraform?ref=feature%2Fcentennial"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
