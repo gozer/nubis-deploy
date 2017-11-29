@@ -68,8 +68,6 @@ module "vpcs" {
   public_state_bucket    = "${module.global_meta.public_state_bucket}"
   apps_state_bucket      = "${module.global_meta.apps_state_bucket}"
 
-  my_ip = "${var.my_ip}"
-
   aws_regions    = "${var.aws_regions}"
   aws_state_region = "${var.global_region}"
 

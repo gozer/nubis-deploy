@@ -325,17 +325,6 @@ resource "aws_security_group" "nat" {
     self = true
   }
 
-  #XXX
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "${var.my_ip}",
-    ]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0

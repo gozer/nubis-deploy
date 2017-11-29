@@ -68,8 +68,6 @@ variable user_management_rate {
   default = "rate(15 minutes)"
 }
 
-variable my_ip {}
-
 variable monitoring_slack_url {}
 
 variable monitoring_slack_channel {}
