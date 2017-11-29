@@ -82,6 +82,10 @@ resource "aws_s3_bucket" "public-state" {
   versioning {
     enabled = true
   }
+
+  tags {
+    TechnicalContact = "${var.technical_contact}"
+  }
 }
 
 resource "aws_s3_bucket_policy" "public-state" {
@@ -172,9 +176,16 @@ resource "aws_s3_bucket" "apps-state" {
   acl           = "private"
   region        = "${var.aws_region}"
 
+  force_destroy = true
+
   versioning {
     enabled = true
   }
+
+  tags {
+    TechnicalContact = "${var.technical_contact}"
+  }
+
 }
 
 module "autospotting" {
