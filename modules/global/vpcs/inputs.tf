@@ -52,8 +52,6 @@ variable enable_user_management_consul {}
 
 variable enable_sso {}
 
-variable my_ip {}
-
 variable vpn_bgp_asn {}
 
 variable monitoring_slack_url {}

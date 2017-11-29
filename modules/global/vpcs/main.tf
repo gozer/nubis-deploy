@@ -33,8 +33,6 @@ module "us-east-1" {
   apps_state_bucket      = "${var.apps_state_bucket}"
   aws_state_region       = "${var.aws_state_region}"
 
-  my_ip = "${var.my_ip}"
-
   # This exists to force a dependency on the global module
   account_name          = "${var.account_name}"
   nubis_version         = "${var.nubis_version}"
@@ -167,8 +165,6 @@ module "us-west-2" {
   public_state_bucket    = "${var.public_state_bucket}"
   apps_state_bucket      = "${var.apps_state_bucket}"
   aws_state_region       = "${var.aws_state_region}"
-
-  my_ip = "${var.my_ip}"
 
   # This exists to force a dependency on the global module
   account_name          = "${var.account_name}"
