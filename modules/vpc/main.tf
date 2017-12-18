@@ -851,7 +851,6 @@ module "monitoring" {
 
   key_name          = "${var.ssh_key_name}"
   nubis_version     = "${coalesce(var.monitoring_version, var.nubis_version)}"
-  instance_type     = "${var.monitoring_instance_type}"
   swap_size_meg     = "${var.monitoring_swap_size_meg}"
 
   technical_contact = "${var.technical_contact}"
