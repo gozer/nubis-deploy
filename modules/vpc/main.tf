@@ -858,6 +858,8 @@ module "monitoring" {
   nubis_user_groups     = "${var.monitoring_user_groups}"
 
   password              = "${var.monitoring_password}"
+
+  instance_type         = "${var.monitoring_instance_type}"
 }
 
 resource "aws_iam_role_policy_attachment" "sso" {
