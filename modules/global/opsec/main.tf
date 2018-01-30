@@ -15,8 +15,8 @@ resource "aws_cloudtrail" "opsec-cloudtrail" {
 }
 
 resource "aws_cloudformation_stack" "opsec" {
-  count                         = "${var.enabled}"
-  name = "opsec"
+  count = "${var.enabled}"
+  name  = "opsec"
 
   capabilities = [
     "CAPABILITY_IAM",

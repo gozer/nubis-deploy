@@ -9,13 +9,13 @@ variable nubis_version {
 }
 
 variable arenas {
-  type = "list"
-  default = [ "core" ]
+  type    = "list"
+  default = ["core"]
 }
 
 variable arenas_networks {
-  type = "list"
-  default = [ "172.16.0.0/16" ]
+  type    = "list"
+  default = ["172.16.0.0/16"]
 }
 
 variable admin_users {
@@ -36,10 +36,10 @@ variable global_region {
 
 variable consul {
   default = {
-    secret           = ""
-    sudo_groups      = "nubis_global_admins"
-    user_groups      = ""
-    version          = ""
+    secret      = ""
+    sudo_groups = "nubis_global_admins"
+    user_groups = ""
+    version     = ""
   }
 }
 
@@ -96,17 +96,18 @@ variable nat {
 
 variable ci {
   default = {
-    project                    = "skel"
-    git_repo                   = "https://github.com/nubisproject/nubis-skel.git"
-    admins                     = "gozer"
-    slack_domain               = "nubisproject"
-    slack_channel              = "#changes"
-    slack_token                = "unset"
-    sudo_groups                = "nubis_global_admins"
-    user_groups                = ""
-    version                    = ""
-    instance_type              = "t2.micro"
-    root_storage_size          = "0"
+    project           = "skel"
+    git_repo          = "https://github.com/nubisproject/nubis-skel.git"
+    admins            = "gozer"
+    slack_domain      = "nubisproject"
+    slack_channel     = "#changes"
+    slack_token       = "unset"
+    sudo_groups       = "nubis_global_admins"
+    user_groups       = ""
+    version           = ""
+    instance_type     = "t2.micro"
+    root_storage_size = "0"
+    newrelic_api_key  = ""
   }
 }
 
@@ -164,9 +165,9 @@ variable sso {
   default = {
     openid_client_id     = ""
     openid_client_secret = ""
-    sudo_groups = "nubis_global_admins"
-    user_groups = ""
-    version     = ""
+    sudo_groups          = "nubis_global_admins"
+    user_groups          = ""
+    version              = ""
   }
 }
 
