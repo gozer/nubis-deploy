@@ -123,9 +123,9 @@ resource "aws_iam_policy_attachment" "read_only" {
 }
 
 resource "aws_iam_policy_attachment" "admins" {
-  name       = "admins"
+  name = "admins"
 
-  roles      = [ "${aws_iam_role.admin.*.name}" ]
+  roles      = ["${aws_iam_role.admin.*.name}"]
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 

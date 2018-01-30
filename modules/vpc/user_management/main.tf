@@ -1,6 +1,6 @@
 provider "aws" {
   version = "~> 0.1"
-  region = "${var.region}"
+  region  = "${var.region}"
 }
 
 provider "null" {
@@ -200,22 +200,22 @@ data "template_file" "user_management_config_iam" {
   template = "${file("${path.module}/../user_management.yml.tmpl")}"
 
   vars {
-    region                  = "${var.region}"
-    arena                   = "global"
-    smtp_from_address       = "${var.user_management_smtp_from_address}"
-    smtp_username           = "${var.user_management_smtp_username}"
-    smtp_password           = "${var.user_management_smtp_password}"
-    smtp_host               = "${var.user_management_smtp_host}"
-    smtp_port               = "${var.user_management_smtp_port}"
-    ldap_server             = "${var.user_management_ldap_server}"
-    ldap_port               = "${var.user_management_ldap_port}"
-    ldap_base_dn            = "${var.user_management_ldap_base_dn}"
-    ldap_bind_user          = "${var.user_management_ldap_bind_user}"
-    ldap_bind_password      = "${var.user_management_ldap_bind_password}"
-    tls_cert                = "${replace(file("${path.cwd}/${var.user_management_tls_cert}"), "/(.*)\\n/", "    $1\n")}"
-    tls_key                 = "${replace(file("${path.cwd}/${var.user_management_tls_key}"), "/(.*)\\n/", "    $1\n")}"
-    sudo_user_ldap_group    = "${replace(var.user_management_sudo_groups, ",", "|")}"
-    users_ldap_group        = "${replace(var.user_management_user_groups, ",", "|")}"
+    region               = "${var.region}"
+    arena                = "global"
+    smtp_from_address    = "${var.user_management_smtp_from_address}"
+    smtp_username        = "${var.user_management_smtp_username}"
+    smtp_password        = "${var.user_management_smtp_password}"
+    smtp_host            = "${var.user_management_smtp_host}"
+    smtp_port            = "${var.user_management_smtp_port}"
+    ldap_server          = "${var.user_management_ldap_server}"
+    ldap_port            = "${var.user_management_ldap_port}"
+    ldap_base_dn         = "${var.user_management_ldap_base_dn}"
+    ldap_bind_user       = "${var.user_management_ldap_bind_user}"
+    ldap_bind_password   = "${var.user_management_ldap_bind_password}"
+    tls_cert             = "${replace(file("${path.cwd}/${var.user_management_tls_cert}"), "/(.*)\\n/", "    $1\n")}"
+    tls_key              = "${replace(file("${path.cwd}/${var.user_management_tls_key}"), "/(.*)\\n/", "    $1\n")}"
+    sudo_user_ldap_group = "${replace(var.user_management_sudo_groups, ",", "|")}"
+    users_ldap_group     = "${replace(var.user_management_user_groups, ",", "|")}"
   }
 }
 
