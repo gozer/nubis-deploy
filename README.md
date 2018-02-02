@@ -225,10 +225,6 @@ features.ci = 0
 features.opsec = 0
 features.stack_compat = 0
 
-# Your own IP for debugging
-# (curl ifconfig.me)
-my_ip = "a.b.c.d/32"
-
 # Consul (required)
 
 # generate a UUID with "uuidgen"

@@ -68,8 +68,6 @@ variable user_management_rate {
   default = "rate(15 minutes)"
 }
 
-variable my_ip {}
-
 variable monitoring_slack_url {}
 
 variable monitoring_slack_channel {}
@@ -90,27 +88,9 @@ variable monitoring_instance_type {}
 
 variable monitoring_swap_size_meg {}
 
-variable ci_project {}
-
-variable ci_git_repo {}
-
-variable ci_admins {}
-
-variable ci_slack_domain {}
-
-variable ci_slack_channel {}
-
-variable ci_slack_token {}
-
-variable ci_sudo_groups {}
-
-variable ci_user_groups {}
-
-variable ci_version {}
-
-variable ci_instance_type {}
-
-variable ci_root_storage_size {}
+variable ci {
+  type = "map"
+}
 
 variable vpn_bgp_asn {}
 
@@ -155,6 +135,8 @@ variable user_management_user_groups {}
 variable fluentd {
   type = "map"
 }
+
+variable fluentd_version {}
 
 variable jumphost_sudo_groups {}
 variable jumphost_user_groups {}

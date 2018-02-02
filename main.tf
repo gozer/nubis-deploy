@@ -1,17 +1,16 @@
 terraform {
-  backend "s3" {
-  }
+  backend "s3" {}
 }
 
 provider "atlas" {
   version = "~> 0.1"
-  token = "${var.atlas_token}"
+  token   = "${var.atlas_token}"
 }
 
 module "global_admins" {
   source = "modules/global/admins"
 
-  aws_region  = "${element(split(",",var.aws_regions),0)}"
+  aws_region = "${element(split(",",var.aws_regions),0)}"
 
   admin_users = "${var.admin_users}"
   guest_users = "${var.guest_users}"
@@ -25,7 +24,7 @@ module "global_admins" {
 module "global_meta" {
   source = "modules/global/meta"
 
-  aws_region  = "${var.global_region}"
+  aws_region = "${var.global_region}"
 
   account_name  = "${var.account_name}"
   nubis_version = "${var.nubis_version}"
@@ -39,7 +38,7 @@ module "global_opsec" {
 
   enabled = "${lookup(var.features,"opsec")}"
 
-  aws_region  = "${element(split(",",var.aws_regions),0)}"
+  aws_region = "${element(split(",",var.aws_regions),0)}"
 
   cloudtrail_bucket    = "${lookup(var.cloudtrail, "bucket")}"
   cloudtrail_sns_topic = "${lookup(var.cloudtrail, "sns_topic")}"
@@ -68,20 +67,18 @@ module "vpcs" {
   public_state_bucket    = "${module.global_meta.public_state_bucket}"
   apps_state_bucket      = "${module.global_meta.apps_state_bucket}"
 
-  my_ip = "${var.my_ip}"
-
-  aws_regions    = "${var.aws_regions}"
+  aws_regions      = "${var.aws_regions}"
   aws_state_region = "${var.global_region}"
 
   # This exists to force a dependency on the global admins module
   account_name = "${module.global_admins.account_name}"
 
-  nubis_version             = "${var.nubis_version}"
-  nubis_domain              = "${var.nubis_domain}"
-  arenas                    = "${var.arenas}"
+  nubis_version       = "${var.nubis_version}"
+  nubis_domain        = "${var.nubis_domain}"
+  arenas              = "${var.arenas}"
   arenas_networks     = "${var.arenas_networks}"
   arenas_ipsec_target = "${lookup(var.vpn, "ipsec_target")}"
-  vpn_bgp_asn               = "${lookup(var.vpn, "bgp_asn")}"
+  vpn_bgp_asn         = "${lookup(var.vpn, "bgp_asn")}"
 
   consul_secret           = "${lookup(var.consul, "secret")}"
   consul_master_acl_token = "${lookup(var.consul, "master_acl_token")}"
@@ -89,22 +86,13 @@ module "vpcs" {
   consul_user_groups      = "${lookup(var.consul, "user_groups")}"
   consul_version          = "${lookup(var.consul, "version")}"
 
-  ci_project                    = "${lookup(var.ci, "project")}"
-  ci_git_repo                   = "${lookup(var.ci, "git_repo")}"
-  ci_admins                     = "${lookup(var.ci, "admins")}"
-  ci_slack_domain               = "${lookup(var.ci, "slack_domain")}"
-  ci_slack_channel              = "${lookup(var.ci, "slack_channel")}"
-  ci_slack_token                = "${lookup(var.ci, "slack_token")}"
-  ci_sudo_groups                = "${lookup(var.ci, "sudo_groups")}"
-  ci_user_groups                = "${lookup(var.ci, "user_groups")}"
-  ci_version                    = "${lookup(var.ci, "version")}"
-  ci_instance_type              = "${lookup(var.ci, "instance_type")}"
-  ci_root_storage_size          = "${lookup(var.ci, "root_storage_size")}"
+  # Jenkins
+  ci = "${var.ci}"
 
   # nat
-  nat_sudo_groups               = "${lookup(var.nat, "sudo_groups")}"
-  nat_user_groups               = "${lookup(var.nat, "user_groups")}"
-  nat_version                   = "${lookup(var.nat, "version")}"
+  nat_sudo_groups = "${lookup(var.nat, "sudo_groups")}"
+  nat_user_groups = "${lookup(var.nat, "user_groups")}"
+  nat_version     = "${lookup(var.nat, "version")}"
 
   # monitoring
   monitoring_slack_url             = "${lookup(var.monitoring, "slack_url")}"
@@ -119,19 +107,20 @@ module "vpcs" {
   monitoring_swap_size_meg         = "${lookup(var.monitoring, "swap_size_meg")}"
 
   # fluentd
-  fluentd                 = "${var.fluentd}"
+  fluentd         = "${var.fluentd}"
+  fluentd_version = "${lookup(var.fluentd, "version")}"
 
   # jumphost groups
-  jumphost_sudo_groups    = "${lookup(var.jumphost, "sudo_groups")}"
-  jumphost_user_groups    = "${lookup(var.jumphost, "user_groups")}"
-  jumphost_version        = "${lookup(var.jumphost, "version")}"
+  jumphost_sudo_groups = "${lookup(var.jumphost, "sudo_groups")}"
+  jumphost_user_groups = "${lookup(var.jumphost, "user_groups")}"
+  jumphost_version     = "${lookup(var.jumphost, "version")}"
 
   # sso
   sso_openid_client_id     = "${lookup(var.sso, "openid_client_id")}"
   sso_openid_client_secret = "${lookup(var.sso, "openid_client_secret")}"
-  sso_sudo_groups    = "${lookup(var.sso, "sudo_groups")}"
-  sso_user_groups    = "${lookup(var.sso, "user_groups")}"
-  sso_version        = "${lookup(var.sso, "version")}"
+  sso_sudo_groups          = "${lookup(var.sso, "sudo_groups")}"
+  sso_user_groups          = "${lookup(var.sso, "user_groups")}"
+  sso_version              = "${lookup(var.sso, "version")}"
 
   # user management
   user_management_smtp_from_address  = "${lookup(var.user_management, "smtp_from_address")}"
@@ -150,7 +139,7 @@ module "vpcs" {
   user_management_user_groups        = "${lookup(var.user_management, "user_groups")}"
 
   # MiG
-  mig                                = "${var.mig}"
+  mig = "${var.mig}"
 
   # Instance MFA (DUO)
   instance_mfa = "${var.instance_mfa}"

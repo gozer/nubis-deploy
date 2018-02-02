@@ -82,6 +82,10 @@ resource "aws_s3_bucket" "public-state" {
   versioning {
     enabled = true
   }
+
+  tags {
+    TechnicalContact = "${var.technical_contact}"
+  }
 }
 
 resource "aws_s3_bucket_policy" "public-state" {
@@ -155,8 +159,6 @@ resource "aws_cloudfront_distribution" "public-state" {
     cloudfront_default_certificate = true
     minimum_protocol_version       = "TLSv1"
   }
-  
-  
 }
 
 resource "aws_route53_delegation_set" "meta" {
@@ -172,18 +174,25 @@ resource "aws_s3_bucket" "apps-state" {
   acl           = "private"
   region        = "${var.aws_region}"
 
+  force_destroy = true
+
   versioning {
     enabled = true
+  }
+
+  tags {
+    TechnicalContact = "${var.technical_contact}"
   }
 }
 
 module "autospotting" {
   source = "github.com/cristim/autospotting/terraform"
 
-#  autospotting_min_on_demand_number = "0"
-#  autospotting_min_on_demand_percentage = "50.0"
-#  autospotting_regions_enabled = "eu*,us*"
+  #  autospotting_min_on_demand_number = "0"
+  #  autospotting_min_on_demand_percentage = "50.0"
+  #  autospotting_regions_enabled = "eu*,us*"
   lambda_zipname = "${path.module}/lambda_build_425.zip"
 }
 
 #spot-enabled
+

@@ -22,7 +22,6 @@ resource "aws_key_pair" "nubis" {
 
   key_name   = "${var.ssh_key_name}"
   public_key = "${var.nubis_ssh_key}"
-
 }
 
 resource "aws_iam_policy" "credstash" {
@@ -73,7 +72,7 @@ module "meta" {
 
   enabled = "${var.enabled}"
 
-  aws_region  = "${var.aws_region}"
+  aws_region = "${var.aws_region}"
 
   nubis_version     = "${var.nubis_version}"
   nubis_domain      = "${var.nubis_domain}"
@@ -111,7 +110,7 @@ resource "aws_vpc" "nubis" {
 resource "aws_default_security_group" "default" {
   count = "${var.enabled * length(var.arenas)}"
 
-  vpc_id         = "${element(aws_vpc.nubis.*.id, count.index)}"
+  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
 
   # Clear default ingress rules
   #ingress {
@@ -316,15 +315,13 @@ resource "aws_security_group" "nat" {
     ]
   }
 
-  #XXX
+  # conntrackd
   ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
+    from_port = 3780
+    to_port   = 3780
+    protocol  = "udp"
 
-    cidr_blocks = [
-      "${var.my_ip}",
-    ]
+    self = true
   }
 
   egress {
@@ -505,32 +502,7 @@ resource "aws_route" "public" {
 
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = "${element(aws_internet_gateway.nubis.*.id, count.index)}"
-
 }
-
-#resource "aws_route" "private" {
-
-#  count = "${3 * var.enabled * length(var.arenas)}"
-
-#
-
-#  lifecycle {
-
-#    create_before_destroy = true
-
-#  }
-
-#
-
-#  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
-
-#
-
-#  destination_cidr_block = "0.0.0.0/0"
-
-##  network_interface_id   = "${element(aws_network_interface.private-nat.*.id, count.index)}"
-
-#}
 
 resource "aws_route_table" "private" {
   count = "${3 * var.enabled * length(var.arenas)}"
@@ -591,7 +563,7 @@ resource "aws_network_interface" "private-nat" {
 module "nat-image" {
   source = "../images"
 
-  region = "${var.aws_region}"
+  region  = "${var.aws_region}"
   version = "${coalesce(var.nat_version, var.nubis_version)}"
 
   project = "nubis-nat"
@@ -627,7 +599,7 @@ resource "aws_autoscaling_group" "nat" {
   desired_capacity = 1
 
   # ELB
-  health_check_type = "ELB"
+  health_check_type         = "ELB"
   health_check_grace_period = 300
 
   launch_configuration = "${element(aws_launch_configuration.nat.*.name, count.index)}"
@@ -698,15 +670,17 @@ NUBIS_ARENA='${element(var.arenas, count.index/2)}'
 NUBIS_DOMAIN='${var.nubis_domain}'
 NUBIS_ACCOUNT='${var.account_name}'
 NUBIS_NAT_EIP='${element(aws_eip.nat.*.id, count.index)}'
+NUBIS_NAT_SIDE='${lookup(var.nat_side,count.index%2)}'
+NUBIS_NAT_PEER_SIDE='${lookup(var.nat_side,(1+count.index)%2)}'
 NUBIS_SUDO_GROUPS="${var.nat_sudo_groups}"
 NUBIS_USER_GROUPS="${var.nat_user_groups}"
 USER_DATA
 }
 
 resource "aws_iam_role_policy_attachment" "nat" {
-    count = "${var.enabled * var.enable_nat * length(var.arenas)}"
-    role = "${element(concat(aws_iam_role.nat.*.id, list("")), count.index)}"
-    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+  count      = "${var.enabled * var.enable_nat * length(var.arenas)}"
+  role       = "${element(concat(aws_iam_role.nat.*.id, list("")), count.index)}"
+  policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
 resource "aws_iam_role" "nat" {
@@ -755,17 +729,17 @@ resource "aws_iam_instance_profile" "nat" {
     create_before_destroy = true
   }
 
-  name  = "nubis-nat-profile-${element(var.arenas, count.index)}-${var.aws_region}"
+  name = "nubis-nat-profile-${element(var.arenas, count.index)}-${var.aws_region}"
   role = "${element(aws_iam_role.nat.*.name, count.index)}"
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.0.4"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.1.0"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
-  arenas       = "${var.arenas}"
-  aws_region   = "${var.aws_region}"
+  arenas     = "${var.arenas}"
+  aws_region = "${var.aws_region}"
 
   key_name          = "${var.ssh_key_name}"
   nubis_version     = "${coalesce(var.jumphost_version, var.nubis_version)}"
@@ -789,22 +763,22 @@ module "jumphost" {
 }
 
 resource "aws_iam_role_policy_attachment" "fluent" {
-    count = "${var.enabled * var.enable_fluent * length(var.arenas)}"
-    role = "${element(split(",",module.fluent-collector.iam_roles), count.index)}"
-    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+  count      = "${var.enabled * var.enable_fluent * length(var.arenas)}"
+  role       = "${element(split(",",module.fluent-collector.iam_roles), count.index)}"
+  policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.0.4"
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.1.0"
 
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
 
-  arenas         = "${var.arenas}"
-  aws_region     = "${var.aws_region}"
+  arenas     = "${var.arenas}"
+  aws_region = "${var.aws_region}"
 
   key_name          = "${var.ssh_key_name}"
-  nubis_version     = "${coalesce(lookup(var.fluentd, "version"), var.nubis_version)}"
+  nubis_version     = "${coalesce(var.fluentd_version, var.nubis_version)}"
   technical_contact = "${var.technical_contact}"
 
   zone_id = "${module.meta.HostedZoneId}"
@@ -832,32 +806,32 @@ module "fluent-collector" {
   nubis_sudo_groups = "${lookup(var.fluentd, "sudo_groups")}"
   nubis_user_groups = "${lookup(var.fluentd, "user_groups")}"
 
-  instance_type     = "${lookup(var.fluentd, "instance_type", "")}"
+  instance_type = "${lookup(var.fluentd, "instance_type", "")}"
 }
 
 resource "aws_iam_role_policy_attachment" "monitoring" {
-    count = "${var.enabled * var.enable_monitoring * length(var.arenas)}"
-    role = "${element(split(",",module.monitoring.iam_roles), count.index)}"
-    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+  count      = "${var.enabled * var.enable_monitoring * length(var.arenas)}"
+  role       = "${element(split(",",module.monitoring.iam_roles), count.index)}"
+  policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.0.4"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.1.0"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
-  arenas       = "${var.arenas}"
-  aws_region   = "${var.aws_region}"
+  arenas     = "${var.arenas}"
+  aws_region = "${var.aws_region}"
 
-  key_name          = "${var.ssh_key_name}"
-  nubis_version     = "${coalesce(var.monitoring_version, var.nubis_version)}"
-  instance_type     = "${var.monitoring_instance_type}"
-  swap_size_meg     = "${var.monitoring_swap_size_meg}"
+  key_name      = "${var.ssh_key_name}"
+  nubis_version = "${coalesce(var.monitoring_version, var.nubis_version)}"
+  instance_type = "${var.monitoring_instance_type}"
+  swap_size_meg = "${var.monitoring_swap_size_meg}"
 
   technical_contact = "${var.technical_contact}"
 
-  vpc_ids    = "${join(",", aws_vpc.nubis.*.id)}"
-  subnet_ids = "${join(",", aws_subnet.private.*.id)}"
+  vpc_ids           = "${join(",", aws_vpc.nubis.*.id)}"
+  subnet_ids        = "${join(",", aws_subnet.private.*.id)}"
   public_subnet_ids = "${join(",", aws_subnet.public.*.id)}"
 
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
@@ -878,32 +852,34 @@ module "monitoring" {
   notification_email    = "${var.monitoring_notification_email}"
   pagerduty_service_key = "${var.monitoring_pagerduty_service_key}"
 
-  nubis_sudo_groups     = "${var.monitoring_sudo_groups}"
-  nubis_user_groups     = "${var.monitoring_user_groups}"
+  nubis_sudo_groups = "${var.monitoring_sudo_groups}"
+  nubis_user_groups = "${var.monitoring_user_groups}"
 
-  password              = "${var.monitoring_password}"
+  password = "${var.monitoring_password}"
+
+  instance_type = "${var.monitoring_instance_type}"
 }
 
 resource "aws_iam_role_policy_attachment" "sso" {
-    count = "${var.enabled * var.enable_sso * length(var.arenas)}"
-    role = "${element(split(",",module.sso.iam_roles), count.index)}"
-    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+  count      = "${var.enabled * var.enable_sso * length(var.arenas)}"
+  role       = "${element(split(",",module.sso.iam_roles), count.index)}"
+  policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
 module "sso" {
-  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.0.4"
+  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.1.0"
 
   enabled = "${var.enabled * var.enable_sso}"
 
-  arenas       = "${var.arenas}"
-  aws_region   = "${var.aws_region}"
+  arenas     = "${var.arenas}"
+  aws_region = "${var.aws_region}"
 
   key_name          = "${var.ssh_key_name}"
   nubis_version     = "${coalesce(var.sso_version, var.nubis_version)}"
   technical_contact = "${var.technical_contact}"
 
-  vpc_ids    = "${join(",", aws_vpc.nubis.*.id)}"
-  subnet_ids = "${join(",", aws_subnet.private.*.id)}"
+  vpc_ids           = "${join(",", aws_vpc.nubis.*.id)}"
+  subnet_ids        = "${join(",", aws_subnet.private.*.id)}"
   public_subnet_ids = "${join(",", aws_subnet.public.*.id)}"
 
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
@@ -912,8 +888,8 @@ module "sso" {
   monitoring_security_groups      = "${join(",",aws_security_group.monitoring.*.id)}"
   sso_security_groups             = "${join(",",aws_security_group.sso.*.id)}"
 
-  openid_client_id                = "${var.sso_openid_client_id}"
-  openid_client_secret            = "${var.sso_openid_client_secret}"
+  openid_client_id     = "${var.sso_openid_client_id}"
+  openid_client_secret = "${var.sso_openid_client_secret}"
 
   credstash_key            = "${module.meta.CredstashKeyID}"
   credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
@@ -922,41 +898,41 @@ module "sso" {
   service_name = "${var.account_name}"
   zone_id      = "${module.meta.HostedZoneId}"
 
-  nubis_sudo_groups     = "${var.sso_sudo_groups}"
-  nubis_user_groups     = "${var.sso_user_groups}"
+  nubis_sudo_groups = "${var.sso_sudo_groups}"
+  nubis_user_groups = "${var.sso_user_groups}"
 }
 
 resource "aws_iam_role_policy_attachment" "consul" {
-    count = "${var.enabled * var.enable_consul * length(var.arenas)}"
-    role = "${element(split(",",module.consul.iam_roles), count.index)}"
-    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+  count      = "${var.enabled * var.enable_consul * length(var.arenas)}"
+  role       = "${element(split(",",module.consul.iam_roles), count.index)}"
+  policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.0.4"
+  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.1.0"
 
   enabled = "${var.enabled * var.enable_consul}"
 
   arenas = "${var.arenas}"
 
-  aws_region     = "${var.aws_region}"
+  aws_region = "${var.aws_region}"
 
-  key_name           = "${var.ssh_key_name}"
-  nubis_version      = "${coalesce(var.consul_version, var.nubis_version)}"
-  service_name       = "${var.account_name}"
+  key_name      = "${var.ssh_key_name}"
+  nubis_version = "${coalesce(var.consul_version, var.nubis_version)}"
+  service_name  = "${var.account_name}"
 
   credstash_key            = "${module.meta.CredstashKeyID}"
   credstash_dynamodb_table = "${module.meta.CredstashDynamoDB}"
 
-  secret           = "${var.consul_secret}"
+  secret = "${var.consul_secret}"
 
   shared_services_security_groups = "${join(",",aws_security_group.shared_services.*.id)}"
   internet_access_security_groups = "${join(",",aws_security_group.internet_access.*.id)}"
   sso_security_groups             = "${join(",",aws_security_group.sso.*.id)}"
 
-  public_subnets     = "${join(",", aws_subnet.public.*.id)}"
-  private_subnets    = "${join(",", aws_subnet.private.*.id)}"
-  vpc_ids            = "${join(",", aws_vpc.nubis.*.id)}"
+  public_subnets  = "${join(",", aws_subnet.public.*.id)}"
+  private_subnets = "${join(",", aws_subnet.private.*.id)}"
+  vpc_ids         = "${join(",", aws_vpc.nubis.*.id)}"
 
   nubis_sudo_groups = "${var.consul_sudo_groups}"
   nubis_user_groups = "${var.consul_user_groups}"
@@ -967,28 +943,27 @@ module "consul" {
   instance_mfa = "${var.instance_mfa}"
 }
 
-
 # XXX: This assumes it's going in the first region
 
 resource "aws_iam_role_policy_attachment" "ci" {
-    count = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
-    role = "${module.ci.iam_role}"
-    policy_arn = "${element(aws_iam_policy.credstash.*.arn, 0)}"
+  count      = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
+  role       = "${module.ci.iam_role}"
+  policy_arn = "${element(aws_iam_policy.credstash.*.arn, 0)}"
 }
 
 # XXX: This assumes it's going in the first arena of the first region
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.0.4"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.1.0"
 
   enabled = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
 
-  arena       = "${element(var.arenas, 0)}"
-  region      = "${var.aws_region}"
+  arena  = "${element(var.arenas, 0)}"
+  region = "${var.aws_region}"
 
   credstash_key = "${module.meta.CredstashKeyID}"
 
   key_name          = "${var.ssh_key_name}"
-  version           = "${coalesce(var.ci_version, var.nubis_version)}"
+  version           = "${coalesce(lookup(var.ci, "version"), var.nubis_version)}"
   technical_contact = "${var.technical_contact}"
 
   nubis_domain = "${var.nubis_domain}"
@@ -1010,23 +985,24 @@ module "ci" {
 
   account_name = "${var.account_name}"
 
-  project                    = "${var.ci_project}"
-  git_repo                   = "${var.ci_git_repo}"
-  slack_domain               = "${var.ci_slack_domain}"
-  slack_channel              = "${var.ci_slack_channel}"
-  slack_token                = "${var.ci_slack_token}"
+  project          = "${lookup(var.ci, "project")}"
+  git_repo         = "${lookup(var.ci, "git_repo")}"
+  slack_domain     = "${lookup(var.ci, "slack_domain")}"
+  slack_channel    = "${lookup(var.ci, "slack_channel")}"
+  slack_token      = "${lookup(var.ci, "slack_token")}"
+  newrelic_api_key = "${lookup(var.ci, "newrelic_api_key")}"
 
-  admins                     = "${var.ci_admins}"
+  admins = "${lookup(var.ci, "admins")}"
 
   email = "${var.technical_contact}"
 
-  nubis_sudo_groups = "${var.ci_sudo_groups}"
-  nubis_user_groups = "${var.ci_user_groups}"
+  nubis_sudo_groups = "${lookup(var.ci, "sudo_groups")}"
+  nubis_user_groups = "${lookup(var.ci, "user_groups")}"
 
-  instance_type              = "${var.ci_instance_type}"
-  root_storage_size          = "${var.ci_root_storage_size}"
+  instance_type     = "${lookup(var.ci, "instance_type")}"
+  root_storage_size = "${lookup(var.ci, "root_storage_size")}"
 
-  consul_acl_token  = "${module.consul.master_acl_token}"
+  consul_acl_token = "${module.consul.master_acl_token}"
 }
 
 module "user_management" {
@@ -1138,7 +1114,6 @@ resource "aws_route" "vpn-public" {
 
   destination_cidr_block = "10.0.0.0/8"
   gateway_id             = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index)}"
-
 }
 
 resource "aws_route" "vpn-private" {
@@ -1152,7 +1127,6 @@ resource "aws_route" "vpn-private" {
 
   destination_cidr_block = "10.0.0.0/8"
   gateway_id             = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index/3)}"
-
 }
 
 # Create a proxy discovery VPC DNS zone
@@ -1226,9 +1200,9 @@ resource "aws_elb" "proxy" {
   ]
 
   tags = {
-    Name        = "elb-proxy-${element(var.arenas, count.index)}"
-    Region      = "${var.aws_region}"
-    Arena       = "${element(var.arenas, count.index)}"
+    Name   = "elb-proxy-${element(var.arenas, count.index)}"
+    Region = "${var.aws_region}"
+    Arena  = "${element(var.arenas, count.index)}"
   }
 }
 
@@ -1263,9 +1237,9 @@ resource "aws_security_group" "proxy" {
   }
 
   tags = {
-    Name        = "elb-proxy-${element(var.arenas, count.index)}"
-    Region      = "${var.aws_region}"
-    Arena       = "${element(var.arenas, count.index)}"
+    Name   = "elb-proxy-${element(var.arenas, count.index)}"
+    Region = "${var.aws_region}"
+    Arena  = "${element(var.arenas, count.index)}"
   }
 }
 
@@ -1273,7 +1247,7 @@ resource "aws_eip" "nat" {
   # We enable this if consul AND/OR nat is enabled
   count = "${var.enabled * signum(var.enable_consul + var.enable_nat) * 2 * length(var.arenas)}"
 
-  vpc   = true
+  vpc = true
 
   lifecycle {
     create_before_destroy = true
@@ -1306,11 +1280,12 @@ resource "aws_s3_bucket_object" "public_state" {
               "nubis_version": ${jsonencode(var.nubis_version)},
               "region": ${jsonencode(var.aws_region)},
               "regions": ${jsonencode(var.aws_regions)},
-	      "arena": "${element(var.arenas, count.index)}",
-	      "network_cidr" : "${element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) )}",
-	      "public_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) ),1 , 0)}",
-	      "private_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) ), 1, 1 )}",
+              "arena": "${element(var.arenas, count.index)}",
+              "network_cidr" : "${element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) )}",
+              "public_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) ),1 , 0)}",
+              "private_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) ), 1, 1 )}",
               "availability_zones": "${join(",",data.aws_availability_zones.available.names)}",
+              "delegation_set_id": ${jsonencode(var.route53_delegation_set)},
               "hosted_zone_name": ${jsonencode(module.meta.HostedZoneName)},
               "hosted_zone_id": ${jsonencode(module.meta.HostedZoneId)},
               "vpc_id": ${jsonencode(element(aws_vpc.nubis.*.id,count.index))},
@@ -1337,9 +1312,9 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "user_managment" {
-    count = "${var.enabled * var.enable_user_management_consul * length(var.arenas)}"
-    role = "${element(concat(aws_iam_role.user_management.*.id, list("")), count.index)}"
-    policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
+  count      = "${var.enabled * var.enable_user_management_consul * length(var.arenas)}"
+  role       = "${element(concat(aws_iam_role.user_management.*.id, list("")), count.index)}"
+  policy_arn = "${element(aws_iam_policy.credstash.*.arn, count.index)}"
 }
 
 resource "aws_iam_role" "user_management" {
@@ -1519,22 +1494,22 @@ data template_file "user_management_config" {
   template = "${file("${path.module}/user_management.yml.tmpl")}"
 
   vars {
-    region                  = "${var.aws_region}"
-    arena                   = "${element(var.arenas, count.index)}"
-    smtp_from_address       = "${var.user_management_smtp_from_address}"
-    smtp_username           = "${var.user_management_smtp_username}"
-    smtp_password           = "${var.user_management_smtp_password}"
-    smtp_host               = "${var.user_management_smtp_host}"
-    smtp_port               = "${var.user_management_smtp_port}"
-    ldap_server             = "${var.user_management_ldap_server}"
-    ldap_port               = "${var.user_management_ldap_port}"
-    ldap_base_dn            = "${var.user_management_ldap_base_dn}"
-    ldap_bind_user          = "${var.user_management_ldap_bind_user}"
-    ldap_bind_password      = "${var.user_management_ldap_bind_password}"
-    tls_cert                = "${replace(file("${path.cwd}/${var.user_management_tls_cert}"), "/(.*)\\n/", "    $1\n")}"
-    tls_key                 = "${replace(file("${path.cwd}/${var.user_management_tls_key}"), "/(.*)\\n/", "    $1\n")}"
-    sudo_user_ldap_group    = "${replace(var.user_management_sudo_groups, ",", "|")}"
-    users_ldap_group        = "${replace(var.user_management_user_groups, ",", "|")}"
+    region               = "${var.aws_region}"
+    arena                = "${element(var.arenas, count.index)}"
+    smtp_from_address    = "${var.user_management_smtp_from_address}"
+    smtp_username        = "${var.user_management_smtp_username}"
+    smtp_password        = "${var.user_management_smtp_password}"
+    smtp_host            = "${var.user_management_smtp_host}"
+    smtp_port            = "${var.user_management_smtp_port}"
+    ldap_server          = "${var.user_management_ldap_server}"
+    ldap_port            = "${var.user_management_ldap_port}"
+    ldap_base_dn         = "${var.user_management_ldap_base_dn}"
+    ldap_bind_user       = "${var.user_management_ldap_bind_user}"
+    ldap_bind_password   = "${var.user_management_ldap_bind_password}"
+    tls_cert             = "${replace(file("${path.cwd}/${var.user_management_tls_cert}"), "/(.*)\\n/", "    $1\n")}"
+    tls_key              = "${replace(file("${path.cwd}/${var.user_management_tls_key}"), "/(.*)\\n/", "    $1\n")}"
+    sudo_user_ldap_group = "${replace(var.user_management_sudo_groups, ",", "|")}"
+    users_ldap_group     = "${replace(var.user_management_user_groups, ",", "|")}"
   }
 }
 

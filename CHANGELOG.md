@@ -1,6 +1,21 @@
 # Change Log
 
-## [v2.0.4](https://github.com/nubisproject/nubis-deploy/tree/v2.0.4) (2017-12-08)
+## [v2.1.0](https://github.com/nubisproject/nubis-deploy/tree/v2.1.0) (2018-02-02)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.0.4...v2.1.0)
+
+**Closed issues:**
+
+- \[rds\] Enable slow-query-log by default in our MySQL parameter group [\#367](https://github.com/nubisproject/nubis-deploy/issues/367)
+- \[ci\] Add support for newrelic API key [\#365](https://github.com/nubisproject/nubis-deploy/issues/365)
+- \[monitoring\] apply specified instance\_type [\#363](https://github.com/nubisproject/nubis-deploy/issues/363)
+
+**Merged pull requests:**
+
+- Enable slow query log for RDS by default [\#368](https://github.com/nubisproject/nubis-deploy/pull/368) ([gozer](https://github.com/gozer))
+- Add ci.newrelic\_api\_key variable [\#366](https://github.com/nubisproject/nubis-deploy/pull/366) ([gozer](https://github.com/gozer))
+- Need to pass the instance type to the monitoring module [\#364](https://github.com/nubisproject/nubis-deploy/pull/364) ([gozer](https://github.com/gozer))
+
+## [v2.0.4](https://github.com/nubisproject/nubis-deploy/tree/v2.0.4) (2017-12-18)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.0.3...v2.0.4)
 
 **Implemented enhancements:**
@@ -13,9 +28,11 @@
 - Support for versioning of various modules [\#348](https://github.com/nubisproject/nubis-deploy/issues/348)
 - Cleanup app-state bucket [\#293](https://github.com/nubisproject/nubis-deploy/issues/293)
 - Remove support for my\_ip [\#145](https://github.com/nubisproject/nubis-deploy/issues/145)
+- Tag v2.0.4 release [\#360](https://github.com/nubisproject/nubis-deploy/issues/360)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.0.4 release \[skip ci\] [\#361](https://github.com/nubisproject/nubis-deploy/pull/361) ([tinnightcap](https://github.com/tinnightcap))
 - Set force\_destroy and tag the app-state bucket [\#359](https://github.com/nubisproject/nubis-deploy/pull/359) ([gozer](https://github.com/gozer))
 - Get rid of my\_ip, it was a debugging mechanism [\#358](https://github.com/nubisproject/nubis-deploy/pull/358) ([gozer](https://github.com/gozer))
 - Expose delegation set id [\#356](https://github.com/nubisproject/nubis-deploy/pull/356) ([limed](https://github.com/limed))

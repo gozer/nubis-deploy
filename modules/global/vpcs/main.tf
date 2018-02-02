@@ -1,8 +1,8 @@
 module "us-east-1" {
   source = "../../vpc"
 
-  aws_region     = "us-east-1"
-  aws_regions    = "${var.aws_regions}"
+  aws_region  = "us-east-1"
+  aws_regions = "${var.aws_regions}"
 
   # Okay, somewhat nasty
   #  - take the list of regions, look for the one we care about and make it XXX
@@ -33,14 +33,12 @@ module "us-east-1" {
   apps_state_bucket      = "${var.apps_state_bucket}"
   aws_state_region       = "${var.aws_state_region}"
 
-  my_ip = "${var.my_ip}"
-
   # This exists to force a dependency on the global module
-  account_name          = "${var.account_name}"
-  nubis_version         = "${var.nubis_version}"
-  nubis_domain          = "${var.nubis_domain}"
-  arenas                = "${var.arenas}"
-  arenas_networks       = "${var.arenas_networks}"
+  account_name    = "${var.account_name}"
+  nubis_version   = "${var.nubis_version}"
+  nubis_domain    = "${var.nubis_domain}"
+  arenas          = "${var.arenas}"
+  arenas_networks = "${var.arenas_networks}"
 
   ipsec_target = "${var.arenas_ipsec_target}"
   vpn_bgp_asn  = "${var.vpn_bgp_asn}"
@@ -51,23 +49,13 @@ module "us-east-1" {
   consul_user_groups      = "${var.consul_user_groups}"
   consul_version          = "${var.consul_version}"
 
-  ci_project                    = "${var.ci_project}"
-  ci_git_repo                   = "${var.ci_git_repo}"
-  ci_admins                     = "${var.ci_admins}"
-  ci_slack_domain               = "${var.ci_slack_domain}"
-  ci_slack_channel              = "${var.ci_slack_channel}"
-  ci_slack_token                = "${var.ci_slack_token}"
-  ci_sudo_groups                = "${var.ci_sudo_groups}"
-  ci_user_groups                = "${var.ci_user_groups}"
-  ci_version                    = "${var.ci_version}"
-  ci_instance_type              = "${var.ci_instance_type}"
-  ci_root_storage_size          = "${var.ci_root_storage_size}"
-
+  # Jekins
+  ci = "${var.ci}"
 
   # nat
-  nat_sudo_groups                 = "${var.nat_sudo_groups}"
-  nat_user_groups                 = "${var.nat_user_groups}"
-  nat_version                     = "${var.nat_version}"
+  nat_sudo_groups = "${var.nat_sudo_groups}"
+  nat_user_groups = "${var.nat_user_groups}"
+  nat_version     = "${var.nat_version}"
 
   # monitoring
   monitoring_slack_url             = "${var.monitoring_slack_url}"
@@ -82,12 +70,13 @@ module "us-east-1" {
   monitoring_swap_size_meg         = "${var.monitoring_swap_size_meg}"
 
   # fluentd
-  fluentd                 = "${var.fluentd}"
+  fluentd         = "${var.fluentd}"
+  fluentd_version = "${var.fluentd_version}"
 
   # jumphost user groups
-  jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"
-  jumphost_user_groups    = "${var.jumphost_user_groups}"
-  jumphost_version        = "${var.jumphost_version}"
+  jumphost_sudo_groups = "${var.jumphost_sudo_groups}"
+  jumphost_user_groups = "${var.jumphost_user_groups}"
+  jumphost_version     = "${var.jumphost_version}"
 
   # SSO
   sso_sudo_groups          = "${var.sso_sudo_groups}"
@@ -135,8 +124,8 @@ module "us-east-1" {
 module "us-west-2" {
   source = "../../vpc"
 
-  aws_region     = "us-west-2"
-  aws_regions    = "${var.aws_regions}"
+  aws_region  = "us-west-2"
+  aws_regions = "${var.aws_regions}"
 
   # Okay, somewhat nasty
   #  - take the list of regions, look for the one we care about and make it XXX
@@ -167,14 +156,12 @@ module "us-west-2" {
   apps_state_bucket      = "${var.apps_state_bucket}"
   aws_state_region       = "${var.aws_state_region}"
 
-  my_ip = "${var.my_ip}"
-
   # This exists to force a dependency on the global module
-  account_name          = "${var.account_name}"
-  nubis_version         = "${var.nubis_version}"
-  nubis_domain          = "${var.nubis_domain}"
-  arenas                = "${var.arenas}"
-  arenas_networks       = "${var.arenas_networks}"
+  account_name    = "${var.account_name}"
+  nubis_version   = "${var.nubis_version}"
+  nubis_domain    = "${var.nubis_domain}"
+  arenas          = "${var.arenas}"
+  arenas_networks = "${var.arenas_networks}"
 
   ipsec_target = "${var.arenas_ipsec_target}"
   vpn_bgp_asn  = "${var.vpn_bgp_asn}"
@@ -185,22 +172,13 @@ module "us-west-2" {
   consul_user_groups      = "${var.consul_user_groups}"
   consul_version          = "${var.consul_version}"
 
-  ci_project                    = "${var.ci_project}"
-  ci_git_repo                   = "${var.ci_git_repo}"
-  ci_admins                     = "${var.ci_admins}"
-  ci_slack_domain               = "${var.ci_slack_domain}"
-  ci_slack_channel              = "${var.ci_slack_channel}"
-  ci_slack_token                = "${var.ci_slack_token}"
-  ci_sudo_groups                = "${var.ci_sudo_groups}"
-  ci_user_groups                = "${var.ci_user_groups}"
-  ci_version                    = "${var.ci_version}"
-  ci_instance_type              = "${var.ci_instance_type}"
-  ci_root_storage_size          = "${var.ci_root_storage_size}"
+  # Jekins
+  ci = "${var.ci}"
 
   # nat
-  nat_sudo_groups               = "${var.nat_sudo_groups}"
-  nat_user_groups               = "${var.nat_user_groups}"
-  nat_version                   = "${var.nat_version}"
+  nat_sudo_groups = "${var.nat_sudo_groups}"
+  nat_user_groups = "${var.nat_user_groups}"
+  nat_version     = "${var.nat_version}"
 
   # monitoring
   monitoring_slack_url             = "${var.monitoring_slack_url}"
@@ -215,16 +193,17 @@ module "us-west-2" {
   monitoring_swap_size_meg         = "${var.monitoring_swap_size_meg}"
 
   # fluentd
-  fluentd                 = "${var.fluentd}"
+  fluentd         = "${var.fluentd}"
+  fluentd_version = "${var.fluentd_version}"
 
   # Jumphost user groups
-  jumphost_sudo_groups    = "${var.jumphost_sudo_groups}"
-  jumphost_user_groups    = "${var.jumphost_user_groups}"
-  jumphost_version        = "${var.jumphost_version}"
+  jumphost_sudo_groups = "${var.jumphost_sudo_groups}"
+  jumphost_user_groups = "${var.jumphost_user_groups}"
+  jumphost_version     = "${var.jumphost_version}"
 
   # SSO
-  sso_sudo_groups    = "${var.sso_sudo_groups}"
-  sso_user_groups    = "${var.sso_user_groups}"
+  sso_sudo_groups          = "${var.sso_sudo_groups}"
+  sso_user_groups          = "${var.sso_user_groups}"
   sso_openid_client_id     = "${var.sso_openid_client_id}"
   sso_openid_client_secret = "${var.sso_openid_client_secret}"
   sso_version              = "${var.sso_version}"

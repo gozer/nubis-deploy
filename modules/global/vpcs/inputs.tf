@@ -52,8 +52,6 @@ variable enable_user_management_consul {}
 
 variable enable_sso {}
 
-variable my_ip {}
-
 variable vpn_bgp_asn {}
 
 variable monitoring_slack_url {}
@@ -73,27 +71,9 @@ variable monitoring_version {}
 variable monitoring_instance_type {}
 variable monitoring_swap_size_meg {}
 
-variable ci_project {}
-
-variable ci_git_repo {}
-
-variable ci_admins {}
-
-variable ci_slack_domain {}
-
-variable ci_slack_channel {}
-
-variable ci_slack_token {}
-
-variable ci_sudo_groups {}
-
-variable ci_user_groups {}
-
-variable ci_version {}
-
-variable ci_instance_type {}
-
-variable ci_root_storage_size {}
+variable ci {
+  type = "map"
+}
 
 variable route53_delegation_set {}
 
@@ -134,8 +114,10 @@ variable user_management_sudo_groups {}
 variable user_management_user_groups {}
 
 variable fluentd {
- type = "map"
+  type = "map"
 }
+
+variable fluentd_version {}
 
 variable jumphost_sudo_groups {}
 variable jumphost_user_groups {}
