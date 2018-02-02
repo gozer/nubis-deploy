@@ -161,7 +161,14 @@ resource "aws_db_parameter_group" "mysql56" {
 
   parameter {
     name  = "max_allowed_packet"
+    apply_method = "immediate"
     value = "1073741824"
+  }
+
+  parameter {
+    name  = "slow_query_log"
+    value = "1"
+    apply_method = "immediate"
   }
 
   parameter {
