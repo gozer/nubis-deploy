@@ -8,9 +8,15 @@
 - \[rds\] Enable slow-query-log by default in our MySQL parameter group [\#367](https://github.com/nubisproject/nubis-deploy/issues/367)
 - \[ci\] Add support for newrelic API key [\#365](https://github.com/nubisproject/nubis-deploy/issues/365)
 - \[monitoring\] apply specified instance\_type [\#363](https://github.com/nubisproject/nubis-deploy/issues/363)
+- Tag v2.1.0 release [\#369](https://github.com/nubisproject/nubis-deploy/issues/369)
+- Cleanup app-state bucket [\#293](https://github.com/nubisproject/nubis-deploy/issues/293)
+- Remove support for my\_ip [\#145](https://github.com/nubisproject/nubis-deploy/issues/145)
 
 **Merged pull requests:**
 
+- Release v2.1.0 [\#372](https://github.com/nubisproject/nubis-deploy/pull/372) ([tinnightcap](https://github.com/tinnightcap))
+- Release v2.1.0 [\#371](https://github.com/nubisproject/nubis-deploy/pull/371) ([tinnightcap](https://github.com/tinnightcap))
+- Update CHANGELOG for v2.1.0 release \[skip ci\] [\#370](https://github.com/nubisproject/nubis-deploy/pull/370) ([nubis-automation](https://github.com/nubis-automation))
 - Enable slow query log for RDS by default [\#368](https://github.com/nubisproject/nubis-deploy/pull/368) ([gozer](https://github.com/gozer))
 - Add ci.newrelic\_api\_key variable [\#366](https://github.com/nubisproject/nubis-deploy/pull/366) ([gozer](https://github.com/gozer))
 - Need to pass the instance type to the monitoring module [\#364](https://github.com/nubisproject/nubis-deploy/pull/364) ([gozer](https://github.com/gozer))
@@ -26,8 +32,6 @@
 
 - Update travis.yml [\#350](https://github.com/nubisproject/nubis-deploy/issues/350)
 - Support for versioning of various modules [\#348](https://github.com/nubisproject/nubis-deploy/issues/348)
-- Cleanup app-state bucket [\#293](https://github.com/nubisproject/nubis-deploy/issues/293)
-- Remove support for my\_ip [\#145](https://github.com/nubisproject/nubis-deploy/issues/145)
 - Tag v2.0.4 release [\#360](https://github.com/nubisproject/nubis-deploy/issues/360)
 
 **Merged pull requests:**
