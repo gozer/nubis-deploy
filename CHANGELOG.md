@@ -1,6 +1,17 @@
 # Change Log
 
-## [v2.1.0](https://github.com/nubisproject/nubis-deploy/tree/v2.1.0) (2018-02-02)
+## [v2.1.0](https://github.com/nubisproject/nubis-deploy/tree/v2.1.0) (2018-02-06)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.1.0...v2.1.0)
+
+**Closed issues:**
+
+- \[PagerDuty\] Don't require an API key to be set [\#376](https://github.com/nubisproject/nubis-deploy/issues/376)
+
+**Merged pull requests:**
+
+- Default Pagerduty API key to something [\#377](https://github.com/nubisproject/nubis-deploy/pull/377) ([gozer](https://github.com/gozer))
+
+## [v2.1.0](https://github.com/nubisproject/nubis-deploy/tree/v2.1.0) (2018-02-05)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.0.4...v2.1.0)
 
 **Closed issues:**
@@ -8,12 +19,15 @@
 - \[rds\] Enable slow-query-log by default in our MySQL parameter group [\#367](https://github.com/nubisproject/nubis-deploy/issues/367)
 - \[ci\] Add support for newrelic API key [\#365](https://github.com/nubisproject/nubis-deploy/issues/365)
 - \[monitoring\] apply specified instance\_type [\#363](https://github.com/nubisproject/nubis-deploy/issues/363)
+- Tag v2.1.0 release [\#373](https://github.com/nubisproject/nubis-deploy/issues/373)
 - Tag v2.1.0 release [\#369](https://github.com/nubisproject/nubis-deploy/issues/369)
 - Cleanup app-state bucket [\#293](https://github.com/nubisproject/nubis-deploy/issues/293)
 - Remove support for my\_ip [\#145](https://github.com/nubisproject/nubis-deploy/issues/145)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.1.0 release \[skip ci\] [\#375](https://github.com/nubisproject/nubis-deploy/pull/375) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.1.0 release \[skip ci\] [\#374](https://github.com/nubisproject/nubis-deploy/pull/374) ([nubis-automation](https://github.com/nubis-automation))
 - Release v2.1.0 [\#372](https://github.com/nubisproject/nubis-deploy/pull/372) ([tinnightcap](https://github.com/tinnightcap))
 - Release v2.1.0 [\#371](https://github.com/nubisproject/nubis-deploy/pull/371) ([tinnightcap](https://github.com/tinnightcap))
 - Update CHANGELOG for v2.1.0 release \[skip ci\] [\#370](https://github.com/nubisproject/nubis-deploy/pull/370) ([nubis-automation](https://github.com/nubis-automation))
