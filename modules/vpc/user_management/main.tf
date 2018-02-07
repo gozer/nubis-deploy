@@ -48,7 +48,7 @@ resource "aws_lambda_function" "user_management" {
   count         = "${var.enabled}"
   function_name = "user-management-iam-${var.region}"
   s3_bucket     = "nubis-stacks-${var.region}"
-  s3_key        = "${var.version}/lambda/nubis-lambda-user-management.zip"
+  s3_key        = "${var.nubis_version}/lambda/nubis-lambda-user-management.zip"
   role          = "${aws_iam_role.lambda.arn}"
   handler       = "index.handler"
   description   = "Queries LDAP and inserts user into consul and create and delete IAM users"

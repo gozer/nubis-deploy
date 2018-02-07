@@ -564,7 +564,7 @@ module "nat-image" {
   source = "../images"
 
   region  = "${var.aws_region}"
-  version = "${coalesce(var.nat_version, var.nubis_version)}"
+  image_version = "${coalesce(var.nat_version, var.nubis_version)}"
 
   project = "nubis-nat"
 }
@@ -1011,9 +1011,9 @@ module "user_management" {
   # set enabled to '1' only if enabled and if we are in the first configured region, yeah, I know.
   enabled = "${var.enabled * var.enable_user_management_iam * ( 1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region)) % 2 )}"
 
-  region       = "${var.aws_region}"
-  version      = "${var.nubis_version}"
-  account_name = "${var.account_name}"
+  region        = "${var.aws_region}"
+  nubis_version = "${var.nubis_version}"
+  account_name  = "${var.account_name}"
 
   credstash_key = "${module.meta.CredstashKeyID}"
   credstash_db  = "${module.meta.CredstashDynamoDB}"
