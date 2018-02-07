@@ -8,7 +8,7 @@ provider "atlas" {
 }
 
 module "global_admins" {
-  source = "modules/global/admins"
+  source = "./modules/global/admins"
 
   aws_region = "${element(split(",",var.aws_regions),0)}"
 
@@ -22,7 +22,7 @@ module "global_admins" {
 }
 
 module "global_meta" {
-  source = "modules/global/meta"
+  source = "./modules/global/meta"
 
   aws_region = "${var.global_region}"
 
@@ -34,7 +34,7 @@ module "global_meta" {
 }
 
 module "global_opsec" {
-  source = "modules/global/opsec"
+  source = "./modules/global/opsec"
 
   enabled = "${lookup(var.features,"opsec")}"
 
@@ -45,7 +45,7 @@ module "global_opsec" {
 }
 
 module "vpcs" {
-  source = "modules/global/vpcs"
+  source = "./modules/global/vpcs"
 
   enable_vpc                    = "${lookup(var.features,"vpc")}"
   enable_consul                 = "${lookup(var.features,"consul")}"
