@@ -15,7 +15,7 @@ data "aws_ami" "image" {
     name = "name"
 
     values = [
-      "${var.project} ${var.version} ${var.storage} ${var.os}",
+      "${var.project} ${var.image_version} ${var.storage} ${var.os}",
     ]
   }
 
