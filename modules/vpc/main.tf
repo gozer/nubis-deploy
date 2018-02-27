@@ -561,12 +561,10 @@ resource "aws_network_interface" "private-nat" {
 }
 
 module "nat-image" {
-  source = "../images"
-
-  region  = "${var.aws_region}"
+  source        = "../images"
+  region        = "${var.aws_region}"
   image_version = "${coalesce(var.nat_version, var.nubis_version)}"
-
-  project = "nubis-nat"
+  project       = "nubis-nat"
 }
 
 variable nat_side {

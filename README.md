@@ -1,29 +1,41 @@
-﻿# Nubis - Deployment
+# Nubis - Deployment
 
-This is the repo to use if you want to deploy the Nubis platform into an AWS account.
+This is the repo to use if you want to deploy the Nubis platform into an AWS
+account.
 
-This document covers some layout information and then goes into tooling and finally describes how to deploy an account.
+This document covers some layout information and then goes into tooling and
+finally describes how to deploy an account.
 
- - [VPC Deployment](#vpc-deployment)
- - [OpSec Deployment](#opsec-deployment)
- - [Prerequisites](#prerequisites)
- - [INSTALLING](#installing)
+- [VPC Deployment](#vpc-deployment)
+- [OpSec Deployment](#opsec-deployment)
+- [Prerequisites](#prerequisites)
+- [INSTALLING](#installing)
 
 ## VPC Deployment
-The VPC is designed to be deployed into a standard Nubis Account. It takes advantage of the standard deployment found [here](https://github.com/nubisproject/nubis-docs/blob/master/DEPLOYMENT_OVERVIEW.md).
 
-The VPC deployment contains a number of other deployments. For example this is where the NAT deployment is defined. Additionally all other account services are deployed into the VPC.
+The VPC is designed to be deployed into a standard Nubis Account. It takes
+advantage of the standard deployment found [here](https://github.com/nubisproject/nubis-docs/blob/master/DEPLOYMENT_OVERVIEW.md).
 
-### Deployment Notes
+The VPC deployment contains a number of other deployments. For example this is
+where the NAT deployment is defined. Additionally all other account services are
+deployed into the VPC.
+
+### VPC Deployment Notes
+
 The Nubis VPC deployment consists of:
- - A number of VPC wide security policies
- - A number of lambda functions which will be deprecated soon
- - All of the IP (network) configuration
- - A VPC wide Route53 zone
- - The nubis-nat deployment (for some strange reason)
 
-### Deployment Resources
-Details for the deployment including; naming conventions, relationships, permissions, etcetera, can be found in the [Terraform template](modules/vpc/main.tf) used for deployment. Links to specific resources can be found in the following table.
+- A number of VPC wide security policies
+- A number of lambda functions which will be deprecated soon
+- All of the IP (network) configuration
+- A VPC wide Route53 zone
+- The nubis-nat deployment (for some strange reason)
+
+### VPC Deployment Resources
+
+Details for the deployment including; naming conventions, relationships,
+permissions, etcetera, can be found in the [Terraform template](modules/vpc/main.tf)
+used for deployment. Links to specific resources can be found in the following
+table.
 
 Resource Type|Resource Title|Code Location|
 |-------------|--------------|-------------|
@@ -82,17 +94,25 @@ Resource Type|Resource Title|Code Location|
 |null_resource|user_management_unicreds|[modules/vpc/main.tf#L1660](modules/vpc/main.tf#L1660)|
 
 ## OpSec Deployment
+
 The OpSec deployment is basically just CloudTrail and a security audit role
 
-This can be deployed independent of a VPC which provides the capability of deploying these required assets even when a VPC is not required.
+This can be deployed independent of a VPC which provides the capability of
+deploying these required assets even when a VPC is not required.
 
-### Deployment Notes
+### OpSec Deployment Notes
+
 The Nubis OpSec deployment consists of:
- - An IAM role which allows the InfoSec team god like privileges into all of our accounts
- - An external SNS topic to which we send all of our logs
 
-### Deployment Resources
-Details for the deployment including; naming conventions, relationships, permissions, etcetera, can be found in the [Terraform template](modules/opsec/main.tf) used for deployment. Links to specific resources can be found in the following table.
+- An IAM role which allows the InfoSec team god like privileges into all of our accounts
+- An external SNS topic to which we send all of our logs
+
+### OpSec Deployment Resources
+
+Details for the deployment including; naming conventions, relationships,
+permissions, etcetera, can be found in the [Terraform template](modules/opsec/main.tf)
+used for deployment. Links to specific resources can be found in the following
+table.
 
 Resource Type|Resource Title|Code Location|
 |-------------|--------------|-------------|
@@ -110,7 +130,8 @@ Resource Type|Resource Title|Code Location|
 
 ## Prerequisites
 
-We've tried to keep the prerequisites as short as possible, but you'll still need to do some work if this is a first time.
+We've tried to keep the prerequisites as short as possible, but you'll still
+need to do some work if this is a first time.
 
 These instructions assume Unix, but should work on any platform with some work.
 
@@ -119,16 +140,22 @@ These instructions assume Unix, but should work on any platform with some work.
 You need root (*.*) API credentials into the account. They
 should have been created by the account provisionning process
 
- And you'll need them to be proprely configured in your ~/.aws/credentials file as a non-default profile.
+ And you'll need them to be proprely configured in your ~/.aws/credentials file
+ as a non-default profile.
 
 ```ini
+
 [project-foo]
 ; state-bucket = state-000XXXX0-0000-00X0-000X-XXXX0X0X0000
 aws_access_key_id = AA123AA123AA123AA123AA123AA123
 aws_secret_access_key = LFvc+IPeS3UA2M3ND5xf6S7jg327ddeDGutGKc4z4Fc
+
 ```
-```
+
+```bash
+
 $> export AWS_PROFILE=project-foo
+
 ```
 
 ### Terraform (0.6.14+)
@@ -145,78 +172,132 @@ Get it from your favorite package manager.
 
 ### credstash (1.11.0+)
 
-[Credstash](https://github.com/fugue/credstash) is a tool for managing our secrets into DynamoDB and KMS. It's a dependency we are hoping to get rid of, but for now, you'll need in your $PATH as well.
+[Credstash](https://github.com/fugue/credstash) is a tool for managing our
+secrets into DynamoDB and KMS. It's a dependency we are hoping to get rid of,
+but for now, you'll need in your $PATH as well.
 
 It's a Python PIP package, so assuming you have a working Python, just do
 
-```shell
+```bash
+
 pip install "credstash>=1.11.0"
+
 ```
 
 ## INSTALLING
 
 ### Version to install
 
-Determine which version you wish to install, for this tutorial, we'll assume v1.1.0
+Determine which version you wish to install, for this tutorial, we'll assume
+v1.1.0
 
 ### clone the deployment repo
 
-```
+```bash
+
 git clone https://github.com/nubisproject/nubis-deploy
 cd nubis-deploy
 git checkout v1.1.0
+
 ```
 
 ### Create the state bucket
 
 This is a manual step at the moment, but we plan on getting rid of it
 
-The current recommendation is to create the bucket in an undeployed-to region, like *eu-west-1*
+The current recommendation is to create the bucket in an undeployed-to region,
+like *eu-west-1*
 
 It must be named **nubis-deploy-#UUID#**, where UUID is a random
 string, not strictly speaking a UUID proper.
 
-```
+```bash
+
 $> aws --profile ${AWS_PROFILE} --region eu-west-1 s3 mb s3://nubis-deploy-$(openssl rand -hex 16)
 make_bucket: s3://nubis-deploy-479220c3efeaa0dfcba3e0078886c68a/
+
 ```
 
-Make sure to note the name of the bucket in question, as it's going to be needed twice, once in the variables file, then at the end of the installation.
+Make sure to note the name of the bucket in question, as it's going to be needed
+twice, once in the variables file, then at the end of the installation.
 
 ### setup the variables file
 
-```
+```bash
+
 $> cd accounts/${AWS_PROFILE}
 $> cp variables.tf-dist variables.tf
 [edit]
-```
 
 ```
-# Name of the account (used for display and resources)
+
+#### Name of the account (used for display and resources)
+
+```bash
+
 account_name = "some-account-name"
 
-# The version of the platform you want
+```
+
+#### The version of the platform you want
+
+```bash
+
 nubis_version = "v1.1.0"
 
-# UUID used for the state bucket
+```
+
+#### UUID used for the state bucket
+
+```bash
+
 state_uuid = "479220c3efeaa0dfcba3e0078886c68a"
 
-# AWS regions to deploy to (us-east-1 & us-west-2 only in v1.1.0)
+```
+
+#### AWS regions to deploy to (us-east-1 & us-west-2 only in v1.1.0)
+
+```bash
+
 aws_regions           = "us-east-1,us-west-2"
 
-# Name of the different environments you want
+```
+
+#### Name of the different environments you want
+
+```bash
+
 environments          = "admin,prod,stage"
 
-# The CIDR block for each environment (order must match above)
+```
+
+#### The CIDR block for each environment (order must match above)
+
+```bash
+
 environments_networks = "10.x.y.0/24,10.x.y.0/24,10.x.y.0/24"
 
-# Usernames of admin IAM users to create
+```
+
+#### Usernames of admin IAM users to create
+
+```bash
+
 admin_users = "alice,bob,chris"
 
-# Usernames of guest IAM users to create
+```
+
+#### Usernames of guest IAM users to create
+
+```bash
+
 guest_users = "jim,jack"
 
-# Optionnal features
+```
+
+#### Optionnal features
+
+```bash
 
 features.consul = 1
 features.jumphost = 0
@@ -225,42 +306,69 @@ features.ci = 0
 features.opsec = 0
 features.stack_compat = 0
 
-# Consul (required)
+```
 
-# generate a UUID with "uuidgen"
+#### Consul (required)
+
+##### generate a UUID with "uuidgen"
+
+```bash
+
 consul.master_acl_token = "00000000-0000-0000-0000-000000000000"
-# generate a secret with "openssl rand 16 | base64"
+
+```
+
+##### generate a secret with "openssl rand 16 | base64"
+
+```bash
+
 consul.secret = "AAAAAAAAAAAAAAAAAAAAAA=="
 
-# CI (optionnal)
+```
 
-#ci.project = "skel"
-#ci.git_repo = "https://github.com/nubisproject/nubis-skel.git"
-#ci.github_oauth_client_secret = "AAA"
-#ci.github_oauth_client_id = "BBB"
+#### CI (optionnal)
 
-# Datadog
+```bash
+
+ci.project = "skel"
+ci.git_repo = "https://github.com/nubisproject/nubis-skel.git"
+ci.github_oauth_client_secret = "AAA"
+ci.github_oauth_client_id = "BBB"
+
+```
+
+#### Datadog
+
+```bash
+
 datadog.api_key = "00000000000000000000000000000000"
+
 ```
 
 ### Download modules
+
 ```bash
+
 terraform get --update=true ../../
 [...]
 Get: git::https://github.com/nubisproject/nubis-consul.git?ref=master (update)
+
 ```
 
 ### Plan
 
-```
+```bash
+
 terraform plan ../../
 [...]
 Plan: 321 to add, 0 to change, 0 to destroy.
+
 ```
 
 ### Deploy
 
-```
+```bash
+
 terraform apply ../../
 [...]
 Apply complete! Resources: 176 added, 0 changed, 0 destroyed.
@@ -279,17 +387,21 @@ Outputs:
   admins_secret_keys = EE2tBVCmFlarz/l77JZlEuk/8e1Fq4tlMd3cAZBl,ucPG4BgympBFvrDnUrKV8WIktmcfmxCRKo4wbmCv,s3DU3CpboNhwY4bi//Oionf7Kthc4paVJLTqJq0N
   admins_users       = alice,bob,chris
   nameservers        = ns-1349.awsdns-40.org,ns-2000.awsdns-58.co.uk,ns-408.awsdns-51.com,ns-828.awsdns-39.net
+
 ```
 
 ### Store Remote State
 
-This is the only somewhat manual step needed, and we have plans to get rid of it, but for now, you'll need to do it yourself once, the first time.
+This is the only somewhat manual step needed, and we have plans to get rid of
+it, but for now, you'll need to do it yourself once, the first time.
 
 #### Use the state bucket
 
-The last step is to tell Terraform about that S3 bucket so it can store its state in it for you and other administrator to make use of
+The last step is to tell Terraform about that S3 bucket so it can store its
+state in it for you and other administrator to make use of
 
-```
+```bash
+
 terraform remote config
   -backend=s3
   -backend-config="region=eu-west-1"
@@ -298,6 +410,7 @@ terraform remote config
 [...]
 Remote state management enabled
 Remote state configured and pulled.
+
 ```
 
 ### Set up DNS delegation
@@ -305,12 +418,15 @@ Remote state configured and pulled.
 To create a new domain in inventory:
 
 **NOTE**: You must be on the VPN to connect to inventory.
- * Go to the [domain creation page](https://inventory.mozilla.org/en-US/mozdns/record/create/DOMAIN/) and create the account domain
-  * Soa: SOA for allizom.org
-  * Name: ${ACCOUNT_NAME}.nubis.allizom.org
- * Go to the [NS delegation page](https://inventory.mozilla.org/en-US/mozdns/record/create/NS/) and add NS records (4 times, once for each AWS NS server)
-  * Domain: ${ACCOUNT_NAME}.nubis.allizom.org
-  * Server: 1 of 4 AWS NameServers for the HostedZones
-  * Views:
-        * check private
-        * check public
+
+- Go to the [domain creation page](https://inventory.mozilla.org/en-US/mozdns/record/create/DOMAIN/)
+ and create the account domain
+  - Soa: SOA for allizom.org
+  - Name: ${ACCOUNT_NAME}.nubis.allizom.org
+- Go to the [NS delegation page](https://inventory.mozilla.org/en-US/mozdns/record/create/NS/)
+ and add NS records (4 times, once for each AWS NS server)
+  - Domain: ${ACCOUNT_NAME}.nubis.allizom.org
+  - Server: 1 of 4 AWS NameServers for the HostedZones
+  - Views:
+    - check private
+    - check public
