@@ -186,7 +186,7 @@ resource "aws_s3_bucket" "apps-state" {
 }
 
 module "autospotting" {
-  source = "github.com/cristim/autospotting/terraform?ref=5e1e46a01972ece3793dea04d7b9d7354346e394"
+  source = "github.com/cristim/autospotting//terraform?ref=5e1e46a01972ece3793dea04d7b9d7354346e394"
 
   #  autospotting_min_on_demand_number = "0"
   #  autospotting_min_on_demand_percentage = "50.0"
