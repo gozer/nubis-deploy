@@ -91,6 +91,7 @@ module "vpcs" {
   arenas_networks     = "${var.arenas_networks}"
   arenas_ipsec_target = "${lookup(var.vpn, "ipsec_target")}"
   vpn_bgp_asn         = "${lookup(var.vpn, "bgp_asn")}"
+  vpn_output_config   = "${lookup(var.vpn, "output_config")}"
 
   consul_secret           = "${lookup(var.consul, "secret")}"
   consul_master_acl_token = "${lookup(var.consul, "master_acl_token")}"

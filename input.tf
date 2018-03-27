@@ -146,6 +146,7 @@ variable vpn {
     ipsec_target  = "63.245.214.100"
     ipsec_network = "10.0.0.0/8"
     bgp_asn       = "65022"
+    output_config = false
   }
 }
 

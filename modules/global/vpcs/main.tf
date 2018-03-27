@@ -40,8 +40,9 @@ module "us-east-1" {
   arenas          = "${var.arenas}"
   arenas_networks = "${var.arenas_networks}"
 
-  ipsec_target = "${var.arenas_ipsec_target}"
-  vpn_bgp_asn  = "${var.vpn_bgp_asn}"
+  ipsec_target      = "${var.arenas_ipsec_target}"
+  vpn_bgp_asn       = "${var.vpn_bgp_asn}"
+  vpn_output_config = "${var.vpn_output_config}"
 
   consul_secret           = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
@@ -168,8 +169,9 @@ module "us-west-2" {
   arenas          = "${var.arenas}"
   arenas_networks = "${var.arenas_networks}"
 
-  ipsec_target = "${var.arenas_ipsec_target}"
-  vpn_bgp_asn  = "${var.vpn_bgp_asn}"
+  ipsec_target      = "${var.arenas_ipsec_target}"
+  vpn_bgp_asn       = "${var.vpn_bgp_asn}"
+  vpn_output_config = "${var.vpn_output_config}"
 
   consul_secret           = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"

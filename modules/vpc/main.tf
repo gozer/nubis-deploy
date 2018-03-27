@@ -1037,8 +1037,6 @@ module "user_management" {
   user_management_user_groups        = "${var.user_management_user_groups}"
 }
 
-#XXX: Move to a module
-
 #XXX: outputs:
 
 #tunnel1_address
@@ -1049,86 +1047,21 @@ module "user_management" {
 
 #tunnel2_preshared_key
 
-resource "aws_vpn_gateway" "vpn_gateway" {
-  count = "${var.enabled * var.enable_vpn * length(var.arenas)}"
+module "vpn" {
+  source = "github.com/nubisproject/nubis-terraform-vpn?ref=develop"
 
-  lifecycle {
-    create_before_destroy = true
-  }
+  enabled           = "${var.enabled * var.enable_vpn}"
+  region            = "${var.aws_region}"
+  arenas            = "${var.arenas}"
+  account_name      = "${var.account_name}"
+  technical_contact = "${var.technical_contact}"
 
-  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
-
-  tags {
-    Name             = "${var.aws_region}-${element(var.arenas, count.index)}-vpn-gateway"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-    Arena            = "${element(var.arenas, count.index)}"
-  }
-}
-
-resource "aws_customer_gateway" "customer_gateway" {
-  count = "${var.enabled * var.enable_vpn}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  bgp_asn = "${var.vpn_bgp_asn}"
-
-  ip_address = "${var.ipsec_target}"
-  type       = "ipsec.1"
-
-  tags {
-    Name             = "${var.aws_region}-customer-gateway"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-  }
-}
-
-resource "aws_vpn_connection" "main" {
-  count = "${var.enabled * var.enable_vpn * length(var.arenas)}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  vpn_gateway_id      = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index)}"
-  customer_gateway_id = "${aws_customer_gateway.customer_gateway.id}"
-  type                = "${aws_customer_gateway.customer_gateway.type}"
-  static_routes_only  = false
-
-  tags {
-    Name             = "${var.aws_region}-${element(var.arenas, count.index)}-vpn"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-    Arena            = "${element(var.arenas, count.index)}"
-  }
-}
-
-resource "aws_route" "vpn-public" {
-  count = "${var.enabled * var.enable_vpn * length(var.arenas)}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
-
-  destination_cidr_block = "10.0.0.0/8"
-  gateway_id             = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index)}"
-}
-
-resource "aws_route" "vpn-private" {
-  count = "${3 * var.enabled * var.enable_vpn * length(var.arenas)}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
-
-  destination_cidr_block = "10.0.0.0/8"
-  gateway_id             = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index/3)}"
+  vpc_id                 = "${join(",", aws_vpc.nubis.*.id)}"
+  vpn_bgp_asn            = "${var.vpn_bgp_asn}"
+  ipsec_target           = "${var.ipsec_target}"
+  private_route_table_id = "${join(",", aws_route_table.private.*.id)}"
+  public_route_table_id  = "${join(",", aws_route_table.public.*.id)}"
+  output_config          = "${var.vpn_output_config}"
 }
 
 # Create a proxy discovery VPC DNS zone

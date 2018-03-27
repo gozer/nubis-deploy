@@ -54,6 +54,8 @@ variable enable_sso {}
 
 variable vpn_bgp_asn {}
 
+variable vpn_output_config {}
+
 variable monitoring_slack_url {}
 
 variable monitoring_slack_channel {}
