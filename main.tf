@@ -85,12 +85,14 @@ module "vpcs" {
   # This exists to force a dependency on the global admins module
   account_name = "${module.global_admins.account_name}"
 
-  nubis_version       = "${var.nubis_version}"
-  nubis_domain        = "${var.nubis_domain}"
-  arenas              = "${var.arenas}"
-  arenas_networks     = "${var.arenas_networks}"
-  arenas_ipsec_target = "${lookup(var.vpn, "ipsec_target")}"
-  vpn_bgp_asn         = "${lookup(var.vpn, "bgp_asn")}"
+  nubis_version              = "${var.nubis_version}"
+  nubis_domain               = "${var.nubis_domain}"
+  arenas                     = "${var.arenas}"
+  arenas_networks            = "${var.arenas_networks}"
+  arenas_ipsec_target        = "${lookup(var.vpn, "ipsec_target")}"
+  vpn_destination_cidr_block = "${lookup(var.vpn, "destination_cidr_block")}"
+  vpn_bgp_asn                = "${lookup(var.vpn, "bgp_asn")}"
+  vpn_output_config          = "${lookup(var.vpn, "output_config")}"
 
   consul_secret           = "${lookup(var.consul, "secret")}"
   consul_master_acl_token = "${lookup(var.consul, "master_acl_token")}"

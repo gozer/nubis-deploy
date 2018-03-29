@@ -98,7 +98,11 @@ variable ci {
   type = "map"
 }
 
+variable vpn_destination_cidr_block {}
+
 variable vpn_bgp_asn {}
+
+variable vpn_output_config {}
 
 variable route53_delegation_set {}
 

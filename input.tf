@@ -143,9 +143,10 @@ variable monitoring {
 
 variable vpn {
   default = {
-    ipsec_target  = "63.245.214.100"
-    ipsec_network = "10.0.0.0/8"
-    bgp_asn       = "65022"
+    ipsec_target           = "63.245.214.100"
+    destination_cidr_block = "10.0.0.0/8"
+    bgp_asn                = "65022"
+    output_config          = false
   }
 }
 
