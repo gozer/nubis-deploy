@@ -52,6 +52,8 @@ variable enable_user_management_consul {}
 
 variable enable_sso {}
 
+variable vpn_destination_cidr_block {}
+
 variable vpn_bgp_asn {}
 
 variable vpn_output_config {}

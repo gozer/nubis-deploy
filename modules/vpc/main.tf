@@ -1059,6 +1059,7 @@ module "vpn" {
   vpc_id                 = "${join(",", aws_vpc.nubis.*.id)}"
   vpn_bgp_asn            = "${var.vpn_bgp_asn}"
   ipsec_target           = "${var.ipsec_target}"
+  destination_cidr_block = "${var.vpn_destination_cidr_block}"
   private_route_table_id = "${join(",", aws_route_table.private.*.id)}"
   public_route_table_id  = "${join(",", aws_route_table.public.*.id)}"
   output_config          = "${var.vpn_output_config}"
