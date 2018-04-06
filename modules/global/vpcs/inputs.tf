@@ -52,15 +52,17 @@ variable enable_user_management_consul {}
 
 variable enable_sso {}
 
+variable vpn_destination_cidr_block {}
+
 variable vpn_bgp_asn {}
+
+variable vpn_output_config {}
 
 variable monitoring_slack_url {}
 
 variable monitoring_slack_channel {}
 
 variable monitoring_notification_email {}
-
-variable monitoring_pagerduty_service_key {}
 
 variable monitoring_sudo_groups {}
 
@@ -70,6 +72,11 @@ variable monitoring_password {}
 variable monitoring_version {}
 variable monitoring_instance_type {}
 variable monitoring_swap_size_meg {}
+
+variable monitoring_pagerduty_critical_platform_service_key {}
+variable monitoring_pagerduty_non_critical_platform_service_key {}
+variable monitoring_pagerduty_critical_application_service_key {}
+variable monitoring_pagerduty_non_critical_application_service_key {}
 
 variable ci {
   type = "map"

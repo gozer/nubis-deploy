@@ -40,8 +40,10 @@ module "us-east-1" {
   arenas          = "${var.arenas}"
   arenas_networks = "${var.arenas_networks}"
 
-  ipsec_target = "${var.arenas_ipsec_target}"
-  vpn_bgp_asn  = "${var.vpn_bgp_asn}"
+  ipsec_target               = "${var.arenas_ipsec_target}"
+  vpn_destination_cidr_block = "${var.vpn_destination_cidr_block}"
+  vpn_bgp_asn                = "${var.vpn_bgp_asn}"
+  vpn_output_config          = "${var.vpn_output_config}"
 
   consul_secret           = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
@@ -58,16 +60,21 @@ module "us-east-1" {
   nat_version     = "${var.nat_version}"
 
   # monitoring
-  monitoring_slack_url             = "${var.monitoring_slack_url}"
-  monitoring_slack_channel         = "${var.monitoring_slack_channel}"
-  monitoring_notification_email    = "${var.monitoring_notification_email}"
-  monitoring_pagerduty_service_key = "${var.monitoring_pagerduty_service_key}"
-  monitoring_sudo_groups           = "${var.monitoring_sudo_groups}"
-  monitoring_user_groups           = "${var.monitoring_user_groups}"
-  monitoring_password              = "${var.monitoring_password}"
-  monitoring_version               = "${var.monitoring_version}"
-  monitoring_instance_type         = "${var.monitoring_instance_type}"
-  monitoring_swap_size_meg         = "${var.monitoring_swap_size_meg}"
+  monitoring_slack_url          = "${var.monitoring_slack_url}"
+  monitoring_slack_channel      = "${var.monitoring_slack_channel}"
+  monitoring_notification_email = "${var.monitoring_notification_email}"
+  monitoring_sudo_groups        = "${var.monitoring_sudo_groups}"
+  monitoring_user_groups        = "${var.monitoring_user_groups}"
+  monitoring_password           = "${var.monitoring_password}"
+  monitoring_version            = "${var.monitoring_version}"
+  monitoring_instance_type      = "${var.monitoring_instance_type}"
+  monitoring_swap_size_meg      = "${var.monitoring_swap_size_meg}"
+
+  # Pagerduty
+  monitoring_pagerduty_critical_platform_service_key        = "${var.monitoring_pagerduty_critical_platform_service_key}"
+  monitoring_pagerduty_non_critical_platform_service_key    = "${var.monitoring_pagerduty_non_critical_platform_service_key}"
+  monitoring_pagerduty_critical_application_service_key     = "${var.monitoring_pagerduty_critical_application_service_key}"
+  monitoring_pagerduty_non_critical_application_service_key = "${var.monitoring_pagerduty_non_critical_application_service_key}"
 
   # fluentd
   fluentd         = "${var.fluentd}"
@@ -163,8 +170,10 @@ module "us-west-2" {
   arenas          = "${var.arenas}"
   arenas_networks = "${var.arenas_networks}"
 
-  ipsec_target = "${var.arenas_ipsec_target}"
-  vpn_bgp_asn  = "${var.vpn_bgp_asn}"
+  ipsec_target               = "${var.arenas_ipsec_target}"
+  vpn_destination_cidr_block = "${var.vpn_destination_cidr_block}"
+  vpn_bgp_asn                = "${var.vpn_bgp_asn}"
+  vpn_output_config          = "${var.vpn_output_config}"
 
   consul_secret           = "${var.consul_secret}"
   consul_master_acl_token = "${var.consul_master_acl_token}"
@@ -181,16 +190,21 @@ module "us-west-2" {
   nat_version     = "${var.nat_version}"
 
   # monitoring
-  monitoring_slack_url             = "${var.monitoring_slack_url}"
-  monitoring_slack_channel         = "${var.monitoring_slack_channel}"
-  monitoring_notification_email    = "${var.monitoring_notification_email}"
-  monitoring_pagerduty_service_key = "${var.monitoring_pagerduty_service_key}"
-  monitoring_sudo_groups           = "${var.monitoring_sudo_groups}"
-  monitoring_user_groups           = "${var.monitoring_user_groups}"
-  monitoring_password              = "${var.monitoring_password}"
-  monitoring_version               = "${var.monitoring_version}"
-  monitoring_instance_type         = "${var.monitoring_instance_type}"
-  monitoring_swap_size_meg         = "${var.monitoring_swap_size_meg}"
+  monitoring_slack_url          = "${var.monitoring_slack_url}"
+  monitoring_slack_channel      = "${var.monitoring_slack_channel}"
+  monitoring_notification_email = "${var.monitoring_notification_email}"
+  monitoring_sudo_groups        = "${var.monitoring_sudo_groups}"
+  monitoring_user_groups        = "${var.monitoring_user_groups}"
+  monitoring_password           = "${var.monitoring_password}"
+  monitoring_version            = "${var.monitoring_version}"
+  monitoring_instance_type      = "${var.monitoring_instance_type}"
+  monitoring_swap_size_meg      = "${var.monitoring_swap_size_meg}"
+
+  # Pagerduty
+  monitoring_pagerduty_critical_platform_service_key        = "${var.monitoring_pagerduty_critical_platform_service_key}"
+  monitoring_pagerduty_non_critical_platform_service_key    = "${var.monitoring_pagerduty_non_critical_platform_service_key}"
+  monitoring_pagerduty_critical_application_service_key     = "${var.monitoring_pagerduty_critical_application_service_key}"
+  monitoring_pagerduty_non_critical_application_service_key = "${var.monitoring_pagerduty_non_critical_application_service_key}"
 
   # fluentd
   fluentd         = "${var.fluentd}"

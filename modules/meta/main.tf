@@ -160,14 +160,14 @@ resource "aws_db_parameter_group" "mysql56" {
   description = "Nubis DB Parameter group for MySql 5.6"
 
   parameter {
-    name  = "max_allowed_packet"
+    name         = "max_allowed_packet"
     apply_method = "immediate"
-    value = "1073741824"
+    value        = "1073741824"
   }
 
   parameter {
-    name  = "slow_query_log"
-    value = "1"
+    name         = "slow_query_log"
+    value        = "1"
     apply_method = "immediate"
   }
 
@@ -184,15 +184,15 @@ resource "aws_db_parameter_group" "mysql56" {
 }
 
 output "NubisMySQL56ParameterGroup" {
-  value = "${aws_db_parameter_group.mysql56.id}"
+  value = "${element(concat(aws_db_parameter_group.mysql56.*.id, list("")), 0)}"
 }
 
 output "DefaultServerCertificate" {
-  value = "${aws_iam_server_certificate.default.arn}"
+  value = "${element(concat(aws_iam_server_certificate.default.*.arn, list("")), 0)}"
 }
 
 output "CredstashKeyID" {
-  value = "${aws_kms_key.credstash.arn}"
+  value = "${element(concat(aws_kms_key.credstash.*.arn, list("")), 0)}"
 }
 
 output "HostedZoneId" {
@@ -204,7 +204,7 @@ output "HostedZoneName" {
 }
 
 output "CredstashDynamoDB" {
-  value = "${aws_dynamodb_table.credstash.arn}"
+  value = "${element(concat(aws_dynamodb_table.credstash.*.arn, list("")), 0)}"
 }
 
 output "HostedZoneNS" {

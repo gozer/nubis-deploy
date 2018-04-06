@@ -2,7 +2,7 @@ variable "enabled" {}
 
 variable "region" {}
 
-variable "version" {}
+variable "nubis_version" {}
 
 variable "credstash_key" {}
 

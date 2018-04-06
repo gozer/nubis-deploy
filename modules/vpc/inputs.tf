@@ -74,7 +74,13 @@ variable monitoring_slack_channel {}
 
 variable monitoring_notification_email {}
 
-variable monitoring_pagerduty_service_key {}
+variable monitoring_pagerduty_critical_platform_service_key {}
+
+variable monitoring_pagerduty_non_critical_platform_service_key {}
+
+variable monitoring_pagerduty_critical_application_service_key {}
+
+variable monitoring_pagerduty_non_critical_application_service_key {}
 
 variable monitoring_sudo_groups {}
 
@@ -92,7 +98,11 @@ variable ci {
   type = "map"
 }
 
+variable vpn_destination_cidr_block {}
+
 variable vpn_bgp_asn {}
+
+variable vpn_output_config {}
 
 variable route53_delegation_set {}
 

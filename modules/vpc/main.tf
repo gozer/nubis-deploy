@@ -561,12 +561,10 @@ resource "aws_network_interface" "private-nat" {
 }
 
 module "nat-image" {
-  source = "../images"
-
-  region  = "${var.aws_region}"
-  version = "${coalesce(var.nat_version, var.nubis_version)}"
-
-  project = "nubis-nat"
+  source        = "github.com/nubisproject/nubis-terraform///images?ref=develop"
+  region        = "${var.aws_region}"
+  image_version = "${coalesce(var.nat_version, var.nubis_version)}"
+  project       = "nubis-nat"
 }
 
 variable nat_side {
@@ -583,7 +581,7 @@ resource "aws_autoscaling_group" "nat" {
     create_before_destroy = true
   }
 
-  name = "nubis-nat-${element(var.arenas, count.index/2)}-${lookup(var.nat_side, count.index % 2)} (${element(aws_launch_configuration.nat.*.name, count.index)})"
+  name = "nat-${element(var.arenas, count.index/2)}-${lookup(var.nat_side, count.index % 2)} (${element(aws_launch_configuration.nat.*.name, count.index)})"
 
   # Subnets
   vpc_zone_identifier = [
@@ -647,7 +645,7 @@ resource "aws_launch_configuration" "nat" {
     create_before_destroy = true
   }
 
-  name_prefix = "nubis-nat-${element(var.arenas, count.index/2 )}-${lookup(var.nat_side, count.index % 2)}-"
+  name_prefix = "nat-${element(var.arenas, count.index/2 )}-${lookup(var.nat_side, count.index % 2)}-"
 
   image_id = "${module.nat-image.image_id}"
 
@@ -734,7 +732,7 @@ resource "aws_iam_instance_profile" "nat" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.1.0"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.2.0"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -769,7 +767,7 @@ resource "aws_iam_role_policy_attachment" "fluent" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.1.0"
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.2.0"
 
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
@@ -816,7 +814,7 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.1.0"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.2.0"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
@@ -847,10 +845,14 @@ module "monitoring" {
   service_name = "${var.account_name}"
   zone_id      = "${module.meta.HostedZoneId}"
 
-  slack_url             = "${var.monitoring_slack_url}"
-  slack_channel         = "${var.monitoring_slack_channel}"
-  notification_email    = "${var.monitoring_notification_email}"
-  pagerduty_service_key = "${var.monitoring_pagerduty_service_key}"
+  slack_url          = "${var.monitoring_slack_url}"
+  slack_channel      = "${var.monitoring_slack_channel}"
+  notification_email = "${var.monitoring_notification_email}"
+
+  pagerduty_critical_platform_service_key        = "${var.monitoring_pagerduty_critical_platform_service_key}"
+  pagerduty_non_critical_platform_service_key    = "${var.monitoring_pagerduty_non_critical_platform_service_key}"
+  pagerduty_critical_application_service_key     = "${var.monitoring_pagerduty_critical_application_service_key}"
+  pagerduty_non_critical_application_service_key = "${var.monitoring_pagerduty_non_critical_application_service_key}"
 
   nubis_sudo_groups = "${var.monitoring_sudo_groups}"
   nubis_user_groups = "${var.monitoring_user_groups}"
@@ -867,7 +869,7 @@ resource "aws_iam_role_policy_attachment" "sso" {
 }
 
 module "sso" {
-  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.1.0"
+  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.2.0"
 
   enabled = "${var.enabled * var.enable_sso}"
 
@@ -909,7 +911,7 @@ resource "aws_iam_role_policy_attachment" "consul" {
 }
 
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.1.0"
+  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.2.0"
 
   enabled = "${var.enabled * var.enable_consul}"
 
@@ -953,7 +955,7 @@ resource "aws_iam_role_policy_attachment" "ci" {
 
 # XXX: This assumes it's going in the first arena of the first region
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.1.0"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.2.0"
 
   enabled = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
 
@@ -963,7 +965,7 @@ module "ci" {
   credstash_key = "${module.meta.CredstashKeyID}"
 
   key_name          = "${var.ssh_key_name}"
-  version           = "${coalesce(lookup(var.ci, "version"), var.nubis_version)}"
+  nubis_version     = "${coalesce(lookup(var.ci, "version"), var.nubis_version)}"
   technical_contact = "${var.technical_contact}"
 
   nubis_domain = "${var.nubis_domain}"
@@ -1011,9 +1013,9 @@ module "user_management" {
   # set enabled to '1' only if enabled and if we are in the first configured region, yeah, I know.
   enabled = "${var.enabled * var.enable_user_management_iam * ( 1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region)) % 2 )}"
 
-  region       = "${var.aws_region}"
-  version      = "${var.nubis_version}"
-  account_name = "${var.account_name}"
+  region        = "${var.aws_region}"
+  nubis_version = "${var.nubis_version}"
+  account_name  = "${var.account_name}"
 
   credstash_key = "${module.meta.CredstashKeyID}"
   credstash_db  = "${module.meta.CredstashDynamoDB}"
@@ -1035,8 +1037,6 @@ module "user_management" {
   user_management_user_groups        = "${var.user_management_user_groups}"
 }
 
-#XXX: Move to a module
-
 #XXX: outputs:
 
 #tunnel1_address
@@ -1047,86 +1047,22 @@ module "user_management" {
 
 #tunnel2_preshared_key
 
-resource "aws_vpn_gateway" "vpn_gateway" {
-  count = "${var.enabled * var.enable_vpn * length(var.arenas)}"
+module "vpn" {
+  source = "github.com/nubisproject/nubis-terraform-vpn?ref=develop"
 
-  lifecycle {
-    create_before_destroy = true
-  }
+  enabled           = "${var.enabled * var.enable_vpn}"
+  region            = "${var.aws_region}"
+  arenas            = "${var.arenas}"
+  account_name      = "${var.account_name}"
+  technical_contact = "${var.technical_contact}"
 
-  vpc_id = "${element(aws_vpc.nubis.*.id, count.index)}"
-
-  tags {
-    Name             = "${var.aws_region}-${element(var.arenas, count.index)}-vpn-gateway"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-    Arena            = "${element(var.arenas, count.index)}"
-  }
-}
-
-resource "aws_customer_gateway" "customer_gateway" {
-  count = "${var.enabled * var.enable_vpn}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  bgp_asn = "${var.vpn_bgp_asn}"
-
-  ip_address = "${var.ipsec_target}"
-  type       = "ipsec.1"
-
-  tags {
-    Name             = "${var.aws_region}-customer-gateway"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-  }
-}
-
-resource "aws_vpn_connection" "main" {
-  count = "${var.enabled * var.enable_vpn * length(var.arenas)}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  vpn_gateway_id      = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index)}"
-  customer_gateway_id = "${aws_customer_gateway.customer_gateway.id}"
-  type                = "${aws_customer_gateway.customer_gateway.type}"
-  static_routes_only  = false
-
-  tags {
-    Name             = "${var.aws_region}-${element(var.arenas, count.index)}-vpn"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-    Arena            = "${element(var.arenas, count.index)}"
-  }
-}
-
-resource "aws_route" "vpn-public" {
-  count = "${var.enabled * var.enable_vpn * length(var.arenas)}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
-
-  destination_cidr_block = "10.0.0.0/8"
-  gateway_id             = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index)}"
-}
-
-resource "aws_route" "vpn-private" {
-  count = "${3 * var.enabled * var.enable_vpn * length(var.arenas)}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
-
-  destination_cidr_block = "10.0.0.0/8"
-  gateway_id             = "${element(aws_vpn_gateway.vpn_gateway.*.id, count.index/3)}"
+  vpc_id                 = "${join(",", aws_vpc.nubis.*.id)}"
+  vpn_bgp_asn            = "${var.vpn_bgp_asn}"
+  ipsec_target           = "${var.ipsec_target}"
+  destination_cidr_block = "${var.vpn_destination_cidr_block}"
+  private_route_table_id = "${join(",", aws_route_table.private.*.id)}"
+  public_route_table_id  = "${join(",", aws_route_table.public.*.id)}"
+  output_config          = "${var.vpn_output_config}"
 }
 
 # Create a proxy discovery VPC DNS zone

@@ -8,7 +8,7 @@ provider "atlas" {
 }
 
 module "global_admins" {
-  source = "modules/global/admins"
+  source = "./modules/global/admins"
 
   aws_region = "${element(split(",",var.aws_regions),0)}"
 
@@ -22,7 +22,7 @@ module "global_admins" {
 }
 
 module "global_meta" {
-  source = "modules/global/meta"
+  source = "./modules/global/meta"
 
   aws_region = "${var.global_region}"
 
@@ -34,7 +34,7 @@ module "global_meta" {
 }
 
 module "global_opsec" {
-  source = "modules/global/opsec"
+  source = "./modules/global/opsec"
 
   enabled = "${lookup(var.features,"opsec")}"
 
@@ -44,8 +44,20 @@ module "global_opsec" {
   cloudtrail_sns_topic = "${lookup(var.cloudtrail, "sns_topic")}"
 }
 
+module "pagerduty" {
+  source = "./modules/global/pagerduty"
+
+  pagerduty_token                                      = "${lookup(var.pagerduty, "token")}"
+  enable_pagerduty                                     = "${lookup(var.features, "monitoring") == 1 ? true : false}"
+  pagerduty_team_name                                  = "${lookup(var.pagerduty, "team_name")}"
+  pagerduty_platform_critical_escalation_policy        = "${lookup(var.pagerduty, "platform_critical_escalation_policy")}"
+  pagerduty_platform_non_critical_escalation_policy    = "${lookup(var.pagerduty, "platform_non_critical_escalation_policy")}"
+  pagerduty_application_critical_escalation_policy     = "${lookup(var.pagerduty, "application_critical_escalation_policy")}"
+  pagerduty_application_non_critical_escalation_policy = "${lookup(var.pagerduty, "application_non_critical_escalation_policy")}"
+}
+
 module "vpcs" {
-  source = "modules/global/vpcs"
+  source = "./modules/global/vpcs"
 
   enable_vpc                    = "${lookup(var.features,"vpc")}"
   enable_consul                 = "${lookup(var.features,"consul")}"
@@ -73,12 +85,14 @@ module "vpcs" {
   # This exists to force a dependency on the global admins module
   account_name = "${module.global_admins.account_name}"
 
-  nubis_version       = "${var.nubis_version}"
-  nubis_domain        = "${var.nubis_domain}"
-  arenas              = "${var.arenas}"
-  arenas_networks     = "${var.arenas_networks}"
-  arenas_ipsec_target = "${lookup(var.vpn, "ipsec_target")}"
-  vpn_bgp_asn         = "${lookup(var.vpn, "bgp_asn")}"
+  nubis_version              = "${var.nubis_version}"
+  nubis_domain               = "${var.nubis_domain}"
+  arenas                     = "${var.arenas}"
+  arenas_networks            = "${var.arenas_networks}"
+  arenas_ipsec_target        = "${lookup(var.vpn, "ipsec_target")}"
+  vpn_destination_cidr_block = "${lookup(var.vpn, "destination_cidr_block")}"
+  vpn_bgp_asn                = "${lookup(var.vpn, "bgp_asn")}"
+  vpn_output_config          = "${lookup(var.vpn, "output_config")}"
 
   consul_secret           = "${lookup(var.consul, "secret")}"
   consul_master_acl_token = "${lookup(var.consul, "master_acl_token")}"
@@ -95,16 +109,21 @@ module "vpcs" {
   nat_version     = "${lookup(var.nat, "version")}"
 
   # monitoring
-  monitoring_slack_url             = "${lookup(var.monitoring, "slack_url")}"
-  monitoring_slack_channel         = "${lookup(var.monitoring, "slack_channel")}"
-  monitoring_notification_email    = "${lookup(var.monitoring, "notification_email")}"
-  monitoring_pagerduty_service_key = "${lookup(var.monitoring, "pagerduty_service_key")}"
-  monitoring_sudo_groups           = "${lookup(var.monitoring, "sudo_groups")}"
-  monitoring_user_groups           = "${lookup(var.monitoring, "user_groups")}"
-  monitoring_password              = "${lookup(var.monitoring, "password")}"
-  monitoring_version               = "${lookup(var.monitoring, "version")}"
-  monitoring_instance_type         = "${lookup(var.monitoring, "instance_type")}"
-  monitoring_swap_size_meg         = "${lookup(var.monitoring, "swap_size_meg")}"
+  monitoring_slack_url          = "${lookup(var.monitoring, "slack_url")}"
+  monitoring_slack_channel      = "${lookup(var.monitoring, "slack_channel")}"
+  monitoring_notification_email = "${lookup(var.monitoring, "notification_email")}"
+  monitoring_sudo_groups        = "${lookup(var.monitoring, "sudo_groups")}"
+  monitoring_user_groups        = "${lookup(var.monitoring, "user_groups")}"
+  monitoring_password           = "${lookup(var.monitoring, "password")}"
+  monitoring_version            = "${lookup(var.monitoring, "version")}"
+  monitoring_instance_type      = "${lookup(var.monitoring, "instance_type")}"
+  monitoring_swap_size_meg      = "${lookup(var.monitoring, "swap_size_meg")}"
+
+  # Pagerduty
+  monitoring_pagerduty_critical_platform_service_key        = "${module.pagerduty.pagerduty_platform_critical_key}"
+  monitoring_pagerduty_non_critical_platform_service_key    = "${module.pagerduty.pagerduty_platform_non_critical_key}"
+  monitoring_pagerduty_critical_application_service_key     = "${module.pagerduty.pagerduty_application_critical_key}"
+  monitoring_pagerduty_non_critical_application_service_key = "${module.pagerduty.pagerduty_application_non_critical_key}"
 
   # fluentd
   fluentd         = "${var.fluentd}"
