@@ -1,24 +1,46 @@
 # Change Log
 
-## [v2.1.0](https://github.com/nubisproject/nubis-deploy/tree/v2.1.0) (2018-02-06)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.1.0...v2.1.0)
+## [v2.2.0](https://github.com/nubisproject/nubis-deploy/tree/v2.2.0) (2018-04-06)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.1.0...v2.2.0)
 
 **Closed issues:**
 
-- \[PagerDuty\] Don't require an API key to be set [\#376](https://github.com/nubisproject/nubis-deploy/issues/376)
+- \[Terrafrom\] Get ready for TF 0.11.x [\#401](https://github.com/nubisproject/nubis-deploy/issues/401)
+- Use VPN module [\#396](https://github.com/nubisproject/nubis-deploy/issues/396)
+- Rename nat autoscaling and launch configuration [\#394](https://github.com/nubisproject/nubis-deploy/issues/394)
+- Cleanup old pagerduty stuff [\#392](https://github.com/nubisproject/nubis-deploy/issues/392)
+- Autospotting url error [\#388](https://github.com/nubisproject/nubis-deploy/issues/388)
+- Support monitoring module pagerduty keys [\#385](https://github.com/nubisproject/nubis-deploy/issues/385)
+- \[autospotting\] Pin and Update [\#383](https://github.com/nubisproject/nubis-deploy/issues/383)
+- \[Terraform\] Prepare for TF 0.11 [\#381](https://github.com/nubisproject/nubis-deploy/issues/381)
 
 **Merged pull requests:**
 
-- Default Pagerduty API key to something [\#377](https://github.com/nubisproject/nubis-deploy/pull/377) ([gozer](https://github.com/gozer))
+- Restore images module [\#403](https://github.com/nubisproject/nubis-deploy/pull/403) ([limed](https://github.com/limed))
+- Prepare for TF 0.11.x [\#402](https://github.com/nubisproject/nubis-deploy/pull/402) ([gozer](https://github.com/gozer))
+- Revert "Small optimization, make our top-level zone use the same DNS delegation set \(\#399\)" [\#400](https://github.com/nubisproject/nubis-deploy/pull/400) ([gozer](https://github.com/gozer))
+- Small optimization, make our top-level zone use the same DNS delegation set as the rest of our region public zones [\#399](https://github.com/nubisproject/nubis-deploy/pull/399) ([gozer](https://github.com/gozer))
+- Replace vpc vpn code with vpn module [\#397](https://github.com/nubisproject/nubis-deploy/pull/397) ([limed](https://github.com/limed))
+- Rename autoscaling group and launch config to be the same as the project [\#395](https://github.com/nubisproject/nubis-deploy/pull/395) ([limed](https://github.com/limed))
+- Remove monitoring\_pagerduty\_service\_key variable [\#393](https://github.com/nubisproject/nubis-deploy/pull/393) ([limed](https://github.com/limed))
+- Some lint fixes [\#391](https://github.com/nubisproject/nubis-deploy/pull/391) ([limed](https://github.com/limed))
+- Terraform github source fix [\#390](https://github.com/nubisproject/nubis-deploy/pull/390) ([limed](https://github.com/limed))
+- Added pagerduty module support [\#389](https://github.com/nubisproject/nubis-deploy/pull/389) ([limed](https://github.com/limed))
+- Switch to nubis-travis container and fix lint errors [\#387](https://github.com/nubisproject/nubis-deploy/pull/387) ([tinnightcap](https://github.com/tinnightcap))
+- Make monitoring module aware of pagerduty arguments [\#386](https://github.com/nubisproject/nubis-deploy/pull/386) ([limed](https://github.com/limed))
+- Upgrade autospotting and pin it at a revision [\#384](https://github.com/nubisproject/nubis-deploy/pull/384) ([gozer](https://github.com/gozer))
+- Prepare for Terraform 0.11.x [\#382](https://github.com/nubisproject/nubis-deploy/pull/382) ([gozer](https://github.com/gozer))
 
-## [v2.1.0](https://github.com/nubisproject/nubis-deploy/tree/v2.1.0) (2018-02-05)
+## [v2.1.0](https://github.com/nubisproject/nubis-deploy/tree/v2.1.0) (2018-02-06)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.0.4...v2.1.0)
 
 **Closed issues:**
 
+- \[PagerDuty\] Don't require an API key to be set [\#376](https://github.com/nubisproject/nubis-deploy/issues/376)
 - \[rds\] Enable slow-query-log by default in our MySQL parameter group [\#367](https://github.com/nubisproject/nubis-deploy/issues/367)
 - \[ci\] Add support for newrelic API key [\#365](https://github.com/nubisproject/nubis-deploy/issues/365)
 - \[monitoring\] apply specified instance\_type [\#363](https://github.com/nubisproject/nubis-deploy/issues/363)
+- Tag v2.1.0 release [\#378](https://github.com/nubisproject/nubis-deploy/issues/378)
 - Tag v2.1.0 release [\#373](https://github.com/nubisproject/nubis-deploy/issues/373)
 - Tag v2.1.0 release [\#369](https://github.com/nubisproject/nubis-deploy/issues/369)
 - Cleanup app-state bucket [\#293](https://github.com/nubisproject/nubis-deploy/issues/293)
@@ -26,6 +48,9 @@
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.1.0 release \[skip ci\] [\#380](https://github.com/nubisproject/nubis-deploy/pull/380) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.1.0 release \[skip ci\] [\#379](https://github.com/nubisproject/nubis-deploy/pull/379) ([nubis-automation](https://github.com/nubis-automation))
+- Default Pagerduty API key to something [\#377](https://github.com/nubisproject/nubis-deploy/pull/377) ([gozer](https://github.com/gozer))
 - Update CHANGELOG for v2.1.0 release \[skip ci\] [\#375](https://github.com/nubisproject/nubis-deploy/pull/375) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.1.0 release \[skip ci\] [\#374](https://github.com/nubisproject/nubis-deploy/pull/374) ([nubis-automation](https://github.com/nubis-automation))
 - Release v2.1.0 [\#372](https://github.com/nubisproject/nubis-deploy/pull/372) ([tinnightcap](https://github.com/tinnightcap))
