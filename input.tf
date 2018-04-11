@@ -116,7 +116,7 @@ variable pagerduty {
   default = {
     token                                      = ""
     enable_pagerduty                           = ""
-    team_name                                  = "nubis"
+    team_name                                  = ""
     platform_critical_escalation_policy        = "nubis"
     platform_non_critical_escalation_policy    = "nubis"
     application_critical_escalation_policy     = "nubis"
