@@ -107,6 +107,73 @@ resource "aws_vpc" "nubis" {
   }
 }
 
+data "aws_iam_policy_document" "flow_logs_assume_role" {
+  count = "${var.enabled * var.flow_logs}"
+
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["vpc-flow-logs.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "flow_logs" {
+  count = "${var.enabled * var.flow_logs}"
+  name  = "flow_logs-${var.aws_region}"
+
+  assume_role_policy = "${data.aws_iam_policy_document.flow_logs_assume_role.json}"
+}
+
+data "aws_iam_policy_document" "flow_logs_role" {
+  count = "${var.enabled * var.flow_logs}"
+
+  statement {
+    sid = "FlowLogs"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "flow_logs" {
+  count = "${var.enabled * var.flow_logs}"
+  name  = "flow_logs-${var.aws_region}"
+  role  = "${aws_iam_role.flow_logs.id}"
+
+  policy = "${data.aws_iam_policy_document.flow_logs_role.json}"
+}
+
+resource "aws_cloudwatch_log_group" "flow_logs" {
+  count             = "${var.enabled * var.flow_logs * length(var.arenas)}"
+  name              = "flow_logs-${var.aws_region}-${element(var.arenas, count.index)}"
+  retention_in_days = "30"
+
+  tags {
+    Name             = "${var.aws_region}-${element(var.arenas, count.index)}-vpc"
+    ServiceName      = "${var.account_name}"
+    TechnicalContact = "${var.technical_contact}"
+    Arena            = "${element(var.arenas, count.index)}"
+  }
+}
+
+resource "aws_flow_log" "flow_log" {
+  count          = "${var.enabled * var.flow_logs * length(var.arenas)}"
+  log_group_name = "${element(aws_cloudwatch_log_group.flow_logs.*.name, count.index)}"
+  iam_role_arn   = "${aws_iam_role.flow_logs.arn}"
+  vpc_id         = "${element(aws_vpc.nubis.*.id, count.index)}"
+  traffic_type   = "ALL"
+}
+
 resource "aws_default_security_group" "default" {
   count = "${var.enabled * length(var.arenas)}"
 

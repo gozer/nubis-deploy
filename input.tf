@@ -70,6 +70,12 @@ variable features {
   }
 }
 
+variable vpc {
+  default = {
+    flow_logs = false
+  }
+}
+
 variable mig {
   default = {
     agent_cert     = "mig/agent.crt"
