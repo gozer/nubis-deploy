@@ -100,6 +100,8 @@ module "vpcs" {
   consul_user_groups      = "${lookup(var.consul, "user_groups")}"
   consul_version          = "${lookup(var.consul, "version")}"
 
+  flow_logs = "${lookup(var.vpc, "flow_logs")}"
+
   # Jenkins
   ci = "${var.ci}"
 

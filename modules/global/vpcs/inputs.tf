@@ -147,3 +147,5 @@ variable mig {
 variable instance_mfa {
   type = "map"
 }
+
+variable flow_logs {}

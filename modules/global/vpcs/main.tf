@@ -40,6 +40,8 @@ module "us-east-1" {
   arenas          = "${var.arenas}"
   arenas_networks = "${var.arenas_networks}"
 
+  flow_logs = "${var.flow_logs}"
+
   ipsec_target               = "${var.arenas_ipsec_target}"
   vpn_destination_cidr_block = "${var.vpn_destination_cidr_block}"
   vpn_bgp_asn                = "${var.vpn_bgp_asn}"
@@ -169,6 +171,8 @@ module "us-west-2" {
   nubis_domain    = "${var.nubis_domain}"
   arenas          = "${var.arenas}"
   arenas_networks = "${var.arenas_networks}"
+
+  flow_logs = "${var.flow_logs}"
 
   ipsec_target               = "${var.arenas_ipsec_target}"
   vpn_destination_cidr_block = "${var.vpn_destination_cidr_block}"
