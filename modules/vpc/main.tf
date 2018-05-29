@@ -1281,6 +1281,7 @@ resource "aws_s3_bucket_object" "public_state" {
             ],
             "outputs": {
               "nubis_version": ${jsonencode(var.nubis_version)},
+              "nubis_domain": ${jsonencode(var.nubis_domain)},
               "region": ${jsonencode(var.aws_region)},
               "regions": ${jsonencode(var.aws_regions)},
               "arena": "${element(var.arenas, count.index)}",
