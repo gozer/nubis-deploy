@@ -71,6 +71,7 @@ module "vpcs" {
   enable_user_management_iam    = "${lookup(var.features, "user_management_iam")}"
   enable_user_management_consul = "${lookup(var.features,"user_management_consul")}"
   enable_sso                    = "${lookup(var.features,"sso")}"
+  enable_kubernetes             = "${lookup(var.features, "kubernetes")}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -158,6 +159,12 @@ module "vpcs" {
   user_management_tls_key            = "${lookup(var.user_management, "tls_key")}"
   user_management_sudo_groups        = "${lookup(var.user_management, "sudo_groups")}"
   user_management_user_groups        = "${lookup(var.user_management, "user_groups")}"
+
+  # kubernetes
+  kubernetes_image_version  = "${lookup(var.kubernetes, "image_version")}"
+  kubernetes_master_type    = "${lookup(var.kubernetes, "master_type")}"
+  kubernetes_node_type      = "${lookup(var.kubernetes, "node_type")}"
+  kubernetes_node_minimum   = "${lookup(var.kubernetes, "node_minimum")}"
 
   # MiG
   mig = "${var.mig}"

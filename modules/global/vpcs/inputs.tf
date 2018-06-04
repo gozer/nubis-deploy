@@ -149,3 +149,13 @@ variable instance_mfa {
 }
 
 variable flow_logs {}
+
+variable enable_kubernetes {}
+
+variable kubernetes_image_version {}
+
+variable kubernetes_master_type {}
+
+variable kubernetes_node_type {}
+
+variable kubernetes_node_minimum {}

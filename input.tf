@@ -55,6 +55,7 @@ variable features {
   default = {
     vpc                    = 1
     consul                 = 1
+    kubernetes             = 0
     jumphost               = 0
     fluent                 = 0
     mig                    = 0
@@ -213,5 +214,14 @@ variable instance_mfa {
     skey     = ""
     host     = ""
     failmode = "secure"
+  }
+}
+
+variable kubernetes {
+  default = {
+    master_type   = "c4.large"
+    node_type     = "t2.medium"
+    node_minimum  = "2"
+    image_version = ""
   }
 }
