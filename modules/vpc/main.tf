@@ -1265,7 +1265,7 @@ provider "aws" {
 
 resource "aws_s3_bucket_object" "public_state" {
   provider     = "aws.public-state"
-  count        = "${var.enabled * length(var.arenas)}"
+  count        = "${length(var.arenas)}"
   bucket       = "${var.public_state_bucket}"
   content_type = "text/json"
   key          = "aws/${var.aws_region}/${element(var.arenas, count.index)}.tfstate"
@@ -1285,25 +1285,25 @@ resource "aws_s3_bucket_object" "public_state" {
               "region": ${jsonencode(var.aws_region)},
               "regions": ${jsonencode(var.aws_regions)},
               "arena": "${element(var.arenas, count.index)}",
-              "network_cidr" : "${element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) )}",
-              "public_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) ),1 , 0)}",
-              "private_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) ), 1, 1 )}",
+              "network_cidr" : "${element(var.arenas_networks, count.index + (3 * index(concat(split(",",var.aws_regions), list(var.aws_region)), var.aws_region)) )}",
+              "public_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(concat(split(",",var.aws_regions), list(var.aws_region)), var.aws_region)) ),1 , 0)}",
+              "private_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(concat(split(",",var.aws_regions), list(var.aws_region)), var.aws_region)) ), 1, 1 )}",
               "availability_zones": "${join(",",data.aws_availability_zones.available.names)}",
               "delegation_set_id": ${jsonencode(var.route53_delegation_set)},
               "hosted_zone_name": ${jsonencode(module.meta.HostedZoneName)},
               "hosted_zone_id": ${jsonencode(module.meta.HostedZoneId)},
-              "vpc_id": ${jsonencode(element(aws_vpc.nubis.*.id,count.index))},
+              "vpc_id": ${jsonencode(element(concat(aws_vpc.nubis.*.id, list("")),count.index))},
               "account_id": ${jsonencode(data.aws_caller_identity.current.account_id)},
               "rds_mysql_parameter_group": ${jsonencode(module.meta.NubisMySQL56ParameterGroup)},
-              "monitoring_security_group" : ${jsonencode(element(aws_security_group.monitoring.*.id,count.index))},
-              "shared_services_security_group": ${jsonencode(element(aws_security_group.shared_services.*.id,count.index))},
-              "internet_access_security_group": ${jsonencode(element(aws_security_group.internet_access.*.id,count.index))},
-              "ssh_security_group": ${jsonencode(element(aws_security_group.ssh.*.id,count.index))},
-              "sso_security_group": ${jsonencode(element(aws_security_group.sso.*.id,count.index))},
-              "instance_security_groups": "${element(aws_security_group.shared_services.*.id,count.index)},${element(aws_security_group.internet_access.*.id,count.index)},${element(aws_security_group.ssh.*.id,count.index)}",
-              "private_subnets": "${element(aws_subnet.private.*.id, (3*count.index) + 0)},${element(aws_subnet.private.*.id, (3*count.index) + 1)},${element(aws_subnet.private.*.id, (3*count.index) + 2)}",
-              "public_subnets": "${element(aws_subnet.public.*.id, (3*count.index) + 0)},${element(aws_subnet.public.*.id, (3*count.index) + 1)},${element(aws_subnet.public.*.id, (3*count.index) + 2)}",
-              "access_logging_bucket": ${jsonencode(element(split(",", module.fluent-collector.logging_buckets),count.index))},
+              "monitoring_security_group" : ${jsonencode(element(concat(aws_security_group.monitoring.*.id, list("")),count.index))},
+              "shared_services_security_group": ${jsonencode(element(concat(aws_security_group.shared_services.*.id, list("")),count.index))},
+              "internet_access_security_group": ${jsonencode(element(concat(aws_security_group.internet_access.*.id, list("")),count.index))},
+              "ssh_security_group": ${jsonencode(element(concat(aws_security_group.ssh.*.id, list("")),count.index))},
+              "sso_security_group": ${jsonencode(element(concat(aws_security_group.sso.*.id, list("")),count.index))},
+              "instance_security_groups": "${element(concat(aws_security_group.shared_services.*.id, list("")),count.index)},${element(concat( aws_security_group.internet_access.*.id, list("")),count.index)},${element(concat(aws_security_group.ssh.*.id, list("")),count.index)}",
+              "private_subnets": "${element(concat(aws_subnet.private.*.id, list("")), (3*count.index) + 0)},${element(concat(aws_subnet.private.*.id, list("")), (3*count.index) + 1)},${element(concat(aws_subnet.private.*.id, list("")), (3*count.index) + 2)}",
+              "public_subnets": "${element(concat(aws_subnet.public.*.id, list("")), (3*count.index) + 0)},${element(concat(aws_subnet.public.*.id, list("")), (3*count.index) + 1)},${element(concat(aws_subnet.public.*.id, list("")), (3*count.index) + 2)}",
+              "access_logging_bucket": ${jsonencode(element(concat(split(",", module.fluent-collector.logging_buckets), list("")),count.index))},
               "default_ssl_certificate": "${module.meta.DefaultServerCertificate}",
               "apps_state_bucket": "${var.apps_state_bucket}",
               "dummy": "dummy"
