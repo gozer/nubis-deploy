@@ -161,10 +161,10 @@ module "vpcs" {
   user_management_user_groups        = "${lookup(var.user_management, "user_groups")}"
 
   # kubernetes
-  kubernetes_image_version  = "${lookup(var.kubernetes, "image_version")}"
-  kubernetes_master_type    = "${lookup(var.kubernetes, "master_type")}"
-  kubernetes_node_type      = "${lookup(var.kubernetes, "node_type")}"
-  kubernetes_node_minimum   = "${lookup(var.kubernetes, "node_minimum")}"
+  kubernetes_image_version = "${lookup(var.kubernetes, "image_version")}"
+  kubernetes_master_type   = "${lookup(var.kubernetes, "master_type")}"
+  kubernetes_node_type     = "${lookup(var.kubernetes, "node_type")}"
+  kubernetes_node_minimum  = "${lookup(var.kubernetes, "node_minimum")}"
 
   # MiG
   mig = "${var.mig}"

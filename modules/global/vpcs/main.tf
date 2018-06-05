@@ -124,10 +124,10 @@ module "us-east-1" {
   user_management_user_groups        = "${var.user_management_user_groups}"
 
   # kubernetes
-  kubernetes_image_version  = "${var.kubernetes_image_version}"
-  kubernetes_master_type    = "${var.kubernetes_master_type}"
-  kubernetes_node_type      = "${var.kubernetes_node_type}"
-  kubernetes_node_minimum   = "${var.kubernetes_node_minimum}"
+  kubernetes_image_version = "${var.kubernetes_image_version}"
+  kubernetes_master_type   = "${var.kubernetes_master_type}"
+  kubernetes_node_type     = "${var.kubernetes_node_type}"
+  kubernetes_node_minimum  = "${var.kubernetes_node_minimum}"
 
   # MiG
   mig = "${var.mig}"
@@ -250,11 +250,11 @@ module "us-west-2" {
   user_management_sudo_groups        = "${var.user_management_sudo_groups}"
   user_management_user_groups        = "${var.user_management_user_groups}"
 
-# kubernetes
-  kubernetes_image_version  = "${var.kubernetes_image_version}"
-  kubernetes_master_type    = "${var.kubernetes_master_type}"
-  kubernetes_node_type      = "${var.kubernetes_node_type}"
-  kubernetes_node_minimum   = "${var.kubernetes_node_minimum}"
+  # kubernetes
+  kubernetes_image_version = "${var.kubernetes_image_version}"
+  kubernetes_master_type   = "${var.kubernetes_master_type}"
+  kubernetes_node_type     = "${var.kubernetes_node_type}"
+  kubernetes_node_minimum  = "${var.kubernetes_node_minimum}"
 
   # MiG
   mig = "${var.mig}"

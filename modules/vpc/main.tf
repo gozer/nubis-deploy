@@ -1143,13 +1143,13 @@ module "kube-image" {
 module "kubnernetes" {
   source = "github.com/nubisproject/nubis-kubernetes//nubis/terraform?ref=develop"
 
-  enabled       = "${var.enabled * var.enable_kubernetes}"
-  region        = "${var.aws_region}"
-  arena         = "${var.arenas[0]}"
-  environment   = "deploy"
-  service_name  = "kubernetes"
-  account       = "${var.account_name}"
-  ami           = "${module.kube-image.image_id}"
+  enabled      = "${var.enabled * var.enable_kubernetes}"
+  region       = "${var.aws_region}"
+  arena        = "${var.arenas[0]}"
+  environment  = "deploy"
+  service_name = "kubernetes"
+  account      = "${var.account_name}"
+  ami          = "${module.kube-image.image_id}"
 
   kubernetes_master_type  = "${var.kubernetes_master_type}"
   kubernetes_node_type    = "${var.kubernetes_node_type}"
