@@ -1314,6 +1314,7 @@ resource "aws_s3_bucket_object" "public_state" {
               "private_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(concat(split(",",var.aws_regions), list(var.aws_region)), var.aws_region)) ), 1, 1 )}",
               "availability_zones": "${join(",",data.aws_availability_zones.available.names)}",
               "delegation_set_id": ${jsonencode(var.route53_delegation_set)},
+              "master_zone_id": ${jsonencode(var.route53_master_zone_id)},
               "hosted_zone_name": ${jsonencode(module.meta.HostedZoneName)},
               "hosted_zone_id": ${jsonencode(module.meta.HostedZoneId)},
               "vpc_id": ${jsonencode(element(concat(aws_vpc.nubis.*.id, list("")),count.index))},
