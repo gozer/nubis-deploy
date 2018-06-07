@@ -469,6 +469,36 @@ resource "aws_security_group" "shared_services" {
 
 data "aws_availability_zones" "available" {}
 
+locals {
+  kubernetes_cluster_tag = "kubernetes.io/cluster/k8s.deploy.${var.aws_region}.${var.account_name}.${var.nubis_domain}"
+
+  # Ugly but Terraform forces me to
+  # Can't use map(list()) [bug], must use zipmap(list(),list())
+  kubernetes_public_tags_keys = "${join(",", list(
+    "SubnetType",
+    "kubernetes.io/role/elb",
+    "${local.kubernetes_cluster_tag}",
+  ))}"
+
+  kubernetes_public_tags_values = "${join(",", list(
+    "Utility",
+    "1",
+    "shared",
+  ))}"
+
+  kubernetes_private_tags_keys = "${join(",", list(
+    "SubnetType",
+    "kubernetes.io/role/internal-elb",
+    "${local.kubernetes_cluster_tag}",
+  ))}"
+
+  kubernetes_private_tags_values = "${join(",", list(
+    "Private",
+    "1",
+    "shared",
+  ))}"
+}
+
 # ATM, we just create public subnets for each arena in the first 3 AZs
 resource "aws_subnet" "public" {
   count = "${3 * var.enabled * length(var.arenas)}"
@@ -483,12 +513,13 @@ resource "aws_subnet" "public" {
 
   cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, count.index % 3 )}"
 
-  tags {
-    Name             = "PublicSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-    Arena            = "${element(var.arenas, count.index / 3)}"
-  }
+  tags = "${merge(map(
+    "Name", "PublicSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}",
+    "ServiceName", "${var.account_name}",
+    "TechnicalContact", "${var.technical_contact}",
+    "Arena", "${element(var.arenas, count.index / 3)}"),
+    zipmap(split(",", (var.enabled * var.enable_kubernetes) == 1 ?  local.kubernetes_public_tags_keys : ""), split(",",  (var.enabled * var.enable_kubernetes) == 1 ? local.kubernetes_public_tags_values : "")),
+  )}"
 }
 
 # ATM, we just create private subnets for each arena in the first 3 AZs
@@ -505,12 +536,13 @@ resource "aws_subnet" "private" {
 
   cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, (count.index % 3) + 3 )}"
 
-  tags {
-    Name             = "PrivateSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-    Arena            = "${element(var.arenas, count.index / 3)}"
-  }
+  tags = "${merge(map(
+    "Name", "PrivateSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}",
+    "ServiceName", "${var.account_name}",
+    "TechnicalContact", "${var.technical_contact}",
+    "Arena", "${element(var.arenas, count.index / 3)}"),
+     zipmap(split(",", (var.enabled * var.enable_kubernetes) == 1 ?  local.kubernetes_private_tags_keys : ""), split(",",  (var.enabled * var.enable_kubernetes) == 1 ? local.kubernetes_private_tags_values : "")),
+  )}"
 }
 
 resource "aws_route_table_association" "public" {
@@ -1130,6 +1162,30 @@ module "vpn" {
   private_route_table_id = "${join(",", aws_route_table.private.*.id)}"
   public_route_table_id  = "${join(",", aws_route_table.public.*.id)}"
   output_config          = "${var.vpn_output_config}"
+}
+
+module "kube-image" {
+  source        = "github.com/nubisproject/nubis-terraform//images?ref=v2.2.0"
+  region        = "${var.aws_region}"
+  image_version = "${coalesce(var.kubernetes_image_version, var.nubis_version)}"
+  project       = "nubis-kubernetes"
+}
+
+# FIXME: will only work once vpc and public state is created
+module "kubnernetes" {
+  source = "github.com/nubisproject/nubis-kubernetes//nubis/terraform?ref=develop"
+
+  enabled      = "${var.enabled * var.enable_kubernetes}"
+  region       = "${var.aws_region}"
+  arena        = "${var.arenas[0]}"
+  environment  = "deploy"
+  service_name = "kubernetes"
+  account      = "${var.account_name}"
+  ami          = "${module.kube-image.image_id}"
+
+  kubernetes_master_type  = "${var.kubernetes_master_type}"
+  kubernetes_node_type    = "${var.kubernetes_node_type}"
+  kubernetes_node_minimum = "${var.kubernetes_node_minimum}"
 }
 
 # Create a proxy discovery VPC DNS zone
