@@ -478,25 +478,32 @@ locals {
     "SubnetType",
     "kubernetes.io/role/elb",
     "${local.kubernetes_cluster_tag}",
+    "${local.service_name_tag_key}",
   ))}"
 
   kubernetes_public_tags_values = "${join(",", list(
     "Utility",
     "1",
     "shared",
+    "${local.service_name_tag_value}",
   ))}"
 
   kubernetes_private_tags_keys = "${join(",", list(
     "SubnetType",
     "kubernetes.io/role/internal-elb",
     "${local.kubernetes_cluster_tag}",
+    "${local.service_name_tag_key}",
   ))}"
 
   kubernetes_private_tags_values = "${join(",", list(
     "Private",
     "1",
     "shared",
+    "${local.service_name_tag_value}",
   ))}"
+
+  service_name_tag_key   = "ServiceName"
+  service_name_tag_value = "${var.account_name}"
 }
 
 # ATM, we just create public subnets for each arena in the first 3 AZs
@@ -515,10 +522,9 @@ resource "aws_subnet" "public" {
 
   tags = "${merge(map(
     "Name", "PublicSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}",
-    "ServiceName", "${var.account_name}",
     "TechnicalContact", "${var.technical_contact}",
     "Arena", "${element(var.arenas, count.index / 3)}"),
-    zipmap(split(",", (var.enabled * var.enable_kubernetes) == 1 ?  local.kubernetes_public_tags_keys : ""), split(",",  (var.enabled * var.enable_kubernetes) == 1 ? local.kubernetes_public_tags_values : "")),
+    zipmap(split(",", (var.enabled * var.enable_kubernetes) == 1 ?  local.kubernetes_public_tags_keys : local.service_name_tag_key), split(",",  (var.enabled * var.enable_kubernetes) == 1 ? local.kubernetes_public_tags_values : local.service_name_tag_value)),
   )}"
 }
 
@@ -538,10 +544,9 @@ resource "aws_subnet" "private" {
 
   tags = "${merge(map(
     "Name", "PrivateSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}",
-    "ServiceName", "${var.account_name}",
     "TechnicalContact", "${var.technical_contact}",
     "Arena", "${element(var.arenas, count.index / 3)}"),
-     zipmap(split(",", (var.enabled * var.enable_kubernetes) == 1 ?  local.kubernetes_private_tags_keys : ""), split(",",  (var.enabled * var.enable_kubernetes) == 1 ? local.kubernetes_private_tags_values : "")),
+     zipmap(split(",", (var.enabled * var.enable_kubernetes) == 1 ?  local.kubernetes_private_tags_keys : local.service_name_tag_key), split(",",  (var.enabled * var.enable_kubernetes) == 1 ? local.kubernetes_private_tags_values : local.service_name_tag_value)),
   )}"
 }
 
