@@ -1152,7 +1152,7 @@ module "user_management" {
 #tunnel2_preshared_key
 
 module "vpn" {
-  source = "github.com/nubisproject/nubis-terraform-vpn?ref=v2.2.0"
+  source = "github.com/nubisproject/nubis-terraform-vpn?ref=v2.2.1"
 
   enabled           = "${var.enabled * var.enable_vpn}"
   region            = "${var.aws_region}"
