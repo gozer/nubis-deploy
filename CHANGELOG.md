@@ -1,5 +1,36 @@
 # Change Log
 
+## [v2.3.0](https://github.com/nubisproject/nubis-deploy/tree/v2.3.0) (2018-07-17)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.2.0...v2.3.0)
+
+**Closed issues:**
+
+- Upgrade to nubis-terraform-vpn v2.2.1 [\#432](https://github.com/nubisproject/nubis-deploy/issues/432)
+- \[kubernetes\] Correctly tag subnets when Kubernetes is off [\#430](https://github.com/nubisproject/nubis-deploy/issues/430)
+- Expose master zone id [\#428](https://github.com/nubisproject/nubis-deploy/issues/428)
+- Create state file even in regions that don't exist [\#425](https://github.com/nubisproject/nubis-deploy/issues/425)
+- Make kubernetes cluster creation part of account deployment [\#422](https://github.com/nubisproject/nubis-deploy/issues/422)
+- Move production deployments away from allizom.org [\#420](https://github.com/nubisproject/nubis-deploy/issues/420)
+- \[vpc\] Add flow logs feature flag [\#418](https://github.com/nubisproject/nubis-deploy/issues/418)
+- Version of node we are using on lambda function is EOL [\#417](https://github.com/nubisproject/nubis-deploy/issues/417)
+- Open up ports for monitoring security groups [\#416](https://github.com/nubisproject/nubis-deploy/issues/416)
+- \[pagerduty\] Default pagerduty team\_name to account\_name [\#409](https://github.com/nubisproject/nubis-deploy/issues/409)
+- \[pagerduty\] When vpc is 0 don't create pagerduty services [\#408](https://github.com/nubisproject/nubis-deploy/issues/408)
+
+**Merged pull requests:**
+
+- Upgrade to nubis-terraform-vpn v2.2.1 [\#433](https://github.com/nubisproject/nubis-deploy/pull/433) ([gozer](https://github.com/gozer))
+- Since zipmap can't deal with empty lists, we need to \*always\* feed it something [\#431](https://github.com/nubisproject/nubis-deploy/pull/431) ([gozer](https://github.com/gozer))
+- Expose master zone id [\#429](https://github.com/nubisproject/nubis-deploy/pull/429) ([limed](https://github.com/limed))
+- \[Needs-review\] Integrate kube deployment into our account opening process [\#427](https://github.com/nubisproject/nubis-deploy/pull/427) ([limed](https://github.com/limed))
+- Create public state to all regions [\#426](https://github.com/nubisproject/nubis-deploy/pull/426) ([limed](https://github.com/limed))
+- Include nubis domain in public state [\#423](https://github.com/nubisproject/nubis-deploy/pull/423) ([limed](https://github.com/limed))
+- Bump node runtime to 8.10 since 4.3 is EOL [\#421](https://github.com/nubisproject/nubis-deploy/pull/421) ([limed](https://github.com/limed))
+- \[vpc\] Add vpc.flow\_logs feature flag for capturing VPC flow logs [\#419](https://github.com/nubisproject/nubis-deploy/pull/419) ([gozer](https://github.com/gozer))
+- If pagerduty team\_name is not set it defaults to the account\_name [\#412](https://github.com/nubisproject/nubis-deploy/pull/412) ([limed](https://github.com/limed))
+- Pagerduty services should now only be created if vpc and monitoring is enabled [\#411](https://github.com/nubisproject/nubis-deploy/pull/411) ([limed](https://github.com/limed))
+- fix missed version bmps [\#407](https://github.com/nubisproject/nubis-deploy/pull/407) ([gozer](https://github.com/gozer))
+
 ## [v2.2.0](https://github.com/nubisproject/nubis-deploy/tree/v2.2.0) (2018-04-06)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.1.0...v2.2.0)
 
@@ -13,9 +44,12 @@
 - Support monitoring module pagerduty keys [\#385](https://github.com/nubisproject/nubis-deploy/issues/385)
 - \[autospotting\] Pin and Update [\#383](https://github.com/nubisproject/nubis-deploy/issues/383)
 - \[Terraform\] Prepare for TF 0.11 [\#381](https://github.com/nubisproject/nubis-deploy/issues/381)
+- Tag v2.2.0 release [\#404](https://github.com/nubisproject/nubis-deploy/issues/404)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.2.0 release \[skip ci\] [\#406](https://github.com/nubisproject/nubis-deploy/pull/406) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.2.0 release \[skip ci\] [\#405](https://github.com/nubisproject/nubis-deploy/pull/405) ([nubis-automation](https://github.com/nubis-automation))
 - Restore images module [\#403](https://github.com/nubisproject/nubis-deploy/pull/403) ([limed](https://github.com/limed))
 - Prepare for TF 0.11.x [\#402](https://github.com/nubisproject/nubis-deploy/pull/402) ([gozer](https://github.com/gozer))
 - Revert "Small optimization, make our top-level zone use the same DNS delegation set \(\#399\)" [\#400](https://github.com/nubisproject/nubis-deploy/pull/400) ([gozer](https://github.com/gozer))
