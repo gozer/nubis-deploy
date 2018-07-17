@@ -24,6 +24,7 @@ module "us-east-1" {
   enable_user_management_consul = "${var.enable_user_management_consul}"
   enable_user_management_iam    = "${var.enable_user_management_iam}"
   enable_sso                    = "${var.enable_sso}"
+  enable_kubernetes             = "${var.enable_kubernetes}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -39,6 +40,8 @@ module "us-east-1" {
   nubis_domain    = "${var.nubis_domain}"
   arenas          = "${var.arenas}"
   arenas_networks = "${var.arenas_networks}"
+
+  flow_logs = "${var.flow_logs}"
 
   ipsec_target               = "${var.arenas_ipsec_target}"
   vpn_destination_cidr_block = "${var.vpn_destination_cidr_block}"
@@ -120,6 +123,12 @@ module "us-east-1" {
   user_management_sudo_groups        = "${var.user_management_sudo_groups}"
   user_management_user_groups        = "${var.user_management_user_groups}"
 
+  # kubernetes
+  kubernetes_image_version = "${var.kubernetes_image_version}"
+  kubernetes_master_type   = "${var.kubernetes_master_type}"
+  kubernetes_node_type     = "${var.kubernetes_node_type}"
+  kubernetes_node_minimum  = "${var.kubernetes_node_minimum}"
+
   # MiG
   mig = "${var.mig}"
 
@@ -154,6 +163,7 @@ module "us-west-2" {
   enable_user_management_consul = "${var.enable_user_management_consul}"
   enable_user_management_iam    = "${var.enable_user_management_iam}"
   enable_sso                    = "${var.enable_sso}"
+  enable_kubernetes             = "${var.enable_kubernetes}"
 
   technical_contact = "${var.technical_contact}"
 
@@ -169,6 +179,8 @@ module "us-west-2" {
   nubis_domain    = "${var.nubis_domain}"
   arenas          = "${var.arenas}"
   arenas_networks = "${var.arenas_networks}"
+
+  flow_logs = "${var.flow_logs}"
 
   ipsec_target               = "${var.arenas_ipsec_target}"
   vpn_destination_cidr_block = "${var.vpn_destination_cidr_block}"
@@ -237,6 +249,12 @@ module "us-west-2" {
   user_management_tls_key            = "${var.user_management_tls_key}"
   user_management_sudo_groups        = "${var.user_management_sudo_groups}"
   user_management_user_groups        = "${var.user_management_user_groups}"
+
+  # kubernetes
+  kubernetes_image_version = "${var.kubernetes_image_version}"
+  kubernetes_master_type   = "${var.kubernetes_master_type}"
+  kubernetes_node_type     = "${var.kubernetes_node_type}"
+  kubernetes_node_minimum  = "${var.kubernetes_node_minimum}"
 
   # MiG
   mig = "${var.mig}"

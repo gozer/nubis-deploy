@@ -55,6 +55,7 @@ variable features {
   default = {
     vpc                    = 1
     consul                 = 1
+    kubernetes             = 0
     jumphost               = 0
     fluent                 = 0
     mig                    = 0
@@ -66,6 +67,13 @@ variable features {
     user_management_consul = 1
     monitoring             = 0
     sso                    = 1
+    pagerduty              = 1
+  }
+}
+
+variable vpc {
+  default = {
+    flow_logs = false
   }
 }
 
@@ -115,7 +123,7 @@ variable pagerduty {
   default = {
     token                                      = ""
     enable_pagerduty                           = ""
-    team_name                                  = "nubis"
+    team_name                                  = ""
     platform_critical_escalation_policy        = "nubis"
     platform_non_critical_escalation_policy    = "nubis"
     application_critical_escalation_policy     = "nubis"
@@ -206,5 +214,14 @@ variable instance_mfa {
     skey     = ""
     host     = ""
     failmode = "secure"
+  }
+}
+
+variable kubernetes {
+  default = {
+    master_type   = "c4.large"
+    node_type     = "t2.medium"
+    node_minimum  = "2"
+    image_version = ""
   }
 }

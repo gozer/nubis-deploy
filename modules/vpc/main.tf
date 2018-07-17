@@ -107,6 +107,73 @@ resource "aws_vpc" "nubis" {
   }
 }
 
+data "aws_iam_policy_document" "flow_logs_assume_role" {
+  count = "${var.enabled * var.flow_logs}"
+
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["vpc-flow-logs.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "flow_logs" {
+  count = "${var.enabled * var.flow_logs}"
+  name  = "flow_logs-${var.aws_region}"
+
+  assume_role_policy = "${data.aws_iam_policy_document.flow_logs_assume_role.json}"
+}
+
+data "aws_iam_policy_document" "flow_logs_role" {
+  count = "${var.enabled * var.flow_logs}"
+
+  statement {
+    sid = "FlowLogs"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "flow_logs" {
+  count = "${var.enabled * var.flow_logs}"
+  name  = "flow_logs-${var.aws_region}"
+  role  = "${aws_iam_role.flow_logs.id}"
+
+  policy = "${data.aws_iam_policy_document.flow_logs_role.json}"
+}
+
+resource "aws_cloudwatch_log_group" "flow_logs" {
+  count             = "${var.enabled * var.flow_logs * length(var.arenas)}"
+  name              = "flow_logs-${var.aws_region}-${element(var.arenas, count.index)}"
+  retention_in_days = "30"
+
+  tags {
+    Name             = "${var.aws_region}-${element(var.arenas, count.index)}-vpc"
+    ServiceName      = "${var.account_name}"
+    TechnicalContact = "${var.technical_contact}"
+    Arena            = "${element(var.arenas, count.index)}"
+  }
+}
+
+resource "aws_flow_log" "flow_log" {
+  count          = "${var.enabled * var.flow_logs * length(var.arenas)}"
+  log_group_name = "${element(aws_cloudwatch_log_group.flow_logs.*.name, count.index)}"
+  iam_role_arn   = "${aws_iam_role.flow_logs.arn}"
+  vpc_id         = "${element(aws_vpc.nubis.*.id, count.index)}"
+  traffic_type   = "ALL"
+}
+
 resource "aws_default_security_group" "default" {
   count = "${var.enabled * length(var.arenas)}"
 
@@ -402,6 +469,43 @@ resource "aws_security_group" "shared_services" {
 
 data "aws_availability_zones" "available" {}
 
+locals {
+  kubernetes_cluster_tag = "kubernetes.io/cluster/k8s.deploy.${var.aws_region}.${var.account_name}.${var.nubis_domain}"
+
+  # Ugly but Terraform forces me to
+  # Can't use map(list()) [bug], must use zipmap(list(),list())
+  kubernetes_public_tags_keys = "${join(",", list(
+    "SubnetType",
+    "kubernetes.io/role/elb",
+    "${local.kubernetes_cluster_tag}",
+    "${local.service_name_tag_key}",
+  ))}"
+
+  kubernetes_public_tags_values = "${join(",", list(
+    "Utility",
+    "1",
+    "shared",
+    "${local.service_name_tag_value}",
+  ))}"
+
+  kubernetes_private_tags_keys = "${join(",", list(
+    "SubnetType",
+    "kubernetes.io/role/internal-elb",
+    "${local.kubernetes_cluster_tag}",
+    "${local.service_name_tag_key}",
+  ))}"
+
+  kubernetes_private_tags_values = "${join(",", list(
+    "Private",
+    "1",
+    "shared",
+    "${local.service_name_tag_value}",
+  ))}"
+
+  service_name_tag_key   = "ServiceName"
+  service_name_tag_value = "${var.account_name}"
+}
+
 # ATM, we just create public subnets for each arena in the first 3 AZs
 resource "aws_subnet" "public" {
   count = "${3 * var.enabled * length(var.arenas)}"
@@ -416,12 +520,12 @@ resource "aws_subnet" "public" {
 
   cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, count.index % 3 )}"
 
-  tags {
-    Name             = "PublicSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-    Arena            = "${element(var.arenas, count.index / 3)}"
-  }
+  tags = "${merge(map(
+    "Name", "PublicSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}",
+    "TechnicalContact", "${var.technical_contact}",
+    "Arena", "${element(var.arenas, count.index / 3)}"),
+    zipmap(split(",", (var.enabled * var.enable_kubernetes) == 1 ?  local.kubernetes_public_tags_keys : local.service_name_tag_key), split(",",  (var.enabled * var.enable_kubernetes) == 1 ? local.kubernetes_public_tags_values : local.service_name_tag_value)),
+  )}"
 }
 
 # ATM, we just create private subnets for each arena in the first 3 AZs
@@ -438,12 +542,12 @@ resource "aws_subnet" "private" {
 
   cidr_block = "${cidrsubnet(element(aws_vpc.nubis.*.cidr_block, count.index / 3), 3, (count.index % 3) + 3 )}"
 
-  tags {
-    Name             = "PrivateSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}"
-    ServiceName      = "${var.account_name}"
-    TechnicalContact = "${var.technical_contact}"
-    Arena            = "${element(var.arenas, count.index / 3)}"
-  }
+  tags = "${merge(map(
+    "Name", "PrivateSubnet-${element(var.arenas, count.index / 3)}-AZ${(count.index % 3 ) + 1}",
+    "TechnicalContact", "${var.technical_contact}",
+    "Arena", "${element(var.arenas, count.index / 3)}"),
+     zipmap(split(",", (var.enabled * var.enable_kubernetes) == 1 ?  local.kubernetes_private_tags_keys : local.service_name_tag_key), split(",",  (var.enabled * var.enable_kubernetes) == 1 ? local.kubernetes_private_tags_values : local.service_name_tag_value)),
+  )}"
 }
 
 resource "aws_route_table_association" "public" {
@@ -561,7 +665,7 @@ resource "aws_network_interface" "private-nat" {
 }
 
 module "nat-image" {
-  source        = "github.com/nubisproject/nubis-terraform///images?ref=develop"
+  source        = "github.com/nubisproject/nubis-terraform//images?ref=v2.3.0"
   region        = "${var.aws_region}"
   image_version = "${coalesce(var.nat_version, var.nubis_version)}"
   project       = "nubis-nat"
@@ -732,7 +836,7 @@ resource "aws_iam_instance_profile" "nat" {
 }
 
 module "jumphost" {
-  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.2.0"
+  source = "github.com/nubisproject/nubis-jumphost//nubis/terraform?ref=v2.3.0"
 
   enabled = "${var.enabled * var.enable_jumphost}"
 
@@ -767,7 +871,7 @@ resource "aws_iam_role_policy_attachment" "fluent" {
 }
 
 module "fluent-collector" {
-  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.2.0"
+  source = "github.com/nubisproject/nubis-fluent-collector//nubis/terraform?ref=v2.3.0"
 
   enabled            = "${var.enabled * var.enable_fluent}"
   monitoring_enabled = "${var.enabled * var.enable_fluent * var.enable_monitoring}"
@@ -814,7 +918,7 @@ resource "aws_iam_role_policy_attachment" "monitoring" {
 }
 
 module "monitoring" {
-  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.2.0"
+  source = "github.com/nubisproject/nubis-prometheus//nubis/terraform?ref=v2.3.0"
 
   enabled = "${var.enabled * var.enable_monitoring}"
 
@@ -869,7 +973,7 @@ resource "aws_iam_role_policy_attachment" "sso" {
 }
 
 module "sso" {
-  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.2.0"
+  source = "github.com/nubisproject/nubis-sso//nubis/terraform?ref=v2.3.0"
 
   enabled = "${var.enabled * var.enable_sso}"
 
@@ -911,7 +1015,7 @@ resource "aws_iam_role_policy_attachment" "consul" {
 }
 
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.2.0"
+  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.3.0"
 
   enabled = "${var.enabled * var.enable_consul}"
 
@@ -955,7 +1059,7 @@ resource "aws_iam_role_policy_attachment" "ci" {
 
 # XXX: This assumes it's going in the first arena of the first region
 module "ci" {
-  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.2.0"
+  source = "github.com/nubisproject/nubis-ci//nubis/terraform?ref=v2.3.0"
 
   enabled = "${var.enabled * var.enable_ci * ((1 + signum(index(concat(split(",", var.aws_regions), list(var.aws_region)),var.aws_region))) % 2 )}"
 
@@ -1048,7 +1152,7 @@ module "user_management" {
 #tunnel2_preshared_key
 
 module "vpn" {
-  source = "github.com/nubisproject/nubis-terraform-vpn?ref=develop"
+  source = "github.com/nubisproject/nubis-terraform-vpn?ref=v2.3.0"
 
   enabled           = "${var.enabled * var.enable_vpn}"
   region            = "${var.aws_region}"
@@ -1063,6 +1167,30 @@ module "vpn" {
   private_route_table_id = "${join(",", aws_route_table.private.*.id)}"
   public_route_table_id  = "${join(",", aws_route_table.public.*.id)}"
   output_config          = "${var.vpn_output_config}"
+}
+
+module "kube-image" {
+  source        = "github.com/nubisproject/nubis-terraform//images?ref=v2.3.0"
+  region        = "${var.aws_region}"
+  image_version = "${coalesce(var.kubernetes_image_version, var.nubis_version)}"
+  project       = "nubis-kubernetes"
+}
+
+# FIXME: will only work once vpc and public state is created
+module "kubnernetes" {
+  source = "github.com/nubisproject/nubis-kubernetes//nubis/terraform?ref=develop"
+
+  enabled      = "${var.enabled * var.enable_kubernetes}"
+  region       = "${var.aws_region}"
+  arena        = "${var.arenas[0]}"
+  environment  = "deploy"
+  service_name = "kubernetes"
+  account      = "${var.account_name}"
+  ami          = "${module.kube-image.image_id}"
+
+  kubernetes_master_type  = "${var.kubernetes_master_type}"
+  kubernetes_node_type    = "${var.kubernetes_node_type}"
+  kubernetes_node_minimum = "${var.kubernetes_node_minimum}"
 }
 
 # Create a proxy discovery VPC DNS zone
@@ -1198,7 +1326,7 @@ provider "aws" {
 
 resource "aws_s3_bucket_object" "public_state" {
   provider     = "aws.public-state"
-  count        = "${var.enabled * length(var.arenas)}"
+  count        = "${length(var.arenas)}"
   bucket       = "${var.public_state_bucket}"
   content_type = "text/json"
   key          = "aws/${var.aws_region}/${element(var.arenas, count.index)}.tfstate"
@@ -1214,28 +1342,30 @@ resource "aws_s3_bucket_object" "public_state" {
             ],
             "outputs": {
               "nubis_version": ${jsonencode(var.nubis_version)},
+              "nubis_domain": ${jsonencode(var.nubis_domain)},
               "region": ${jsonencode(var.aws_region)},
               "regions": ${jsonencode(var.aws_regions)},
               "arena": "${element(var.arenas, count.index)}",
-              "network_cidr" : "${element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) )}",
-              "public_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) ),1 , 0)}",
-              "private_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(split(",",var.aws_regions), var.aws_region)) ), 1, 1 )}",
+              "network_cidr" : "${element(var.arenas_networks, count.index + (3 * index(concat(split(",",var.aws_regions), list(var.aws_region)), var.aws_region)) )}",
+              "public_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(concat(split(",",var.aws_regions), list(var.aws_region)), var.aws_region)) ),1 , 0)}",
+              "private_network_cidr" : "${cidrsubnet(element(var.arenas_networks, count.index + (3 * index(concat(split(",",var.aws_regions), list(var.aws_region)), var.aws_region)) ), 1, 1 )}",
               "availability_zones": "${join(",",data.aws_availability_zones.available.names)}",
               "delegation_set_id": ${jsonencode(var.route53_delegation_set)},
+              "master_zone_id": ${jsonencode(var.route53_master_zone_id)},
               "hosted_zone_name": ${jsonencode(module.meta.HostedZoneName)},
               "hosted_zone_id": ${jsonencode(module.meta.HostedZoneId)},
-              "vpc_id": ${jsonencode(element(aws_vpc.nubis.*.id,count.index))},
+              "vpc_id": ${jsonencode(element(concat(aws_vpc.nubis.*.id, list("")),count.index))},
               "account_id": ${jsonencode(data.aws_caller_identity.current.account_id)},
               "rds_mysql_parameter_group": ${jsonencode(module.meta.NubisMySQL56ParameterGroup)},
-              "monitoring_security_group" : ${jsonencode(element(aws_security_group.monitoring.*.id,count.index))},
-              "shared_services_security_group": ${jsonencode(element(aws_security_group.shared_services.*.id,count.index))},
-              "internet_access_security_group": ${jsonencode(element(aws_security_group.internet_access.*.id,count.index))},
-              "ssh_security_group": ${jsonencode(element(aws_security_group.ssh.*.id,count.index))},
-              "sso_security_group": ${jsonencode(element(aws_security_group.sso.*.id,count.index))},
-              "instance_security_groups": "${element(aws_security_group.shared_services.*.id,count.index)},${element(aws_security_group.internet_access.*.id,count.index)},${element(aws_security_group.ssh.*.id,count.index)}",
-              "private_subnets": "${element(aws_subnet.private.*.id, (3*count.index) + 0)},${element(aws_subnet.private.*.id, (3*count.index) + 1)},${element(aws_subnet.private.*.id, (3*count.index) + 2)}",
-              "public_subnets": "${element(aws_subnet.public.*.id, (3*count.index) + 0)},${element(aws_subnet.public.*.id, (3*count.index) + 1)},${element(aws_subnet.public.*.id, (3*count.index) + 2)}",
-              "access_logging_bucket": ${jsonencode(element(split(",", module.fluent-collector.logging_buckets),count.index))},
+              "monitoring_security_group" : ${jsonencode(element(concat(aws_security_group.monitoring.*.id, list("")),count.index))},
+              "shared_services_security_group": ${jsonencode(element(concat(aws_security_group.shared_services.*.id, list("")),count.index))},
+              "internet_access_security_group": ${jsonencode(element(concat(aws_security_group.internet_access.*.id, list("")),count.index))},
+              "ssh_security_group": ${jsonencode(element(concat(aws_security_group.ssh.*.id, list("")),count.index))},
+              "sso_security_group": ${jsonencode(element(concat(aws_security_group.sso.*.id, list("")),count.index))},
+              "instance_security_groups": "${element(concat(aws_security_group.shared_services.*.id, list("")),count.index)},${element(concat( aws_security_group.internet_access.*.id, list("")),count.index)},${element(concat(aws_security_group.ssh.*.id, list("")),count.index)}",
+              "private_subnets": "${element(concat(aws_subnet.private.*.id, list("")), (3*count.index) + 0)},${element(concat(aws_subnet.private.*.id, list("")), (3*count.index) + 1)},${element(concat(aws_subnet.private.*.id, list("")), (3*count.index) + 2)}",
+              "public_subnets": "${element(concat(aws_subnet.public.*.id, list("")), (3*count.index) + 0)},${element(concat(aws_subnet.public.*.id, list("")), (3*count.index) + 1)},${element(concat(aws_subnet.public.*.id, list("")), (3*count.index) + 2)}",
+              "access_logging_bucket": ${jsonencode(element(concat(split(",", module.fluent-collector.logging_buckets), list("")),count.index))},
               "default_ssl_certificate": "${module.meta.DefaultServerCertificate}",
               "apps_state_bucket": "${var.apps_state_bucket}",
               "dummy": "dummy"
@@ -1335,7 +1465,7 @@ resource "aws_lambda_function" "user_management" {
   handler       = "index.handler"
   description   = "Queries LDAP and inserts user into consul and create and delete IAM users"
   memory_size   = 128
-  runtime       = "nodejs4.3"
+  runtime       = "nodejs8.10"
   timeout       = "30"
 
   vpc_config = {
