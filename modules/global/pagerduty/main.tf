@@ -4,7 +4,7 @@ provider "pagerduty" {
 }
 
 module "platform_pagerduty" {
-  source                         = "github.com/nubisproject/nubis-pagerduty//service?ref=develop"
+  source                         = "github.com/nubisproject/nubis-pagerduty//service?ref=v0.1.0"
   enable_pagerduty               = "${var.enable_pagerduty}"
   team_name                      = "${var.pagerduty_team_name}"
   service_name                   = "platform"
@@ -13,7 +13,7 @@ module "platform_pagerduty" {
 }
 
 module "application_pagerduty" {
-  source                         = "github.com/nubisproject/nubis-pagerduty//service?ref=develop"
+  source                         = "github.com/nubisproject/nubis-pagerduty//service?ref=v0.1.0"
   enable_pagerduty               = "${var.enable_pagerduty}"
   team_name                      = "${var.pagerduty_team_name}"
   service_name                   = "application"
