@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.3.0](https://github.com/nubisproject/nubis-deploy/tree/v2.3.0) (2018-07-19)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.3.0...v2.3.0)
+
+**Closed issues:**
+
+- Pin nubis-pagerduty to current release [\#437](https://github.com/nubisproject/nubis-deploy/issues/437)
+
+**Merged pull requests:**
+
+- Pin nubis-pagerduty at latest release \(v0.1.0\) [\#438](https://github.com/nubisproject/nubis-deploy/pull/438) ([tinnightcap](https://github.com/tinnightcap))
+
 ## [v2.3.0](https://github.com/nubisproject/nubis-deploy/tree/v2.3.0) (2018-07-17)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.2.0...v2.3.0)
 
@@ -16,9 +27,12 @@
 - Open up ports for monitoring security groups [\#416](https://github.com/nubisproject/nubis-deploy/issues/416)
 - \[pagerduty\] Default pagerduty team\_name to account\_name [\#409](https://github.com/nubisproject/nubis-deploy/issues/409)
 - \[pagerduty\] When vpc is 0 don't create pagerduty services [\#408](https://github.com/nubisproject/nubis-deploy/issues/408)
+- Tag v2.3.0 release [\#434](https://github.com/nubisproject/nubis-deploy/issues/434)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#436](https://github.com/nubisproject/nubis-deploy/pull/436) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#435](https://github.com/nubisproject/nubis-deploy/pull/435) ([nubis-automation](https://github.com/nubis-automation))
 - Upgrade to nubis-terraform-vpn v2.2.1 [\#433](https://github.com/nubisproject/nubis-deploy/pull/433) ([gozer](https://github.com/gozer))
 - Since zipmap can't deal with empty lists, we need to \*always\* feed it something [\#431](https://github.com/nubisproject/nubis-deploy/pull/431) ([gozer](https://github.com/gozer))
 - Expose master zone id [\#429](https://github.com/nubisproject/nubis-deploy/pull/429) ([limed](https://github.com/limed))
