@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 module "cloudhealth" {
-  source = "github.com/nubisproject/nubis-terraform-cloudhealth?ref=master"
+  source = "github.com/nubisproject/nubis-terraform-cloudhealth?ref=v2.3.0"
 
   aws_profile = "default"
   aws_region  = "${var.aws_region}"
