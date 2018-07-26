@@ -1,10 +1,10 @@
 provider "aws" {
-  version = "~> 0.1"
+  version = "~> 1"
   region  = "${var.aws_region}"
 }
 
 provider "tls" {
-  version = "~> 0.1"
+  version = "~> 1"
 }
 
 #XXX: We create this on purpose for all the regions we support

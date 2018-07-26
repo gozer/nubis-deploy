@@ -1,5 +1,5 @@
 provider "pagerduty" {
-  version = "~> 0.1"
+  version = "~> 1"
   token   = "${var.pagerduty_token}"
 }
 

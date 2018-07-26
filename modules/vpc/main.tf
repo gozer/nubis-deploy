@@ -1,14 +1,14 @@
 provider "aws" {
-  version = "~> 0.1"
+  version = "~> 1"
   region  = "${var.aws_region}"
 }
 
 provider "null" {
-  version = "~> 0.1"
+  version = "~> 1"
 }
 
 provider "template" {
-  version = "~> 0.1"
+  version = "~> 1"
 }
 
 data "aws_caller_identity" "current" {}
@@ -1015,7 +1015,8 @@ resource "aws_iam_role_policy_attachment" "consul" {
 }
 
 module "consul" {
-  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.3.0"
+  #source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.3.0"
+  source = "/home/gozer/opt/src/mozilla.org/gozer/nubis/consul/nubis/terraform"
 
   enabled = "${var.enabled * var.enable_consul}"
 
@@ -1152,7 +1153,8 @@ module "user_management" {
 #tunnel2_preshared_key
 
 module "vpn" {
-  source = "github.com/nubisproject/nubis-terraform-vpn?ref=v2.3.0"
+  #source = "github.com/nubisproject/nubis-terraform-vpn?ref=v2.3.0"
+  source = "/home/gozer/opt/src/mozilla.org/gozer/nubis/nubis-terraform-vpn"
 
   enabled           = "${var.enabled * var.enable_vpn}"
   region            = "${var.aws_region}"
@@ -1319,7 +1321,7 @@ resource "aws_eip" "nat" {
 }
 
 provider "aws" {
-  version = "~> 0.1"
+  version = "~> 1"
   region  = "${var.aws_state_region}"
   alias   = "public-state"
 }
