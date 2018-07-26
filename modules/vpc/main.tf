@@ -1015,8 +1015,7 @@ resource "aws_iam_role_policy_attachment" "consul" {
 }
 
 module "consul" {
-  #source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.3.0"
-  source = "/home/gozer/opt/src/mozilla.org/gozer/nubis/consul/nubis/terraform"
+  source = "github.com/nubisproject/nubis-consul//nubis/terraform?ref=v2.3.0"
 
   enabled = "${var.enabled * var.enable_consul}"
 
@@ -1153,8 +1152,7 @@ module "user_management" {
 #tunnel2_preshared_key
 
 module "vpn" {
-  #source = "github.com/nubisproject/nubis-terraform-vpn?ref=v2.3.0"
-  source = "/home/gozer/opt/src/mozilla.org/gozer/nubis/nubis-terraform-vpn"
+  source = "github.com/nubisproject/nubis-terraform-vpn?ref=v2.3.0"
 
   enabled           = "${var.enabled * var.enable_vpn}"
   region            = "${var.aws_region}"
