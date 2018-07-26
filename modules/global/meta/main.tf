@@ -1,10 +1,10 @@
 provider "aws" {
-  version = "~> 0.1"
+  version = "~> 1"
   region  = "${var.aws_region}"
 }
 
 module "cloudhealth" {
-  source = "github.com/nubisproject/nubis-terraform-cloudhealth?ref=v2.3.0"
+  source = "github.com/nubisproject/nubis-terraform-cloudhealth?ref=v1.3.0"
 
   aws_profile = "default"
   aws_region  = "${var.aws_region}"

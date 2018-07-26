@@ -1,10 +1,10 @@
 provider "aws" {
-  version = "~> 0.1"
+  version = "~> 1"
   region  = "${var.aws_region}"
 }
 
 provider "template" {
-  version = "~> 0.1"
+  version = "~> 1"
 }
 
 output "account_name" {
