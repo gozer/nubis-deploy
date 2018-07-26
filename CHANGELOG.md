@@ -7,9 +7,12 @@
 
 - \[tf\] Add more recent version of modules [\#449](https://github.com/nubisproject/nubis-deploy/issues/449)
 - Expose nubis domain in public state [\#413](https://github.com/nubisproject/nubis-deploy/issues/413)
+- Tag v1.3.0 release [\#451](https://github.com/nubisproject/nubis-deploy/issues/451)
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v1.3.0 release \[skip ci\] [\#453](https://github.com/nubisproject/nubis-deploy/pull/453) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v1.3.0 release \[skip ci\] [\#452](https://github.com/nubisproject/nubis-deploy/pull/452) ([nubis-automation](https://github.com/nubis-automation))
 - Pin TF modules at more recent 1.x versions [\#450](https://github.com/nubisproject/nubis-deploy/pull/450) ([gozer](https://github.com/gozer))
 
 ## [v2.3.0](https://github.com/nubisproject/nubis-deploy/tree/v2.3.0) (2018-07-24)
@@ -56,52 +59,17 @@
 - Pagerduty services should now only be created if vpc and monitoring is enabled [\#411](https://github.com/nubisproject/nubis-deploy/pull/411) ([limed](https://github.com/limed))
 - fix missed version bmps [\#407](https://github.com/nubisproject/nubis-deploy/pull/407) ([gozer](https://github.com/gozer))
 
-## [v2.3.0](https://github.com/nubisproject/nubis-deploy/tree/v2.3.0) (2018-07-24)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.3.0...v2.3.0)
+## [v1.3.0](https://github.com/nubisproject/nubis-deploy/tree/v1.3.0) (2018-07-26)
+[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.3.0...v1.3.0)
 
 **Closed issues:**
 
-- \[dns\] Create an \<account-id\>.\<nubis.allizom.org\> zone [\#443](https://github.com/nubisproject/nubis-deploy/issues/443)
-
-## [v2.3.0](https://github.com/nubisproject/nubis-deploy/tree/v2.3.0) (2018-07-19)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.2.0...v2.3.0)
-
-**Closed issues:**
-
-- Pin nubis-pagerduty to current release [\#437](https://github.com/nubisproject/nubis-deploy/issues/437)
-- Upgrade to nubis-terraform-vpn v2.2.1 [\#432](https://github.com/nubisproject/nubis-deploy/issues/432)
-- \[kubernetes\] Correctly tag subnets when Kubernetes is off [\#430](https://github.com/nubisproject/nubis-deploy/issues/430)
-- Expose master zone id [\#428](https://github.com/nubisproject/nubis-deploy/issues/428)
-- Create state file even in regions that don't exist [\#425](https://github.com/nubisproject/nubis-deploy/issues/425)
-- Make kubernetes cluster creation part of account deployment [\#422](https://github.com/nubisproject/nubis-deploy/issues/422)
-- Move production deployments away from allizom.org [\#420](https://github.com/nubisproject/nubis-deploy/issues/420)
-- \[vpc\] Add flow logs feature flag [\#418](https://github.com/nubisproject/nubis-deploy/issues/418)
-- Version of node we are using on lambda function is EOL [\#417](https://github.com/nubisproject/nubis-deploy/issues/417)
-- Open up ports for monitoring security groups [\#416](https://github.com/nubisproject/nubis-deploy/issues/416)
-- \[pagerduty\] Default pagerduty team\_name to account\_name [\#409](https://github.com/nubisproject/nubis-deploy/issues/409)
-- \[pagerduty\] When vpc is 0 don't create pagerduty services [\#408](https://github.com/nubisproject/nubis-deploy/issues/408)
-- Tag v2.2.0 release [\#404](https://github.com/nubisproject/nubis-deploy/issues/404)
-- Tag v2.3.0 release [\#440](https://github.com/nubisproject/nubis-deploy/issues/440)
-- Tag v2.3.0 release [\#434](https://github.com/nubisproject/nubis-deploy/issues/434)
+- \[tf\] Add more recent version of modules [\#449](https://github.com/nubisproject/nubis-deploy/issues/449)
+- Expose nubis domain in public state [\#413](https://github.com/nubisproject/nubis-deploy/issues/413)
 
 **Merged pull requests:**
 
-- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#442](https://github.com/nubisproject/nubis-deploy/pull/442) ([nubis-automation](https://github.com/nubis-automation))
-- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#441](https://github.com/nubisproject/nubis-deploy/pull/441) ([nubis-automation](https://github.com/nubis-automation))
-- Pin nubis-pagerduty at latest release \(v0.1.0\) [\#438](https://github.com/nubisproject/nubis-deploy/pull/438) ([tinnightcap](https://github.com/tinnightcap))
-- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#436](https://github.com/nubisproject/nubis-deploy/pull/436) ([nubis-automation](https://github.com/nubis-automation))
-- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#435](https://github.com/nubisproject/nubis-deploy/pull/435) ([nubis-automation](https://github.com/nubis-automation))
-- Upgrade to nubis-terraform-vpn v2.2.1 [\#433](https://github.com/nubisproject/nubis-deploy/pull/433) ([gozer](https://github.com/gozer))
-- Since zipmap can't deal with empty lists, we need to \*always\* feed it something [\#431](https://github.com/nubisproject/nubis-deploy/pull/431) ([gozer](https://github.com/gozer))
-- Expose master zone id [\#429](https://github.com/nubisproject/nubis-deploy/pull/429) ([limed](https://github.com/limed))
-- \[Needs-review\] Integrate kube deployment into our account opening process [\#427](https://github.com/nubisproject/nubis-deploy/pull/427) ([limed](https://github.com/limed))
-- Create public state to all regions [\#426](https://github.com/nubisproject/nubis-deploy/pull/426) ([limed](https://github.com/limed))
-- Include nubis domain in public state [\#423](https://github.com/nubisproject/nubis-deploy/pull/423) ([limed](https://github.com/limed))
-- Bump node runtime to 8.10 since 4.3 is EOL [\#421](https://github.com/nubisproject/nubis-deploy/pull/421) ([limed](https://github.com/limed))
-- \[vpc\] Add vpc.flow\_logs feature flag for capturing VPC flow logs [\#419](https://github.com/nubisproject/nubis-deploy/pull/419) ([gozer](https://github.com/gozer))
-- If pagerduty team\_name is not set it defaults to the account\_name [\#412](https://github.com/nubisproject/nubis-deploy/pull/412) ([limed](https://github.com/limed))
-- Pagerduty services should now only be created if vpc and monitoring is enabled [\#411](https://github.com/nubisproject/nubis-deploy/pull/411) ([limed](https://github.com/limed))
-- fix missed version bmps [\#407](https://github.com/nubisproject/nubis-deploy/pull/407) ([gozer](https://github.com/gozer))
+- Pin TF modules at more recent 1.x versions [\#450](https://github.com/nubisproject/nubis-deploy/pull/450) ([gozer](https://github.com/gozer))
 
 ## [v2.2.0](https://github.com/nubisproject/nubis-deploy/tree/v2.2.0) (2018-04-06)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.1.0...v2.2.0)
