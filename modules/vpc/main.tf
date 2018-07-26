@@ -1,14 +1,14 @@
 provider "aws" {
-  version = "~> 0.1"
+  version = "~> 1"
   region  = "${var.aws_region}"
 }
 
 provider "null" {
-  version = "~> 0.1"
+  version = "~> 1"
 }
 
 provider "template" {
-  version = "~> 0.1"
+  version = "~> 1"
 }
 
 data "aws_caller_identity" "current" {}
@@ -1319,7 +1319,7 @@ resource "aws_eip" "nat" {
 }
 
 provider "aws" {
-  version = "~> 0.1"
+  version = "~> 1"
   region  = "${var.aws_state_region}"
   alias   = "public-state"
 }
