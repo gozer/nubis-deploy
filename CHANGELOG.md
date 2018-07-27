@@ -1,10 +1,11 @@
 # Change Log
 
-## [v2.3.0](https://github.com/nubisproject/nubis-deploy/tree/v2.3.0) (2018-07-26)
+## [v2.3.0](https://github.com/nubisproject/nubis-deploy/tree/v2.3.0) (2018-07-27)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v1.3.0...v2.3.0)
 
 **Closed issues:**
 
+- Tag v2.3.0 release [\#457](https://github.com/nubisproject/nubis-deploy/issues/457)
 - Tag v2.3.0 release [\#454](https://github.com/nubisproject/nubis-deploy/issues/454)
 - Tag v2.3.0 release [\#445](https://github.com/nubisproject/nubis-deploy/issues/445)
 - Tag v2.3.0 release [\#440](https://github.com/nubisproject/nubis-deploy/issues/440)
@@ -12,6 +13,8 @@
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#459](https://github.com/nubisproject/nubis-deploy/pull/459) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#458](https://github.com/nubisproject/nubis-deploy/pull/458) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#456](https://github.com/nubisproject/nubis-deploy/pull/456) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#455](https://github.com/nubisproject/nubis-deploy/pull/455) ([nubis-automation](https://github.com/nubis-automation))
 
@@ -61,21 +64,6 @@
 - If pagerduty team\_name is not set it defaults to the account\_name [\#412](https://github.com/nubisproject/nubis-deploy/pull/412) ([limed](https://github.com/limed))
 - Pagerduty services should now only be created if vpc and monitoring is enabled [\#411](https://github.com/nubisproject/nubis-deploy/pull/411) ([limed](https://github.com/limed))
 - fix missed version bmps [\#407](https://github.com/nubisproject/nubis-deploy/pull/407) ([gozer](https://github.com/gozer))
-
-## [v1.3.0](https://github.com/nubisproject/nubis-deploy/tree/v1.3.0) (2018-07-26)
-[Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.3.0...v1.3.0)
-
-**Closed issues:**
-
-- \[tf\] Add more recent version of modules [\#449](https://github.com/nubisproject/nubis-deploy/issues/449)
-- Expose nubis domain in public state [\#413](https://github.com/nubisproject/nubis-deploy/issues/413)
-- Tag v1.3.0 release [\#451](https://github.com/nubisproject/nubis-deploy/issues/451)
-
-**Merged pull requests:**
-
-- Update CHANGELOG for v1.3.0 release \[skip ci\] [\#453](https://github.com/nubisproject/nubis-deploy/pull/453) ([nubis-automation](https://github.com/nubis-automation))
-- Update CHANGELOG for v1.3.0 release \[skip ci\] [\#452](https://github.com/nubisproject/nubis-deploy/pull/452) ([nubis-automation](https://github.com/nubis-automation))
-- Pin TF modules at more recent 1.x versions [\#450](https://github.com/nubisproject/nubis-deploy/pull/450) ([gozer](https://github.com/gozer))
 
 ## [v2.2.0](https://github.com/nubisproject/nubis-deploy/tree/v2.2.0) (2018-04-06)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.1.0...v2.2.0)
