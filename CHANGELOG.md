@@ -5,6 +5,7 @@
 
 **Closed issues:**
 
+- Tag v2.3.0 release [\#460](https://github.com/nubisproject/nubis-deploy/issues/460)
 - Tag v2.3.0 release [\#457](https://github.com/nubisproject/nubis-deploy/issues/457)
 - Tag v2.3.0 release [\#454](https://github.com/nubisproject/nubis-deploy/issues/454)
 - Tag v2.3.0 release [\#445](https://github.com/nubisproject/nubis-deploy/issues/445)
@@ -13,6 +14,8 @@
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#462](https://github.com/nubisproject/nubis-deploy/pull/462) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.3.0 release \[skip ci\] [\#461](https://github.com/nubisproject/nubis-deploy/pull/461) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#459](https://github.com/nubisproject/nubis-deploy/pull/459) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#458](https://github.com/nubisproject/nubis-deploy/pull/458) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.3.0 release \[skip ci\] [\#456](https://github.com/nubisproject/nubis-deploy/pull/456) ([nubis-automation](https://github.com/nubis-automation))
