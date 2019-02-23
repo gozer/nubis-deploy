@@ -1,17 +1,18 @@
 # Change Log
 
-## [v2.4.0](https://github.com/nubisproject/nubis-deploy/tree/v2.4.0) (2019-02-22)
+## [v2.4.0](https://github.com/nubisproject/nubis-deploy/tree/v2.4.0) (2019-02-23)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.4.0...v2.4.0)
 
 **Closed issues:**
 
-- Tag v2.4.0 release [\#485](https://github.com/nubisproject/nubis-deploy/issues/485)
+- Tag v2.4.0 release [\#488](https://github.com/nubisproject/nubis-deploy/issues/488)
 
 ## [v2.4.0](https://github.com/nubisproject/nubis-deploy/tree/v2.4.0) (2019-02-22)
 [Full Changelog](https://github.com/nubisproject/nubis-deploy/compare/v2.3.1...v2.4.0)
 
 **Closed issues:**
 
+- Tag v2.4.0 release [\#485](https://github.com/nubisproject/nubis-deploy/issues/485)
 - Tag v2.4.0 release [\#482](https://github.com/nubisproject/nubis-deploy/issues/482)
 - Tag v2.4.0 release [\#479](https://github.com/nubisproject/nubis-deploy/issues/479)
 - Update infosec security role [\#477](https://github.com/nubisproject/nubis-deploy/issues/477)
@@ -19,6 +20,8 @@
 
 **Merged pull requests:**
 
+- Update CHANGELOG for v2.4.0 release \[skip ci\] [\#490](https://github.com/nubisproject/nubis-deploy/pull/490) ([nubis-automation](https://github.com/nubis-automation))
+- Update CHANGELOG for v2.4.0 release \[skip ci\] [\#489](https://github.com/nubisproject/nubis-deploy/pull/489) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.4.0 release \[skip ci\] [\#487](https://github.com/nubisproject/nubis-deploy/pull/487) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.4.0 release \[skip ci\] [\#486](https://github.com/nubisproject/nubis-deploy/pull/486) ([nubis-automation](https://github.com/nubis-automation))
 - Update CHANGELOG for v2.4.0 release \[skip ci\] [\#484](https://github.com/nubisproject/nubis-deploy/pull/484) ([nubis-automation](https://github.com/nubis-automation))
