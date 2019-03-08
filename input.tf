@@ -19,7 +19,7 @@ variable arenas_networks {
 }
 
 variable admin_users {
-  default = "gozer,limed,jcrowe"
+  default = "gozer,limed"
 }
 
 variable guest_users {
